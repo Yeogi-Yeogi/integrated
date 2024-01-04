@@ -18,6 +18,8 @@ public class BoardListDto {
     private String enrollDate;
     //제목
     private String title;
+    //조회수
+    private String hit;
     //내용
     private String content;
     //첫번째 사진경로
