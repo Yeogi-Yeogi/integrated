@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReviewMapper">
+
+    <select id="getReviewListByBoardNo" resultType="com.yeogi.app.review.dto.ReviewDetailDto">
+        SELECT
+            R.NO REVIEW_NO
+            , M.NICK MEMBER_NICK
+            , M.PROFILE_IMG MEMBER_PROFILE
+            ,TO_CHAR(R.ENROLL_DATE, 'YYYY. MM. DD. HH24:MI') ENROLL_DATE
+            , R.CONTENT
+        FROM REVIEW R
+        INNER JOIN MEMBER M ON R.WRITER_NO = M.NO
+        WHERE
+            R.BOARD_NO = #{boardNo}
+            AND R.DEL_YN = 'N'
+        ORDER BY 4 DESC
+    </select>
+</mapper>
