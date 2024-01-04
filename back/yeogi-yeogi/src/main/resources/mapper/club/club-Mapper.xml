@@ -5,7 +5,7 @@
 
 <mapper namespace="ClubMapper">
 
-    <select id="searchClub">
-
+    <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
+        SELECT * FROM CLUB WHERE ${searchMenu} LIKE '%'||#{searchString}||'%'
     </select>
 </mapper>
