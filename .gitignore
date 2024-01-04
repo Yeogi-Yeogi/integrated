@@ -80,6 +80,5 @@ back/yeogi-yeogi/.mvn/wrapper/maven-wrapper.jarback/
 back/yeogi-yeogi/.mvn/wrapper/maven-wrapper.properties
 back/.gitignore
 back/yeogi-yeogi/.gitignore
-back/yeogi-yeogi/pom.xml
 front/yeogi-yeogi/.gitignore
 front/yeogi-yeogi/README.md
