@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDetailValidDto {
-
-    private String clubNo;
+public class BoardListFileUrlDto {
+    private String boardImageNo;
     private String boardNo;
+    private String fileUrl;
 }

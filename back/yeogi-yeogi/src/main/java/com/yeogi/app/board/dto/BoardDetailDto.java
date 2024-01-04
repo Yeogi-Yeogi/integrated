@@ -16,6 +16,7 @@ public class BoardDetailDto {
     private String boardNo;
     //프로필 이미지
     private String memberProfile;
+    private String memberNo;
     //작성자
     private String memberName;
     //작성일자
@@ -24,8 +25,12 @@ public class BoardDetailDto {
     private String title;
     //내용
     private String content;
+
+    private String reviewCount;
     //이미지 파일 보기
-    private List<String> images;
+    private List<BoardListFileUrlDto> images;
     //리뷰들
     private List<ReviewDetailDto> reviews;
+
+    private boolean isMine = false;
 }
