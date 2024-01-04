@@ -1,12 +1,14 @@
 package com.yeogi.app.club.controller;
 
 import com.yeogi.app.club.dto.ClubSearchDto;
+import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.service.ClubService;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,6 +31,15 @@ public class ClubController {
         log.info("clubList = {}", clubList);
 
         return clubList;
+    }
+
+    // 클럽 생성
+    @PostMapping("createClub")
+    public int createClub(CreateClubDto createClubDto){
+        log.info("createClubDto = {}", createClubDto);
+        int result = service.createClub(createClubDto);
+        log.info("result = {}", result);
+        return result;
     }
 
 }

@@ -8,4 +8,26 @@
     <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT * FROM CLUB WHERE ${searchMenu} LIKE '%'||#{searchString}||'%'
     </select>
+
+    <insert id="createClub">
+        INSERT INTO CLUB(NO, CATEGORY_NO, CREATOR_NO, NAME, CLUB_DESCRIPTION, AGE_LIMIT, SIGNUP_LIMIT)
+        VALUES (SEQ_CLUB_NO.NEXTVAL, #{categoryNo}, #{creatorNo}, #{name}, #{clubDescription}, #{ageLimit}, #{signupLimit})
+    </insert>
+
+    <insert id="insertClubImage">
+<!--        <selectKey keyProperty="seqClubNo" resultType="Integer" order="BEFORE">-->
+<!--            SELECT SEQ_CLUB_NO.CURRVAL FROM DUAL-->
+<!--        </selectKey>-->
+        <choose>
+            <when test="clubImageFile != null or clubImageFile.equals(' ')">
+                INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, '테스트2', '테스트2')
+            </when>
+            <otherwise>
+                INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, '기본이미지', '기본이미지')
+            </otherwise>
+        </choose>
+
+
+    </insert>
+
 </mapper>
