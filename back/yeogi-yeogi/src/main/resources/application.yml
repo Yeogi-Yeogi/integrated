@@ -1,0 +1,19 @@
+server:
+  port: 8889
+  servlet:
+    encoding:
+      charset: utf-8
+      enabled: true
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  config:
+    import:
+      - classpath:/config/secret.yml
+
+logging.level:
+  org.hibernate.SQL: trace

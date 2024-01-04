@@ -1,0 +1,85 @@
+/.metadata/
+back/Servers/
+# Created by https://www.toptal.com/developers/gitignore/api/java,maven,windows
+# Edit at https://www.toptal.com/developers/gitignore?templates=java,maven,windows
+
+### Java ###
+# Compiled class file
+*.class
+
+# Log file
+back/*.log
+
+# BlueJ files
+back/*.ctxt
+
+# Mobile Tools for Java (J2ME)
+back/.mtj.tmp/
+
+# Package Files #
+back/yeogi-yeogi/*.jar
+back/yeogi-yeogi/*.war
+back/yeogi-yeogi/*.nar
+back/yeogi-yeogi/*.ear
+back/yeogi-yeogi/*.zip
+back/yeogi-yeogi/*.tar.gz
+back/yeogi-yeogi/*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+
+### Maven ###
+back/yeogi-yeogi/target/
+back/yeogi-yeogi/pom.xml.tag
+back/yeogi-yeogi/pom.xml.releaseBackup
+back/yeogi-yeogi/pom.xml.versionsBackup
+back/yeogi-yeogi/pom.xml.next
+back/yeogi-yeogi/release.properties
+back/yeogi-yeogi/dependency-reduced-pom.xml
+back/yeogi-yeogi/buildNumber.properties
+back/yeogi-yeogi/.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+back/yeogi-yeogi/.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse m2e generated files
+# Eclipse Core
+back/.project
+# JDT-specific (Eclipse Java Development Tools)
+back/.classpath
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+back/yeogi-yeogi/src/main/resources/config/secret.yml
+# End of https://www.toptal.com/developers/gitignore/api/java,maven,windows
+back/yeogi-yeogi/.mvn/wrapper/maven-wrapper.jarback/
+back/yeogi-yeogi/.mvn/wrapper/maven-wrapper.properties
+back/.gitignore
+back/yeogi-yeogi/.gitignore
+back/yeogi-yeogi/pom.xml
+front/yeogi-yeogi/.gitignore
+front/yeogi-yeogi/README.md

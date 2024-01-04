@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script !src="">
+        fetch('/upload/list')
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                const resultContainer = document.getElementById('result-container');
+                for (let element in data) {
+                    const imgDiv = document.createElement('div');
+                    const img = document.createElement('img');
+                    img.src = element.fileUrl;
+                    imgDiv.appendChild(img);
+
+                    const uploadDate = document.createElement('span');
+                    uploadDate.innerText = element.uploadTime;
+                    imgDiv.appendChild(uploadDate);
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.innerText = '삭제하기'
+                    deleteBtn.addEventListener('click', () => {
+                        fetch(`/upload/delete/${element.customFileName}`, {
+                            method: "DELETE",
+                        })
+                    })
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    </script>
+
+</head>
+<body>
+<h1>사진 리스트 가져오기</h1>
+<div id="result-container">
+
+</div>
+</body>
+</html>

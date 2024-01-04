@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>s3에 사진 올리기</h1>
+<a href="list.html">사진 리스트 보기</a>
+<form action="/upload/save" method="post" enctype="multipart/form-data">
+    <img src="" alt="" id="upload-image" width="150"> <br>
+    <span>파일 올리기:</span><input type="file" name="upload" id="upload"> <br>
+    <input type="submit" value="파일 올리기">
+</form>
+
+<script>
+    const uploadFile = document.getElementById('upload');
+    const fileUrl = document.getElementById('imageUrl')
+
+
+    uploadFile.addEventListener('change', () => {
+        const uploadImg = document.getElementById('upload-image');
+        const file = uploadFile.files[0];
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            uploadImg.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+
+
+</script>
+
+</body>
+</html>
