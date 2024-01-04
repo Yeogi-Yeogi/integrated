@@ -82,7 +82,11 @@ back/.gitignore
 back/yeogi-yeogi/.gitignore
 front/yeogi-yeogi/.gitignore
 front/yeogi-yeogi/README.md
+
+front/yeogi-yeogi/node_modules/
+back/yeogi-yeogi/.idea/
+.idea/
 *.classpath
 *.project
 *.prefs
-front/yeogi-yeogi/node_modules/
+
