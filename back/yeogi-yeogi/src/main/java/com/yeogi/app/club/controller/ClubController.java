@@ -2,6 +2,7 @@ package com.yeogi.app.club.controller;
 
 import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
+import com.yeogi.app.club.dto.EditClubDto;
 import com.yeogi.app.club.service.ClubService;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,23 @@ public class ClubController {
         int result = service.createClub(createClubDto);
         log.info("result = {}", result);
         return result;
+    }
+
+    // 클럽 가입
+    @PostMapping("joinClub")
+    public int joinClub(){
+
+        int result = 1;
+
+        return result;
+    }
+
+    // 클럽 관리(클럽 정보 수정)
+    @PostMapping("")
+    public void editClub(EditClubDto editClubDto){
+        // 대표이미지 변경, 소개글 변경, 모임인원 변경, 가입 연령 변경,
+        // 모임 회원관리 ( 관리자 지정, 추방? )
+
     }
 
 }

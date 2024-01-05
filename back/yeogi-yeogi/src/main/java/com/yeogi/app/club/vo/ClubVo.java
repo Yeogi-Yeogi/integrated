@@ -14,4 +14,6 @@ public class ClubVo {
    private String signupLimit;
    private String enrollDate;
    private String delYn;
+   private String categoryName;
+   private String fileUrl;
 }

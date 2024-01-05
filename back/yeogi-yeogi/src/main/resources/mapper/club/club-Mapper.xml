@@ -6,7 +6,11 @@
 <mapper namespace="ClubMapper">
 
     <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
-        SELECT * FROM CLUB WHERE ${searchMenu} LIKE '%'||#{searchString}||'%'
+        SELECT C.*, CC.CATEGORY_NAME, I.FILE_URL
+        FROM CLUB C
+        JOIN CLUB_CATEGORY CC ON C.CATEGORY_NO = CC.CATEGORY_NO
+        JOIN CLUB_IMAGE_FILE I ON C.NO = I.NO
+        WHERE ${searchMenu} LIKE '%'||#{searchString}||'%'
     </select>
 
     <insert id="createClub">
