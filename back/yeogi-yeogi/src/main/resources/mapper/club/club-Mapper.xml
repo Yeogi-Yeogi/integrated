@@ -5,6 +5,7 @@
 
 <mapper namespace="ClubMapper">
 
+<!-- 클럽 검색(조건 넣을지,,,) -->
     <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT C.*, CC.CATEGORY_NAME, I.FILE_URL
         FROM CLUB C
@@ -13,25 +14,55 @@
         WHERE ${searchMenu} LIKE '%'||#{searchString}||'%'
     </select>
 
+<!--    클럽 생성(카테고리 불러오는거 추가? and 모임이름 중복검사?)-->
     <insert id="createClub">
         INSERT INTO CLUB(NO, CATEGORY_NO, CREATOR_NO, NAME, CLUB_DESCRIPTION, AGE_LIMIT, SIGNUP_LIMIT)
         VALUES (SEQ_CLUB_NO.NEXTVAL, #{categoryNo}, #{creatorNo}, #{name}, #{clubDescription}, #{ageLimit}, #{signupLimit})
     </insert>
 
+<!--    클럽 생성(클럽 대표이미지 추가) -->
     <insert id="insertClubImage">
-<!--        <selectKey keyProperty="seqClubNo" resultType="Integer" order="BEFORE">-->
-<!--            SELECT SEQ_CLUB_NO.CURRVAL FROM DUAL-->
-<!--        </selectKey>-->
         <choose>
-            <when test="clubImageFile != null or clubImageFile.equals(' ')">
+            <when test="clubImageFile != null or clubImageFile.equals('')">
                 INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, '테스트2', '테스트2')
             </when>
             <otherwise>
                 INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, '기본이미지', '기본이미지')
             </otherwise>
         </choose>
-
-
     </insert>
+
+<!--  클럽 소개(클럽가입화면)  -->
+    <select id="clubDescription" resultType="com.yeogi.app.club.vo.ClubVo">
+        SELECT C.*
+        , CC.CATEGORY_NAME
+        , M.NICK
+        , (SELECT COUNT(MEMBER_NO) FROM MEMBER_CLUB WHERE CLUB_NO = #{no}) AS MEMBER_COUNT
+        FROM CLUB C
+        JOIN CLUB_CATEGORY CC ON C.NO = CC.CATEGORY_NO
+        JOIN MEMBER M ON C.CREATOR_NO = M.NO
+        WHERE C.NO = #{no}
+    </select>
+
+<!--    클럽 가입 (가입인원, 연령제한 생각)-->
+    <insert id="joinClub">
+        INSERT INTO MEMBER_CLUB(MEMBER_NO, CLUB_NO)
+        VALUES (#{memberNo}, #{clubNo})
+    </insert>
+
+<!--    클럽 관리(소개글변경)-->
+<!--    클럽 관리(대표이미지변경)-->
+<!--    클럽 관리(모임인원 변경)-->
+<!--    클럽 관리(가입연령 변경)-->
+<!--    클럽 관리(관리자 지정)-->
+<!--    클럽 관리(회원 추방)-->
+<!--    클럽 탈퇴-->
+
+<!--    이게뭐지..-->
+    <select id="checkIsClubMember" resultType="java.lang.String">
+        SELECT MEMBER_NO
+        WHERE MEMBER_NO = #{memberNo}
+        AND CLUB_NO = #{clubNo}
+    </select>
 
 </mapper>
