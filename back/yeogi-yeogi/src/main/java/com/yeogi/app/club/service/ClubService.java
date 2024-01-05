@@ -3,6 +3,8 @@ package com.yeogi.app.club.service;
 import com.yeogi.app.club.dao.ClubDao;
 import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
+import com.yeogi.app.club.dto.EditClubDto;
+import com.yeogi.app.club.dto.EditClubMemberDto;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class ClubService {
 
@@ -34,5 +37,25 @@ public class ClubService {
         }
 
         return result;
+    }
+
+    public ClubVo getClubDescription(String clubNo) {
+        return dao.getClubDescription(sst, clubNo);
+    }
+
+    public int joinClub(ClubVo vo) {
+        return dao.joinClub(sst, vo);
+    }
+
+    public int editClub(EditClubDto editClubDto) {
+        return  dao.editClub(sst, editClubDto);
+    }
+
+    public int editClubMember(EditClubMemberDto editClubMemberDto) {
+        if(editClubMemberDto.getAdminYn() == null){
+            return dao.editClubMember(sst, editClubMemberDto);
+        } else {
+            return dao.quitClubMember(sst, editClubMemberDto);
+        }
     }
 }
