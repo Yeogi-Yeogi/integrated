@@ -5,6 +5,15 @@
 
 <mapper namespace="ClubMapper">
 
+<!-- 클럽 멤버 체크 -->
+    <select id="checkIsClubMember" resultType="java.lang.String">
+        SELECT MEMBER_NO
+        WHERE MEMBER_NO = #{memberNo}
+        AND CLUB_NO = #{clubNo}
+    </select>
+
+<!-- 클럽 관리자여부 체크-->
+
 <!-- 클럽 검색(조건 넣을지,,,) -->
     <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT C.*, CC.CATEGORY_NAME, I.FILE_URL
@@ -50,19 +59,25 @@
         VALUES (#{memberNo}, #{clubNo})
     </insert>
 
-<!--    클럽 관리(소개글변경)-->
-<!--    클럽 관리(대표이미지변경)-->
-<!--    클럽 관리(모임인원 변경)-->
-<!--    클럽 관리(가입연령 변경)-->
-<!--    클럽 관리(관리자 지정)-->
-<!--    클럽 관리(회원 추방)-->
-<!--    클럽 탈퇴-->
+<!--    클럽 관리(소개글, 대표이미지, 모임인원, 가입연령 변경) + -->
+    <update id="editClub">
+        UPDATE CLUB
+        SET
+        <if test="clubDescription != null">
+            CLUB_DESCRIPTION = #{clubDescription}
+        </if>
+        <if test="ageLimit != null">
+            AGE_LIMIT = #{ageLimit}
+        </if>
+        <if test="signupLimit != null">
+            SIGNUP_LIMIT = #{signupLimit}
+        </if>
+        WHERE NO = #{no}
+    </update>
+<!--    클럽 관리(관리자 지정 및 해제, 회원 추방)-->
+    <update id="editClubMember">
 
-<!--    이게뭐지..-->
-    <select id="checkIsClubMember" resultType="java.lang.String">
-        SELECT MEMBER_NO
-        WHERE MEMBER_NO = #{memberNo}
-        AND CLUB_NO = #{clubNo}
-    </select>
+    </update>
 
+<!--    회원 탈퇴 -->
 </mapper>
