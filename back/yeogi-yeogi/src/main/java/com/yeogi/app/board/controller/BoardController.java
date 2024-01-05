@@ -1,5 +1,6 @@
 package com.yeogi.app.board.controller;
 
+import com.yeogi.app.board.dto.BoardAddDto;
 import com.yeogi.app.board.dto.BoardDetailDto;
 import com.yeogi.app.board.dto.BoardDetailValidDto;
 import com.yeogi.app.board.dto.BoardListDto;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -33,10 +35,23 @@ public class BoardController {
      * @return
      */
     @GetMapping("/list/{clubNo}")
-    public ResponseEntity<List<BoardListDto>> getList(@PathVariable String clubNo, @RequestParam(defaultValue = "0") String pageNo) throws NotClubMemberException {
+    public ResponseEntity<List<BoardListDto>> getList(@PathVariable String clubNo, @RequestParam(defaultValue = "0") String pageNo, @RequestParam String memberNo) throws NotClubMemberException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        return new ResponseEntity<>(service.getBoardListByClubNo(clubNo, pageNo), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.getBoardListByClubNo(clubNo, memberNo, pageNo), headers, HttpStatus.OK);
+    }
+
+    /**
+     * 게시글 작성
+     * @param dto
+     * @return
+     */
+    @PostMapping("/add")
+    public ResponseEntity<String> addBoard(@RequestBody BoardAddDto dto) {
+        int result = service.addBoard(dto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        return new ResponseEntity<>("작성 완료", headers, HttpStatus.OK);
     }
 
     /**
@@ -82,4 +97,15 @@ public class BoardController {
 
         return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
     }
+
+
+//    @ExceptionHandler(value = IOException.class)
+//    public ResponseEntity<ErrorResult> handleIOE(IOException e) {
+//        e.printStackTrace();
+//        ErrorResult response = new ErrorResult();
+//        response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.ordinal());
+//        response.setMessage(e.getMessage());
+//
+//        return new ResponseEntity<>(response, null, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

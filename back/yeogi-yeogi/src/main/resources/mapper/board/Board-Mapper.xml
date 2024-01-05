@@ -79,4 +79,16 @@
         FROM BOARD_IMAGE_FILE
         WHERE BOARD_NO = #{boardNo}
     </select>
+
+    <insert id="addBoard">
+        INSERT INTO BOARD(NO, CLUB_NO, MEMBER_NO, TITLE, CONTENT)
+        VALUES (SEQ_BOARD_NO.NEXTVAL, #{clubNo}, #{memberNo}, #{title}, #{content})
+    </insert>
+
+    <select id="getNoByMemberNo" resultType="java.lang.String">
+        SELECT NO
+        FROM BOARD
+        WHERE MEMBER_NO = #{memberNo} AND CLUB_NO = #{clubNo}
+        ORDER BY ENROLL_DATE DESC
+    </select>
 </mapper>

@@ -1,4 +1,4 @@
-package com.yeogi.app.sample.config;
+package com.yeogi.app.util.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

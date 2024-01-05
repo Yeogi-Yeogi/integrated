@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.yeogi.app.sample.config.S3Config;
+import com.yeogi.app.util.config.S3Config;
 import com.yeogi.app.sample.entity.UploadFile;
 import com.yeogi.app.sample.repository.FileRepository;
 import lombok.RequiredArgsConstructor;

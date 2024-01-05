@@ -1,19 +1,16 @@
 package com.yeogi.app.board.service;
 
-import com.yeogi.app.board.dto.BoardDetailDto;
-import com.yeogi.app.board.dto.BoardDetailValidDto;
-import com.yeogi.app.board.dto.BoardListDto;
-import com.yeogi.app.board.dto.BoardListFileUrlDto;
+import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.exception.NotClubMemberException;
+import com.yeogi.app.util.valid.CheckClubMember;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.NoResultException;
 import java.util.HashMap;
@@ -29,25 +26,22 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     private final ReviewRepository reviewRepository;
-    private final SqlSessionTemplate template;
 
-    /**
-     * 모임에 가입한 멤버인지 확인
-     * @return
-     */
-    private boolean isClubMember() {
-        return true;
-    }
+    private final CheckClubMember checkMember;
+
+    private final BoardImageService boardImageService;
+    private final SqlSessionTemplate template;
 
     /**
      * 게시글 간편 조회 데이터 가져오기
      *
      * @param clubNo
+     * @param memberNo
      * @param pageNo
      * @return
      */
-    public List<BoardListDto> getBoardListByClubNo(String clubNo, String pageNo) throws NotClubMemberException {
-        if(!isClubMember()) {
+    public List<BoardListDto> getBoardListByClubNo(String clubNo, String memberNo, String pageNo) throws NotClubMemberException {
+        if(memberNo == null || !checkMember.isClubMember(new CheckIsMemberDto(memberNo, clubNo))) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
@@ -77,7 +71,7 @@ public class BoardService {
      * @return
      */
     public BoardDetailDto getOneByBoardNo(BoardDetailValidDto valid) throws NotClubMemberException {
-        if(!isClubMember()) {
+        if(valid.getMemberNo() == null || !checkMember.isClubMember(new CheckIsMemberDto(valid.getMemberNo(), valid.getClubNo()))) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
@@ -104,5 +98,20 @@ public class BoardService {
         return findBoard;
     }
 
+    /**
+     * 게시글 작성
+     * @param dto
+     * @return
+     */
+    public int addBoard(BoardAddDto dto) {
+        int result = boardRepository.addBoard(dto, template);
 
+        //이미지 사진 저장
+        int imageResult = 0;
+        if(result == 1 && dto.getImageList().size() != 0) {
+            String recentBoardNo = boardRepository.getNoByMemberNo(dto, template);
+            imageResult = boardImageService.addImages(dto.getImageList(), recentBoardNo);
+        }
+        return imageResult;
+    }
 }

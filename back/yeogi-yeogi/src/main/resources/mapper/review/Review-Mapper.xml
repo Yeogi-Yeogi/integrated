@@ -19,4 +19,9 @@
             AND R.DEL_YN = 'N'
         ORDER BY 4 DESC
     </select>
+
+    <insert id="addReview" parameterType="com.yeogi.app.review.dto.ReviewAddDto">
+        INSERT INTO REVIEW(NO, WRITER_NO, BOARD_NO, CONTENT)
+        VALUES (SEQ_REVIEW_NO.NEXTVAL, #{writerNo}, #{boardNo}, #{content})
+    </insert>
 </mapper>

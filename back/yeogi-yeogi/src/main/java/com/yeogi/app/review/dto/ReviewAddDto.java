@@ -9,5 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReviewAddDto {
     private String writerNo;
+    private String boardNo;
+    private String clubNo;
     private String content;
 }
