@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDetailValidDto {
+public class CheckIsMemberDto {
     private String memberNo;
     private String clubNo;
-    private String boardNo;
 }
