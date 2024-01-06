@@ -2,7 +2,7 @@ package com.yeogi.app.club.vo;
 
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
-import org.springframework.data.annotation.TypeAlias;
+
 
 @Data
 @Alias("ClubVo")
