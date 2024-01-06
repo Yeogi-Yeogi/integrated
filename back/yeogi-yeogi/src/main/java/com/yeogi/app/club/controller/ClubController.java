@@ -40,10 +40,18 @@ public class ClubController {
         log.info("createClubDto = {}", createClubDto);
         int result = service.createClub(createClubDto);
         log.info("result = {}", result);
+        // 클럽이미지 선택x == 기본이미지
         return result;
     }
 
-    //클럽 소개
+    // 클럽 생성 - 클럽명 중복 확인
+    @PostMapping("checkClubName")
+    public String checkClubName(String clubName){
+        // 중복되는 클럽명 있으면 어떻게 처리할지
+        return service.checkClubName(clubName);
+    }
+
+    //클럽 소개(가입 전 클럽 보여주는 화면)
     @GetMapping("clubDescription")
     public ClubVo clubDescription(String clubNo){
         return service.getClubDescription(clubNo);
@@ -52,7 +60,7 @@ public class ClubController {
     // 클럽 가입
     @PostMapping("joinClub")
     public int joinClub(ClubVo vo){
-
+        // 회원 넘버 받아와서 처리할 dto 만들기,,
         int result = service.joinClub(vo);
 
         return result;

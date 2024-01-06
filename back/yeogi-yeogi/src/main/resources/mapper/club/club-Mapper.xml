@@ -30,7 +30,15 @@
         WHERE C.${searchMenu} LIKE '%'||#{searchString}||'%' AND DEL_YN = 'N'
     </select>
 
-<!--    클럽 생성(카테고리 불러오는거 추가? and 모임이름 중복검사?)-->
+<!--    클럽 생성( 클럽명 중복 확인 ) -->
+    <select id="checkClubName" resultType="String">
+        SELECT NAME
+        FROM CLUB
+        WHERE NAME = #{clubName}
+    </select>
+    
+    
+<!--    클럽 생성(insert)-->
     <insert id="createClub">
         INSERT INTO CLUB(NO, CATEGORY_NO, CREATOR_NO, NAME, CLUB_DESCRIPTION, AGE_LIMIT, SIGNUP_LIMIT)
         VALUES (SEQ_CLUB_NO.NEXTVAL, #{categoryNo}, #{creatorNo}, #{name}, #{clubDescription}, #{ageLimit}, #{signupLimit})
@@ -68,23 +76,33 @@
 
 <!--    클럽 관리(소개글, 대표이미지, 모임인원, 가입연령 변경) + -->
     <update id="editClub">
-        UPDATE CLUB
-        SET
-        <if test="clubDescription != null">
-            CLUB_DESCRIPTION = #{clubDescription}
-        </if>
-        <if test="ageLimit != null">
-            AGE_LIMIT = #{ageLimit}
-        </if>
-        <if test="signupLimit != null">
-            SIGNUP_LIMIT = #{signupLimit}
-        </if>
-        WHERE NO = #{no}
+        <choose>
+            <when test="clubImageFile == null">
+                UPDATE CLUB
+                SET
+                <if test="clubDescription != null">
+                    CLUB_DESCRIPTION = #{clubDescription}
+                </if>
+                <if test="ageLimit != null">
+                    AGE_LIMIT = #{ageLimit}
+                </if>
+                <if test="signupLimit != null">
+                    SIGNUP_LIMIT = #{signupLimit}
+                </if>
+                WHERE NO = #{no}
+            </when>
+            <otherwise>
+                UPDATE CLUB_IMAGE_FILE
+                SET FILE_URL = #{clubImageFile}
+                WHERE NO = #{no}
+            </otherwise>
+        </choose>
+
     </update>
 <!--    클럽 관리(관리자 지정 및 해제, 회원 추방)-->
     <update id="editClubMember">
 
     </update>
 
-<!--    회원 탈퇴 -->
+<!--    클럽 탈퇴 -->
 </mapper>
