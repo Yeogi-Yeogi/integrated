@@ -16,11 +16,18 @@
 
 <!-- 클럽 검색(조건 넣을지,,,) -->
     <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
-        SELECT C.*, CC.CATEGORY_NAME, I.FILE_URL
+        SELECT C.*
+        , CC.CATEGORY_NAME
+        , I.FILE_URL
+        , M.NICK
+        , (SELECT COUNT(MEMBER_NO)
+            FROM MEMBER_CLUB
+            WHERE CLUB_NO = C.NO) AS MEMBER_COUNT
         FROM CLUB C
+        JOIN MEMBER M ON C.CREATOR_NO = M.NO
         JOIN CLUB_CATEGORY CC ON C.CATEGORY_NO = CC.CATEGORY_NO
         JOIN CLUB_IMAGE_FILE I ON C.NO = I.NO
-        WHERE ${searchMenu} LIKE '%'||#{searchString}||'%'
+        WHERE C.${searchMenu} LIKE '%'||#{searchString}||'%' AND DEL_YN = 'N'
     </select>
 
 <!--    클럽 생성(카테고리 불러오는거 추가? and 모임이름 중복검사?)-->

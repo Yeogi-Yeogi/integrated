@@ -1,5 +1,6 @@
 package com.yeogi.app.club.dao;
 
+import com.yeogi.app.board.dto.CheckIsMemberDto;
 import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.dto.EditClubDto;

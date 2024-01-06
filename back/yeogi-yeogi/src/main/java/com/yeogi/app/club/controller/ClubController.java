@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -29,10 +31,10 @@ public class ClubController {
     @GetMapping("searchClub")
     public List<ClubVo> searchClub(ClubSearchDto clubSearchDto){
         log.info("clubSearchDto = {}", clubSearchDto);
-        List<ClubVo> clubList = service.getClubList(clubSearchDto);
-        log.info("clubList = {}", clubList);
+        List<ClubVo> searchClubList = service.getClubList(clubSearchDto);
+        log.info("clubList = {}", searchClubList);
 
-        return clubList;
+        return searchClubList;
     }
 
     // 클럽 생성
