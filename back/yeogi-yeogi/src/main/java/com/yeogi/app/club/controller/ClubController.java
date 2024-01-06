@@ -66,6 +66,12 @@ public class ClubController {
         return result;
     }
 
+    // 클럽 관리 (클럽 관리 화면) -> 클럽 정보 + 가입유저 정보
+    @GetMapping("management")
+    public ClubVo clubManagement(String no){
+        return service.getClubInfo(no);
+    }
+
     // 클럽 관리(클럽 정보 수정)
     @PostMapping("editClub")
     public int editClub(EditClubDto editClubDto){

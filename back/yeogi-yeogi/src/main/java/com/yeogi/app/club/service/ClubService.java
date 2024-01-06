@@ -64,4 +64,8 @@ public class ClubService {
     public String checkClubName(String clubName) {
         return dao.checkClubName(sst, clubName);
     }
+
+    public ClubVo getClubInfo(String no) {
+        return dao.getClubInfo(sst, no);
+    }
 }

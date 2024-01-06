@@ -73,6 +73,11 @@
         INSERT INTO MEMBER_CLUB(MEMBER_NO, CLUB_NO)
         VALUES (#{memberNo}, #{clubNo})
     </insert>
+<!--    클럽 관리 ( 클럽 정보 상세 조회 ) -->
+    <select id="getClubInfo" resultType="com.yeogi.app.club.vo.ClubVo">
+        SELECT *
+        FROM CLUB
+    </select>
 
 <!--    클럽 관리(소개글, 대표이미지, 모임인원, 가입연령 변경) + -->
     <update id="editClub">
