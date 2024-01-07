@@ -47,7 +47,7 @@ public class ClubController {
     // 클럽 생성 - 클럽명 중복 확인
     @PostMapping("checkClubName")
     public String checkClubName(String clubName){
-        // 중복되는 클럽명 있으면 어떻게 처리할지
+        // 중복되는 클럽명 있으면 어떻게 처리할지 써야됨
         return service.checkClubName(clubName);
     }
 

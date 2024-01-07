@@ -12,26 +12,46 @@
         AND CLUB_NO = #{clubNo}
     </select>
 
-<!-- 클럽 관리자여부 체크-->
+<!-- 클럽 관리자여부 체크 -->
+    <select id="checkAdmin" resultType="com.yeogi.app.club.vo.CheckMemberVo">
+        SELECT
+            M.NO
+            ,MC.ADMIN_YN
+            ,NVL(
+                (SELECT ADMIN_YN
+                FROM MEMBER_CLUB MC_SUB
+                JOIN CLUB C_SUB ON MC_SUB.CLUB_NO = C_SUB.NO
+                JOIN MEMBER M_SUB ON MC_SUB.MEMBER_NO = M_SUB.NO
+                WHERE MC_SUB.MEMBER_NO = C_SUB.CREATOR_NO
+                AND MC_SUB.CLUB_NO = #{clubNo}
+                AND M_SUB.NO = #{memberNo})
+                ,'N'
+            ) AS CLUB_MASTER
+        FROM MEMBER_CLUB MC
+        JOIN CLUB C ON MC.CLUB_NO = C.NO
+        JOIN MEMBER M ON MC.MEMBER_NO = M.NO
+        WHERE M.NO = #{memberNo}
+            AND C.NO = #{clubNo}
+    </select>
 
 <!-- 클럽 검색(조건 넣을지,,,) -->
     <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT
         C.NO
-        , C.NAME
-        , C.CATEGORY_NO
-        , C.CREATOR_NO
-        , C.CLUB_DESCRIPTION
-        , C.AGE_LIMIT
-        , C.SIGNUP_LIMIT
-        , C.ENROLL_DATE
-        , C.DEL_YN
-        , CC.CATEGORY_NAME
-        , I.FILE_URL
-        , M.NICK
-        , (SELECT COUNT(MEMBER_NO)
-            FROM MEMBER_CLUB
-            WHERE CLUB_NO = C.NO) AS MEMBER_COUNT
+            , C.NAME
+            , C.CATEGORY_NO
+            , C.CREATOR_NO
+            , C.CLUB_DESCRIPTION
+            , C.AGE_LIMIT
+            , C.SIGNUP_LIMIT
+            , C.ENROLL_DATE
+            , C.DEL_YN
+            , CC.CATEGORY_NAME
+            , I.FILE_URL
+            , M.NICK
+            , (SELECT COUNT(MEMBER_NO)
+                FROM MEMBER_CLUB
+                WHERE CLUB_NO = C.NO) AS MEMBER_COUNT
         FROM CLUB C
         JOIN MEMBER M ON C.CREATOR_NO = M.NO
         JOIN CLUB_CATEGORY CC ON C.CATEGORY_NO = CC.CATEGORY_NO
@@ -61,7 +81,7 @@
         VALUES (SEQ_CLUB_NO.NEXTVAL, #{categoryNo}, #{creatorNo}, #{name}, #{clubDescription}, #{ageLimit}, #{signupLimit})
     </insert>
 
-<!--    클럽 생성(클럽 대표이미지 추가) -->
+<!--    클럽 생성(클럽 대표이미지 추가), 클럽 insert 성공시 실행? 한번에 insert 할지? -->
     <insert id="insertClubImage">
         <choose>
             <when test="clubImageFile != null or clubImageFile.equals('')">
@@ -73,12 +93,21 @@
         </choose>
     </insert>
 
-<!--  클럽 소개(클럽가입화면)  -->
+<!--  클럽 소개(상세조회 / 클럽가입화면 )  -->
     <select id="clubDescription" resultType="com.yeogi.app.club.vo.ClubVo">
-        SELECT C.*
-        , CC.CATEGORY_NAME
-        , M.NICK
-        , (SELECT COUNT(MEMBER_NO) FROM MEMBER_CLUB WHERE CLUB_NO = #{no}) AS MEMBER_COUNT
+        SELECT
+            C.NO
+            , C.NAME
+            , C.CATEGORY_NO
+            , C.CREATOR_NO
+            , C.CLUB_DESCRIPTION
+            , C.AGE_LIMIT
+            , C.SIGNUP_LIMIT
+            , C.ENROLL_DATE
+            , C.DEL_YN
+            , CC.CATEGORY_NAME
+            , M.NICK
+            , (SELECT COUNT(MEMBER_NO) FROM MEMBER_CLUB WHERE CLUB_NO = #{no}) AS MEMBER_COUNT
         FROM CLUB C
         JOIN CLUB_CATEGORY CC ON C.NO = CC.CATEGORY_NO
         JOIN MEMBER M ON C.CREATOR_NO = M.NO
@@ -90,13 +119,13 @@
         INSERT INTO MEMBER_CLUB(MEMBER_NO, CLUB_NO)
         VALUES (#{memberNo}, #{clubNo})
     </insert>
-<!--    클럽 관리 ( 클럽 정보 상세 조회 ) -->
+<!--    클럽 관리 ( 클럽 정보 상세 조회 ) 일단 clubDescription 이랑 같이 사용.. -->
     <select id="getClubInfo" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT *
         FROM CLUB
     </select>
 
-<!--    클럽 관리(소개글, 대표이미지, 모임인원, 가입연령 변경) + -->
+<!--    클럽 관리(소개글, 대표이미지, 모임인원, 가입연령 변경) + 실행되는 쿼리마다 리턴값을 다르게해서 구분하고싶은데... -->
     <update id="editClub">
         <choose>
             <when test="clubImageFile == null">
