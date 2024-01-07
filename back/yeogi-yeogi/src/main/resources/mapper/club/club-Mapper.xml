@@ -23,8 +23,8 @@
                 JOIN CLUB C_SUB ON MC_SUB.CLUB_NO = C_SUB.NO
                 JOIN MEMBER M_SUB ON MC_SUB.MEMBER_NO = M_SUB.NO
                 WHERE MC_SUB.MEMBER_NO = C_SUB.CREATOR_NO
-                AND MC_SUB.CLUB_NO = #{clubNo}
-                AND M_SUB.NO = #{memberNo})
+                    AND MC_SUB.CLUB_NO = #{clubNo}
+                    AND M_SUB.NO = #{memberNo})
                 ,'N'
             ) AS CLUB_MASTER
         FROM MEMBER_CLUB MC
@@ -156,4 +156,8 @@
     </update>
 
 <!--    클럽 탈퇴 -->
+    <delete id="">
+
+    </delete>
+
 </mapper>
