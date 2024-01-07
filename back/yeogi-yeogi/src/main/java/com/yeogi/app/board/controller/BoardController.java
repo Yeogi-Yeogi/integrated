@@ -1,9 +1,6 @@
 package com.yeogi.app.board.controller;
 
-import com.yeogi.app.board.dto.BoardAddDto;
-import com.yeogi.app.board.dto.BoardDetailDto;
-import com.yeogi.app.board.dto.BoardDetailValidDto;
-import com.yeogi.app.board.dto.BoardListDto;
+import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.service.BoardService;
 import com.yeogi.app.util.exception.ErrorResult;
 import com.yeogi.app.util.exception.NotClubMemberException;
@@ -30,15 +27,15 @@ public class BoardController {
 
     /**
      * 게시글 리스트 출력
-     * @param clubNo
+     * @param dto
      * @param pageNo
      * @return
      */
-    @GetMapping("/list/{clubNo}")
-    public ResponseEntity<List<BoardListDto>> getList(@PathVariable String clubNo, @RequestParam(defaultValue = "0") String pageNo, @RequestParam String memberNo) throws NotClubMemberException {
+    @GetMapping("/list/{pageNo}")
+    public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckIsMemberDto dto, @PathVariable String pageNo) throws NotClubMemberException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        return new ResponseEntity<>(service.getBoardListByClubNo(clubNo, memberNo, pageNo), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.getBoardListByClubNo(dto, pageNo), headers, HttpStatus.OK);
     }
 
     /**
@@ -61,7 +58,7 @@ public class BoardController {
      * @return
      */
     @GetMapping("/detail")
-    public ResponseEntity<BoardDetailDto> getOneByBoardNo(@RequestBody BoardDetailValidDto valid) throws NotClubMemberException {
+    public ResponseEntity<BoardDetailDto> getOneByBoardNo(@ModelAttribute BoardDetailValidDto valid) throws NotClubMemberException {
         log.info("valid = {}", valid);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
