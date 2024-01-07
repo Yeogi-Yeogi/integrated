@@ -35,18 +35,17 @@ public class BoardService {
     /**
      * 게시글 간편 조회 데이터 가져오기
      *
-     * @param clubNo
-     * @param memberNo
+     * @param dto
      * @param pageNo
      * @return
      */
-    public List<BoardListDto> getBoardListByClubNo(String clubNo, String memberNo, String pageNo) throws NotClubMemberException {
-        if(memberNo == null || !checkMember.isClubMember(new CheckIsMemberDto(memberNo, clubNo))) {
+    public List<BoardListDto> getBoardListByClubNo(CheckIsMemberDto dto, String pageNo) throws NotClubMemberException {
+        if(dto.getMemberNo() == null || !checkMember.isClubMember(dto)) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*10, 10);
-        List<BoardListDto> boardList = boardRepository.getBoardListIgnoreFileUrl(clubNo, template, rowBounds);
+        List<BoardListDto> boardList = boardRepository.getBoardListIgnoreFileUrl(dto.getClubNo(), template, rowBounds);
 
         Map<String, BoardListDto> boardMap = new HashMap<>();
         boardList.stream().forEach(e -> boardMap.put(e.getBoardNo(), e));
@@ -114,4 +113,5 @@ public class BoardService {
         }
         return imageResult;
     }
+
 }
