@@ -56,4 +56,12 @@ public class ClubDao {
     public int quitClubMember(SqlSessionTemplate sst, EditClubMemberDto editClubMemberDto) {
         return sst.delete("ClubMapper.quitClubMember", editClubMemberDto);
     }
+
+    public String checkClubName(SqlSessionTemplate sst, String clubName) {
+        return sst.selectOne("ClubMapper.checkClubName", clubName);
+    }
+
+    public ClubVo getClubInfo(SqlSessionTemplate sst, String no) {
+        return sst.selectOne("ClubMapper.clubDescription", no);
+    }
 }

@@ -30,7 +30,7 @@ public class ClubService {
     @Transactional
     public int createClub(CreateClubDto createClubDto) {
         int result = dao.createClub(createClubDto, sst);
-
+        // 클럽에 insert 성공하면 클럽이미지에 insert
         if(result == 1){
             int clubImageResult = dao.insertClubImage(createClubDto, sst);
             log.info("clubImageResult = {}", clubImageResult);
@@ -43,10 +43,12 @@ public class ClubService {
         return dao.getClubDescription(sst, clubNo);
     }
 
+    @Transactional
     public int joinClub(ClubVo vo) {
         return dao.joinClub(sst, vo);
     }
 
+    @Transactional
     public int editClub(EditClubDto editClubDto) {
         return  dao.editClub(sst, editClubDto);
     }
@@ -57,5 +59,13 @@ public class ClubService {
         } else {
             return dao.quitClubMember(sst, editClubMemberDto);
         }
+    }
+
+    public String checkClubName(String clubName) {
+        return dao.checkClubName(sst, clubName);
+    }
+
+    public ClubVo getClubInfo(String no) {
+        return dao.getClubInfo(sst, no);
     }
 }
