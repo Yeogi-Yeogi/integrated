@@ -91,9 +91,11 @@
         VALUES (SEQ_CLUB_NO.NEXTVAL, #{categoryNo}, #{creatorNo}, #{name}, #{clubDescription}, #{ageLimit}, #{signupLimit})
     </insert>
 
-<!--    클럽 생성 (MEMBER_CLUB 에 모임장 INSERT) -->
+<!--    클럽 생성 (MEMBER_CLUB 에 모임장 INSERT) 클럽 insert 성공시 실행?-->
+    <insert id="insertClubMaster">
 
-<!--    클럽 생성(클럽 대표이미지 추가), 클럽 insert 성공시 실행? 한번에 insert 할지? -->
+    </insert>
+<!--    클럽 생성(클럽 대표이미지 추가), 클럽 insert 성공시 실행?-->
     <insert id="insertClubImage">
         <choose>
             <when test="clubImageFile != null or clubImageFile.equals('')">
@@ -203,7 +205,7 @@
     </update>
 
 <!--    클럽 탈퇴 -->
-    <delete id="">
+    <delete id="quitClub">
 
     </delete>
 

@@ -54,7 +54,7 @@ public class ClubController {
     }
 
     /**
-     * 클럽 생성 - 클럽명 중복 확인
+     * 클럽 생성 - 클럽명 중복 확인 - 이미지파일관련 수정 필요
      * @param clubName
      * @return
      */
@@ -127,5 +127,18 @@ public class ClubController {
     @PostMapping("editClubMember")
     public int editClubMember(EditClubMemberDto editClubMemberDto){
         return service.editClubMember(editClubMemberDto);
+    }
+
+    /**
+     * 클럽 탈퇴(회원) => 모임장은 안돼
+     * @param editClubDto
+     * @return
+     */
+    @PostMapping("quitClub")
+    public int quitClub(EditClubDto editClubDto){
+
+        int result = service.quitClub(editClubDto);
+
+        return result;
     }
 }

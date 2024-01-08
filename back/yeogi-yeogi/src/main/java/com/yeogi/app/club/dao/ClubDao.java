@@ -66,4 +66,11 @@ public class ClubDao {
     public List<ClubMemberVo> getClubMemberList(SqlSessionTemplate sst, String clubNo) {
         return sst.selectList("ClubMapper.getClubMemberList", clubNo);
     }
+
+    public int quitClub(SqlSessionTemplate sst, EditClubDto editClubDto) {
+        return sst.delete("ClubMapper.quitClub", editClubDto);
+    }
+
+    public void insertClubMaster(CreateClubDto createClubDto, SqlSessionTemplate sst) {
+    }
 }
