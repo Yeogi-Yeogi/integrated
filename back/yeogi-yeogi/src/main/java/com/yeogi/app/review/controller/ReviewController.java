@@ -4,11 +4,9 @@ import com.yeogi.app.review.dto.ReviewAddDto;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
 import com.yeogi.app.review.service.ReviewService;
-import com.yeogi.app.review.vo.ReviewVo;
 import com.yeogi.app.util.exception.ErrorResult;
 import com.yeogi.app.util.exception.FailAddReviewException;
-import com.yeogi.app.util.exception.NotClubMemberException;
-import lombok.AllArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

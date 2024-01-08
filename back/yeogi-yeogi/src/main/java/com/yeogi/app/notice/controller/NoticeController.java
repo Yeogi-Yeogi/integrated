@@ -38,10 +38,17 @@ public class NoticeController {
         return new ResponseEntity<>(service.getNoticeList(checkDto, pageNo), headers, HttpStatus.OK);
     }
 
+    /**
+     * 공지사항 상세 조회
+     * @param dto
+     * @return
+     * @throws NotClubMemberException
+     */
     @GetMapping("/detail")
     public ResponseEntity<NoticeDetailDto> getDetail(@ModelAttribute BoardDetailValidDto dto) throws NotClubMemberException {
         return new ResponseEntity<>(service.getOne(dto), getHttpHeaders(), HttpStatus.OK);
     }
+
 
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();

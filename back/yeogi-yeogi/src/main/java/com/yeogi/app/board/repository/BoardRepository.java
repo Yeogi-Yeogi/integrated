@@ -1,6 +1,8 @@
 package com.yeogi.app.board.repository;
 
 import com.yeogi.app.board.dto.*;
+import com.yeogi.app.notice.dto.NoticeDetailDto;
+import com.yeogi.app.notice.dto.NoticeListDto;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -69,5 +71,25 @@ public class BoardRepository {
      */
     public String getNoByMemberNo(BoardAddDto memberNo, SqlSessionTemplate template) {
         return template.selectOne("BoardMapper.getNoByMemberNo", memberNo);
+    }
+
+    /**
+     * 공지사항 리스트 가져오기
+     * @param template
+     * @param rowBounds
+     * @return
+     */
+    public List<NoticeListDto> getNoticeList(SqlSessionTemplate template, RowBounds rowBounds) {
+        return template.selectList("BoardMapper.getNoticeList", rowBounds);
+    }
+
+    /**
+     * 공지사항 상세조회
+     * @param dto
+     * @param template
+     * @return
+     */
+    public NoticeDetailDto getOne(BoardDetailValidDto dto, SqlSessionTemplate template) {
+        return template.selectOne("BoardMapper.getNoticeOne", dto);
     }
 }

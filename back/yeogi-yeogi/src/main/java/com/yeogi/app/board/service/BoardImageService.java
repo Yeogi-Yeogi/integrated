@@ -46,6 +46,9 @@ public class BoardImageService {
      */
     public int addImages(List<MultipartFile> imageList, String recentBoardNo) {
         //MultipartFile -> BoardImageVo로 변환
+        //map & forEach
+        // common: 반복문 처럼 동작
+        // diff: 반환값의 유무
         List<BoardImageFileVo> voList = imageList.stream().map(m -> {
             try {
                 return getBoardImageVo(recentBoardNo, m);
@@ -55,7 +58,22 @@ public class BoardImageService {
         }).collect(Collectors.toList());
 
         log.info("voList = {}", voList);
-        return repository.addImages(voList, template);
+        int result = 0;
+
+        try {
+            result = repository.addImages(voList, template);
+        } catch (Exception e) {
+//            voList.stream().forEach(i -> deleteServerImage(i.getFileName()));
+        }
+        return result;
+    }
+
+    /**
+     * 오류 시 파일 삭제
+     * @param fileName
+     */
+    private void deleteServerImage(String fileName) {
+        s3Client.deleteObject(s3Config.getBucket(), fileName);
     }
 
     /**
@@ -73,7 +91,7 @@ public class BoardImageService {
         metadata.setContentType(m.getContentType());
         metadata.setContentLength(m.getSize());
 
-        s3Client.putObject(new PutObjectRequest(s3Config.getBucket(), customName, m.getInputStream(), null)
+        s3Client.putObject(new PutObjectRequest(s3Config.getBucket(), customName, m.getInputStream(), metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
 
         //customName, url을 DB에 저장;
