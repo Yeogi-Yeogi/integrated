@@ -5,11 +5,22 @@
 
 <mapper namespace="ClubMapper">
 
-<!-- 클럽 멤버 체크 -->
-    <select id="checkIsClubMember" resultType="java.lang.String">
-        SELECT MEMBER_NO
-        WHERE MEMBER_NO = #{memberNo}
-        AND CLUB_NO = #{clubNo}
+<!-- 클럽 멤버 권한 체크 -->
+    <select id="checkIsClubMember" resultType="com.yeogi.app.util.check.CheckDto">
+        SELECT
+            CASE
+                WHEN C.CREATOR_NO = MC.MEMBER_NO THEN 'Y'
+                ELSE 'N'
+            END AS CREATOR_YN
+            , MC.MEMBER_NO
+            , MC.ADMIN_YN
+            , MC.CLUB_NO
+        FROM MEMBER_CLUB MC
+        LEFT OUTER JOIN CLUB C
+            ON MC.CLUB_NO = C.NO
+        WHERE C.NO = #{clubNo}
+        AND MC.MEMBER_NO = #{memberNo}
+        ;
     </select>
 
 <!-- 클럽 관리자여부 체크 -->
@@ -35,7 +46,7 @@
     </select>
 
 <!-- 클럽 검색(조건 넣을지,,,) -->
-    <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
+    <select id="searchClub" resultType="ClubVo">
         SELECT
         C.NO
             , C.NAME
@@ -94,7 +105,7 @@
     </insert>
 
 <!--  클럽 소개(상세조회 / 클럽가입화면 )  -->
-    <select id="clubDescription" resultType="com.yeogi.app.club.vo.ClubVo">
+    <select id="clubDescription" resultType="ClubVo">
         SELECT
             C.NO
             , C.NAME
@@ -152,6 +163,22 @@
     </update>
 <!--    클럽 관리(관리자 지정 및 해제, 회원 추방)-->
     <update id="editClubMember">
+        <choose>
+            <when test="editType != null and editType.contains('admin') ">
+                UPDATE MEMBER_CLUB
+                <if test="adminN">
+                    SET ADMIN_YN = 'N'
+                </if>
+                <if test="adminY">
+                    SET ADMIN_YN = 'Y'
+                </if>
+            </when>
+            <otherwise>
+                DELETE FROM MEMBER_CLUB
+                WHERE MEMBER_NO = #{memberNo}
+                    AND CLUB_NO = #{clubNo}
+            </otherwise>
+        </choose>
 
     </update>
 
