@@ -91,6 +91,8 @@
         VALUES (SEQ_CLUB_NO.NEXTVAL, #{categoryNo}, #{creatorNo}, #{name}, #{clubDescription}, #{ageLimit}, #{signupLimit})
     </insert>
 
+<!--    클럽 생성 (MEMBER_CLUB 에 모임장 INSERT) -->
+
 <!--    클럽 생성(클럽 대표이미지 추가), 클럽 insert 성공시 실행? 한번에 insert 할지? -->
     <insert id="insertClubImage">
         <choose>
@@ -160,6 +162,22 @@
         </choose>
 
     </update>
+<!--    클럽 관리(클럽 회원 목록 불러오기)-->
+    <select id="getClubMemberList" resultType="com.yeogi.app.club.vo.ClubMemberVo">
+        SELECT
+            MC.MEMBER_NO
+            ,MC.CLUB_NO
+            ,MC.ADMIN_YN
+            ,MC.REG_DATE
+            ,M.NICK
+            ,M.NAME
+            ,M.PHONE
+            ,M.EMAIL
+        FROM MEMBER_CLUB MC
+        JOIN MEMBER M ON MC.MEMBER_NO = M.NO
+        WHERE MC.CLUB_NO = #{clubNo}
+        ORDER BY ADMIN_YN DESC, REG_DATE
+    </select>
 <!--    클럽 관리(관리자 지정 및 해제, 회원 추방)-->
     <update id="editClubMember">
         <choose>
@@ -172,13 +190,16 @@
                     SET ADMIN_YN = 'Y'
                 </if>
             </when>
-            <otherwise>
+            <when test="editType.equals('deleteMember')">
                 DELETE FROM MEMBER_CLUB
                 WHERE MEMBER_NO = #{memberNo}
                     AND CLUB_NO = #{clubNo}
+            </when>
+            <otherwise>
+                DELETE FROM CLUB
+                WHERE CLUB_NO = #{clubNo}
             </otherwise>
         </choose>
-
     </update>
 
 <!--    클럽 탈퇴 -->

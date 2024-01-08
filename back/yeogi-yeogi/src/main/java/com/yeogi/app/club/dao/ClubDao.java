@@ -4,6 +4,7 @@ import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.dto.EditClubDto;
 import com.yeogi.app.club.dto.EditClubMemberDto;
+import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckDto;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -60,5 +61,9 @@ public class ClubDao {
 
     public ClubVo getClubInfo(SqlSessionTemplate sst, String no) {
         return sst.selectOne("ClubMapper.clubDescription", no);
+    }
+
+    public List<ClubMemberVo> getClubMemberList(SqlSessionTemplate sst, String clubNo) {
+        return sst.selectList("ClubMapper.getClubMemberList", clubNo);
     }
 }

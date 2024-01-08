@@ -5,6 +5,7 @@ import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.dto.EditClubDto;
 import com.yeogi.app.club.dto.EditClubMemberDto;
+import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,5 +64,9 @@ public class ClubService {
 
     public ClubVo getClubInfo(String no) {
         return dao.getClubInfo(sst, no);
+    }
+
+    public List<ClubMemberVo> getClubMemberList(String clubNo) {
+        return dao.getClubMemberList(sst, clubNo);
     }
 }
