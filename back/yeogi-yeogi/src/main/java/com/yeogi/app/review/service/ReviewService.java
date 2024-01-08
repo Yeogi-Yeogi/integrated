@@ -5,6 +5,7 @@ import com.yeogi.app.review.dto.ReviewAddDto;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
 import com.yeogi.app.review.repository.ReviewRepository;
+import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.FailAddReviewException;
 import com.yeogi.app.util.check.CheckClubMember;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,14 @@ public class ReviewService {
      * @throws FailAddReviewException
      */
     public int addReview(ReviewAddDto review) throws FailAddReviewException {
-        if(review.getWriterNo() == null || !checkMember.isClubMember(new CheckIsMemberDto(review.getWriterNo(), review.getClubNo()))) {
-            throw new FailAddReviewException("회원만 작성 가능합니다.");
-        }
-
+        checkIsMember(review);
         return repository.addReview(review, template);
+    }
+
+    private void checkIsMember(ReviewAddDto review) throws FailAddReviewException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(review.getClubNo(), review.getWriterNo()), template);
+        if(!(review.getWriterNo() == null && clubMember.getMemberNo().equals(review.getWriterNo()))) {
+            throw new FailAddReviewException("모임에 가입한 회원만 이용 가능합니다");
+        }
     }
 }

@@ -1,8 +1,11 @@
 package com.yeogi.app.notice.service;
 
+import com.yeogi.app.board.dto.BoardDetailValidDto;
 import com.yeogi.app.board.dto.CheckIsMemberDto;
+import com.yeogi.app.notice.dto.NoticeDetailDto;
 import com.yeogi.app.notice.dto.NoticeListDto;
 import com.yeogi.app.notice.repository.NoticeRepository;
+import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import com.yeogi.app.util.check.CheckClubMember;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +31,21 @@ public class NoticeService {
      * @param checkDto
      * @return
      */
-    public List<NoticeListDto> getNoticeList(CheckIsMemberDto checkDto, String pageNo) throws NotClubMemberException {
-        if(checkDto == null || !check.isClubMember(checkDto)) {
-            throw new NotClubMemberException("회원만 이용가능합니다");
+    public List<NoticeListDto> getNoticeList(CheckDto checkDto, String pageNo) throws NotClubMemberException {
+        CheckDto clubMember = check.isClubMember(checkDto, template);
+        if(!(checkDto != null && !clubMember.getMemberNo().equals(checkDto.getMemberNo()))) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo) * 10, 15);
+        return null;
+    }
+
+    public NoticeDetailDto getOne(BoardDetailValidDto dto) throws NotClubMemberException {
+        CheckDto clubMember = check.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
+        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        }
         return null;
     }
 }

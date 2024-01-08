@@ -14,15 +14,14 @@ public class CheckClubMember {
 
     private final ClubDao clubRepository;
 
-    private final SqlSessionTemplate template;
 
     /**
      * 모임에 가입한 사람인지 검사하는 로직
      * @param dto
      * @return
      */
-    public boolean isClubMember(CheckIsMemberDto dto) {
-        CheckDto findMemberNo = clubRepository.checkIsClubMember(dto, template);
-        return findMemberNo == null ? false : true;
+    public CheckDto isClubMember(CheckDto dto, SqlSessionTemplate template) {
+        return clubRepository.checkIsClubMember(dto, template);
+
     }
 }

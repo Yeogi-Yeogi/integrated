@@ -2,6 +2,7 @@ package com.yeogi.app.board.controller;
 
 import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.service.BoardService;
+import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.ErrorResult;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -32,9 +32,8 @@ public class BoardController {
      * @return
      */
     @GetMapping("/list/{pageNo}")
-    public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckIsMemberDto dto, @PathVariable String pageNo) throws NotClubMemberException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+    public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException {
+        HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(service.getBoardListByClubNo(dto, pageNo), headers, HttpStatus.OK);
     }
 
@@ -44,10 +43,9 @@ public class BoardController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addBoard(@RequestBody BoardAddDto dto) {
+    public ResponseEntity<String> addBoard(@RequestBody BoardAddDto dto) throws NotClubMemberException {
         int result = service.addBoard(dto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>("작성 완료", headers, HttpStatus.OK);
     }
 
@@ -60,8 +58,7 @@ public class BoardController {
     @GetMapping("/detail")
     public ResponseEntity<BoardDetailDto> getOneByBoardNo(@ModelAttribute BoardDetailValidDto valid) throws NotClubMemberException {
         log.info("valid = {}", valid);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(service.getOneByBoardNo(valid), headers, HttpStatus.OK);
     }
 
@@ -78,6 +75,12 @@ public class BoardController {
         response.setMessage(e.getMessage());
 
         return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
+    }
+
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        return headers;
     }
 
     /**
