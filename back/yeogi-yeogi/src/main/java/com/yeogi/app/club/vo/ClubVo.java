@@ -1,7 +1,10 @@
 package com.yeogi.app.club.vo;
 
+import com.yeogi.app.member.vo.MemberVo;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
+
+import java.util.List;
 
 
 @Data
