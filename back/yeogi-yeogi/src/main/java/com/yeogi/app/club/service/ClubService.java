@@ -54,11 +54,7 @@ public class ClubService {
     }
 
     public int editClubMember(EditClubMemberDto editClubMemberDto) {
-        if(editClubMemberDto.getAdminYn() == null){
-            return dao.editClubMember(sst, editClubMemberDto);
-        } else {
-            return dao.quitClubMember(sst, editClubMemberDto);
-        }
+        return dao.editClubMember(sst, editClubMemberDto);
     }
 
     public String checkClubName(String clubName) {

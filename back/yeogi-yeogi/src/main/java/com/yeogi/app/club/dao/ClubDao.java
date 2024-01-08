@@ -19,9 +19,10 @@ public class ClubDao {
      * @param template
      * @return
      */
-    public String checkIsClubMember(CheckIsMemberDto dto, SqlSessionTemplate template) {
+    public CheckDto checkIsClubMember(CheckIsMemberDto dto, SqlSessionTemplate template) {
         return template.selectOne("ClubMapper.checkIsClubMember", dto);
     }
+
 
 
     public List<ClubVo> getClubList(ClubSearchDto clubSearchDto, SqlSessionTemplate sst) {
@@ -51,10 +52,6 @@ public class ClubDao {
 
     public int editClubMember(SqlSessionTemplate sst, EditClubMemberDto editClubMemberDto) {
         return sst.update("ClubMapper.editClubMember", editClubMemberDto);
-    }
-
-    public int quitClubMember(SqlSessionTemplate sst, EditClubMemberDto editClubMemberDto) {
-        return sst.delete("ClubMapper.quitClubMember", editClubMemberDto);
     }
 
     public String checkClubName(SqlSessionTemplate sst, String clubName) {
