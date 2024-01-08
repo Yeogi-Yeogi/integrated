@@ -1,11 +1,11 @@
 package com.yeogi.app.club.dao;
 
-import com.yeogi.app.board.dto.CheckIsMemberDto;
 import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.dto.EditClubDto;
 import com.yeogi.app.club.dto.EditClubMemberDto;
 import com.yeogi.app.club.vo.ClubVo;
+import com.yeogi.app.util.check.CheckDto;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -19,7 +19,7 @@ public class ClubDao {
      * @param template
      * @return
      */
-    public CheckDto checkIsClubMember(CheckIsMemberDto dto, SqlSessionTemplate template) {
+    public CheckDto checkIsClubMember(CheckDto dto, SqlSessionTemplate template) {
         return template.selectOne("ClubMapper.checkIsClubMember", dto);
     }
 

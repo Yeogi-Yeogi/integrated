@@ -1,5 +1,7 @@
 package com.yeogi.app.notice.dto;
 
+import com.yeogi.app.board.dto.BoardDetailDto;
+import com.yeogi.app.notice.vo.ScheduleVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoticeDetailDto {
-    private String noticeNo;
+public class NoticeDetailDto extends BoardDetailDto {
+   private ScheduleVo schedule;
+
+
 }

@@ -8,19 +8,18 @@
 <!-- 클럽 멤버 권한 체크 -->
     <select id="checkIsClubMember" resultType="com.yeogi.app.util.check.CheckDto">
         SELECT
-            CASE
+             MC.CLUB_NO
+            , MC.MEMBER_NO
+            , CASE
                 WHEN C.CREATOR_NO = MC.MEMBER_NO THEN 'Y'
                 ELSE 'N'
             END AS CREATOR_YN
-            , MC.MEMBER_NO
             , MC.ADMIN_YN
-            , MC.CLUB_NO
         FROM MEMBER_CLUB MC
         LEFT OUTER JOIN CLUB C
             ON MC.CLUB_NO = C.NO
         WHERE C.NO = #{clubNo}
         AND MC.MEMBER_NO = #{memberNo}
-        ;
     </select>
 
 <!-- 클럽 관리자여부 체크 -->
@@ -46,7 +45,7 @@
     </select>
 
 <!-- 클럽 검색(조건 넣을지,,,) -->
-    <select id="searchClub" resultType="ClubVo">
+    <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT
         C.NO
             , C.NAME
@@ -105,7 +104,7 @@
     </insert>
 
 <!--  클럽 소개(상세조회 / 클럽가입화면 )  -->
-    <select id="clubDescription" resultType="ClubVo">
+    <select id="clubDescription" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT
             C.NO
             , C.NAME

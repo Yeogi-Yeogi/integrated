@@ -35,8 +35,7 @@ public class ReviewController {
      */
     @GetMapping("/list")
     public ResponseEntity<List<ReviewDetailDto>> getMoreReviews(ReviewReqDto dto) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(service.getReviews(dto), headers, HttpStatus.OK);
     }
 
@@ -52,9 +51,14 @@ public class ReviewController {
 
         if(result != 1) throw new FailAddReviewException("리뷰 작성 실패");
 
+        HttpHeaders headers = getHttpHeaders();
+        return new ResponseEntity<>("작성되었습니다", headers, HttpStatus.OK);
+    }
+
+    private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        return new ResponseEntity<>("작성되었습니다", headers, HttpStatus.OK);
+        return headers;
     }
 
     /**

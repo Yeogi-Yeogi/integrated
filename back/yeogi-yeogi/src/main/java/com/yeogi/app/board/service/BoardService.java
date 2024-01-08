@@ -4,6 +4,7 @@ import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.repository.ReviewRepository;
+import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import com.yeogi.app.util.check.CheckClubMember;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,9 @@ public class BoardService {
      * @param pageNo
      * @return
      */
-    public List<BoardListDto> getBoardListByClubNo(CheckIsMemberDto dto, String pageNo) throws NotClubMemberException {
-        if(dto.getMemberNo() == null || !checkMember.isClubMember(dto)) {
+    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException {
+        CheckDto clubMember = checkMember.isClubMember(dto, template);
+        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
@@ -70,7 +72,8 @@ public class BoardService {
      * @return
      */
     public BoardDetailDto getOneByBoardNo(BoardDetailValidDto valid) throws NotClubMemberException {
-        if(valid.getMemberNo() == null || !checkMember.isClubMember(new CheckIsMemberDto(valid.getMemberNo(), valid.getClubNo()))) {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(valid.getClubNo(), valid.getMemberNo()), template);
+        if(!(valid.getMemberNo() != null && clubMember.getMemberNo().equals(valid.getMemberNo()))) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
@@ -90,9 +93,9 @@ public class BoardService {
         findBoard.setReviews(reviewList);
 
         //내가 작성한 거면
-//        if(findBoard.getMemberNo().equals("")) {
-//            findBoard.setMine(true);
-//        }
+        if(findBoard.getMemberNo().equals(clubMember.getMemberNo())) {
+            findBoard.setMine(true);
+        }
 
         return findBoard;
     }
@@ -102,7 +105,11 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int addBoard(BoardAddDto dto) {
+    public int addBoard(BoardAddDto dto) throws NotClubMemberException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
+        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+            throw new NotClubMemberException("회원만 작성 가능합니다.");
+        }
         int result = boardRepository.addBoard(dto, template);
 
         //이미지 사진 저장
