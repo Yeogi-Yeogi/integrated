@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleVo {
-    private String no;
-    private String title;
+    private String scheduleNo;
     private String boardNo;
+    private String clubNo;
+    private String title;
     private String startTime;
     private String location;
 }

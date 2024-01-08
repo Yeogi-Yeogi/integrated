@@ -43,8 +43,12 @@ public class BoardController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addBoard(@RequestBody BoardAddDto dto) throws NotClubMemberException {
+    public ResponseEntity<String> addBoard(BoardAddDto dto) throws NotClubMemberException {
+        log.info("boardAddDto = {}", dto);
         int result = service.addBoard(dto);
+        if(result == 0) {
+            throw new IllegalStateException("작성 실패");
+        }
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>("작성 완료", headers, HttpStatus.OK);
     }
@@ -99,13 +103,13 @@ public class BoardController {
     }
 
 
-//    @ExceptionHandler(value = IOException.class)
-//    public ResponseEntity<ErrorResult> handleIOE(IOException e) {
-//        e.printStackTrace();
-//        ErrorResult response = new ErrorResult();
-//        response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.ordinal());
-//        response.setMessage(e.getMessage());
-//
-//        return new ResponseEntity<>(response, null, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(value = IllegalStateException.class)
+    public ResponseEntity<ErrorResult> handleIOE(IllegalStateException e) {
+        e.printStackTrace();
+        ErrorResult response = new ErrorResult();
+        response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.ordinal());
+        response.setMessage(e.getMessage());
+
+        return new ResponseEntity<>(response, null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

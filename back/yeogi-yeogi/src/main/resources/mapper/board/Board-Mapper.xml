@@ -90,5 +90,32 @@
         FROM BOARD
         WHERE MEMBER_NO = #{memberNo} AND CLUB_NO = #{clubNo}
         ORDER BY ENROLL_DATE DESC
+        FETCH FIRST 1 ROWS ONLY
     </select>
+
+
+    <select id="getNoticeList" resultType="com.yeogi.app.board.dto.BoardListDto">
+        SELECT
+            B.NO NOTICE_NO,
+            B.TITLE,
+            B.HIT,
+            TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE,
+            M.NICK MEMBER_NAME,
+<!--            COUNT(R.NO) AS REVIEW_COUNT-->
+        FROM
+        BOARD B
+        INNER JOIN CLUB C ON B.CLUB_NO = C.NO
+        INNER JOIN MEMBER M ON B.MEMBER_NO = M.NO
+        LEFT OUTER JOIN REVIEW R  ON B.NO = R.BOARD_NO
+        LEFT OUTER JOIN BOARD_IMAGE_FILE BI ON B.NO = BI.BOARD_NO
+        WHERE
+        C.NO = #{clubNo}
+        AND B.DEL_YN = 'N'
+        AND B.NOTICE_YN = 'Y'
+        GROUP BY
+        B.NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.PROFILE_IMG
+        ORDER BY 5 DESC
+    </select>
+
+
 </mapper>

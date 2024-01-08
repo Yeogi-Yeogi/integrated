@@ -116,6 +116,7 @@ public class BoardService {
         int imageResult = 0;
         if(result == 1 && dto.getImageList().size() != 0) {
             String recentBoardNo = boardRepository.getNoByMemberNo(dto, template);
+            System.out.println("recentBoardNo = " + recentBoardNo);
             imageResult = boardImageService.addImages(dto.getImageList(), recentBoardNo);
         }
         return imageResult;
