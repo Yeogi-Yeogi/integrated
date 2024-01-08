@@ -5,7 +5,7 @@ import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.exception.NotClubMemberException;
-import com.yeogi.app.util.valid.CheckClubMember;
+import com.yeogi.app.util.check.CheckClubMember;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;

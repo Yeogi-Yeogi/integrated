@@ -1,13 +1,12 @@
 package com.yeogi.app.review.service;
 
 import com.yeogi.app.board.dto.CheckIsMemberDto;
-import com.yeogi.app.club.dao.ClubDao;
 import com.yeogi.app.review.dto.ReviewAddDto;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
 import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.exception.FailAddReviewException;
-import com.yeogi.app.util.valid.CheckClubMember;
+import com.yeogi.app.util.check.CheckClubMember;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;

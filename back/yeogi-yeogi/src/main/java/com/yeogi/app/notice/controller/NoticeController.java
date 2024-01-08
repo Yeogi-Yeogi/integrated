@@ -23,11 +23,11 @@ public class NoticeController {
 
 
 
-    @GetMapping("/list/{offset}")
-    public ResponseEntity<List<NoticeListDto>> getNoticeList(@ModelAttribute CheckIsMemberDto checkDto, @PathVariable String offset) throws NotClubMemberException {
+    @GetMapping("/list/{pageNo}")
+    public ResponseEntity<List<NoticeListDto>> getNoticeList(@ModelAttribute CheckIsMemberDto checkDto, @PathVariable String pageNo) throws NotClubMemberException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        return new ResponseEntity<>(service.getNoticeList(checkDto, offset), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.getNoticeList(checkDto, pageNo), headers, HttpStatus.OK);
     }
 
     @ExceptionHandler(value = NotClubMemberException.class)

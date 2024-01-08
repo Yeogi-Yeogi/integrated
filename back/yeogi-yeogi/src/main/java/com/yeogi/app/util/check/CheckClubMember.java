@@ -1,4 +1,4 @@
-package com.yeogi.app.util.valid;
+package com.yeogi.app.util.check;
 
 import com.yeogi.app.board.dto.CheckIsMemberDto;
 import com.yeogi.app.club.dao.ClubDao;
@@ -22,7 +22,7 @@ public class CheckClubMember {
      * @return
      */
     public boolean isClubMember(CheckIsMemberDto dto) {
-        String findMemberNo = clubRepository.checkIsClubMember(dto, template);
+        CheckDto findMemberNo = clubRepository.checkIsClubMember(dto, template);
         return findMemberNo == null ? false : true;
     }
 }
