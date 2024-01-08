@@ -12,5 +12,25 @@ public class MemberDao {
 	public int join(SqlSessionTemplate sst, MemberVo vo) {
 		return sst.insert("MemberMapper.join", vo);		
 	}
+	
+	// 로그인
+	public MemberVo login(SqlSessionTemplate sst, MemberVo vo) {
+		return sst.selectOne("MemberMapper.login" , vo);
+	}
+
+	// 회원 탈퇴
+	public int quit(SqlSessionTemplate sst, MemberVo vo) {
+		return sst.update("MemberMapper.quit", vo);
+	}
+
+	//내 정보 조회
+	public MemberVo mySelect(SqlSessionTemplate sst, MemberVo vo) {
+		return sst.selectOne("MemberMapper.mySelect",vo);
+	}
+
+	//내 정보 수정
+	public int edit(SqlSessionTemplate sst, MemberVo vo) {
+		return sst.update("MemberMapper.edit" , vo);
+	}
 
 }
