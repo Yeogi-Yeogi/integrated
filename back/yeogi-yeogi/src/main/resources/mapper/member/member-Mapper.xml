@@ -2,10 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="MemberMapper">
 
-    <insert id="Join">
+    <insert id="join">
         INSERT INTO MEMBER
 		(
 		    NO
@@ -31,4 +30,57 @@
             , #{resiNum}
 		)
     </insert>
+    
+    
+    <select id="login" resultType="MemberVo">
+		SELECT
+		    NO
+		    ,ID
+		    ,PWD
+		    ,NICK
+		    ,ENROLL_DATE
+		    ,DEL_YN
+		FROM MEMBER
+		WHERE ID = #{id}
+		AND PWD = #{pwd}
+	</select>
+	
+	<update id="quit">
+		UPDATE MEMBER
+		    SET 
+		        DEL_YN = 'Y'
+		WHERE NO = #{no}
+	</update>
+	
+	<select id="mySelect" resultType="MemberVo">
+		SELECT
+			NO
+            ,NAME
+            ,ID
+            ,PWD
+            ,NICK
+            ,PHONE
+            ,EMAIL
+            ,ENROLL_DATE
+            ,MODIFIED_DATE
+            ,PROFILE_IMG
+            ,RESI_NUM
+         FROM MEMBER
+         ;
+	</select>
+	
+	<update id="edit">
+		UPDATE MEMBER
+			SET
+				NO
+	           ,ID = #{id}
+	           ,PWD = #{pwd}
+	           ,NICK = #{nick}
+	           ,PHONE = #{phone}
+	           ,EMAIL = #{email}
+	           ,PROFILE_IMG = #{profileImg}
+           WHERE NO = #{no}
+		   AND QUIT_YN = 'N'		
+	</update>
+	
 </mapper>
