@@ -61,8 +61,10 @@ public class BoardImageService {
         int result = 0;
 
         try {
-            result = (int) voList.stream().map(e -> imageRepository.addImages(e, template)).count();
-            log.info("result = {}", result);
+            //count는 0이어도 1임, Stream 한번 볼것
+            for(BoardImageFileVo b : voList) {
+                result += imageRepository.addImages(b, template);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             voList.stream().forEach(i -> deleteServerImage(i.getFileName()));

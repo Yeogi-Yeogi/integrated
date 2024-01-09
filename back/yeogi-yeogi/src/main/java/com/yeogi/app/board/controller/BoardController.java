@@ -46,7 +46,7 @@ public class BoardController {
     public ResponseEntity<String> addBoard(BoardAddDto dto) throws NotClubMemberException {
         log.info("boardAddDto = {}", dto);
         int result = service.addBoard(dto);
-        if(result == 0) {
+        if(result != dto.getImageList().size()) {
             throw new IllegalStateException("작성 실패");
         }
         HttpHeaders headers = getHttpHeaders();
