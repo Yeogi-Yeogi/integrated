@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewReqDto {
+    private String clubNo;
+    private String memberNo;
     private String offset;
     private String boardNo;
 }

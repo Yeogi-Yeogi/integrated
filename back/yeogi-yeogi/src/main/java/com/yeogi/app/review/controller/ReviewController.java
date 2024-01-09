@@ -7,6 +7,7 @@ import com.yeogi.app.review.service.ReviewService;
 import com.yeogi.app.util.exception.ErrorResult;
 import com.yeogi.app.util.exception.FailAddReviewException;
 
+import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -32,7 +33,7 @@ public class ReviewController {
      * @return
      */
     @GetMapping("/list")
-    public ResponseEntity<List<ReviewDetailDto>> getMoreReviews(ReviewReqDto dto) {
+    public ResponseEntity<List<ReviewDetailDto>> getMoreReviews(ReviewReqDto dto) throws NotClubMemberException {
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(service.getReviews(dto), headers, HttpStatus.OK);
     }
@@ -57,6 +58,16 @@ public class ReviewController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         return headers;
+    }
+    
+    @ExceptionHandler(value = NotClubMemberException.class)
+    public ResponseEntity<ErrorResult> handleErrorNotMember(NotClubMemberException e) {
+        e.printStackTrace();
+        ErrorResult response = new ErrorResult();
+        response.setCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(e.getMessage());
+
+        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
     }
 
     /**
