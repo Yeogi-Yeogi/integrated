@@ -32,7 +32,7 @@
     </insert>
     
     
-    <select id="login" resultType="MemberVo">
+    <select id="login" resultType="com.yeogi.app.member.vo.MemberVo">
 		SELECT
 		    NO
 		    ,ID
@@ -52,7 +52,7 @@
 		WHERE NO = #{no}
 	</update>
 	
-	<select id="mySelect" resultType="MemberVo">
+	<select id="mySelect" resultType="com.yeogi.app.member.vo.MemberVo">
 		SELECT
 			NO
             ,NAME
