@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.yeogi.app.board.repository.BoardImageRepository;
+import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.board.vo.BoardImageFileVo;
 import com.yeogi.app.util.config.S3Config;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardImageService {
 
-    private final BoardImageRepository repository;
+    private final BoardImageRepository imageRepository;
+    private final BoardRepository boardRepository;
     private final SqlSessionTemplate template;
     private AmazonS3Client s3Client;
     private final S3Config s3Config;
@@ -58,12 +60,16 @@ public class BoardImageService {
         }).collect(Collectors.toList());
 
         log.info("voList = {}", voList);
+        log.info("voList.size() = {}", voList.size() );
         int result = 0;
 
         try {
-            result = repository.addImages(voList, template);
+            result = (int) voList.stream().map(e -> imageRepository.addImages(e, template)).count();
+            log.info("result = {}", result);
         } catch (Exception e) {
-//            voList.stream().forEach(i -> deleteServerImage(i.getFileName()));
+            e.printStackTrace();
+            voList.stream().forEach(i -> deleteServerImage(i.getFileName()));
+            boardRepository.deleteBoardByNo(recentBoardNo, template);
         }
         return result;
     }

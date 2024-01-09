@@ -92,4 +92,14 @@ public class BoardRepository {
     public NoticeDetailDto getOne(BoardDetailValidDto dto, SqlSessionTemplate template) {
         return template.selectOne("BoardMapper.getNoticeOne", dto);
     }
+
+    /**
+     * 게시글 번호로 게시글 삭제
+     *
+     * @param BoardNo
+     * @param template
+     */
+    public void deleteBoardByNo(String BoardNo, SqlSessionTemplate template) {
+        template.delete("BoardMapper.deleteBoardByNo", BoardNo);
+    }
 }
