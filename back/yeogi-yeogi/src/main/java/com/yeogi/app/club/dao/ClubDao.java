@@ -9,6 +9,8 @@ import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckDto;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @Repository
@@ -72,5 +74,10 @@ public class ClubDao {
     }
 
     public void insertClubMaster(CreateClubDto createClubDto, SqlSessionTemplate sst) {
+    }
+
+    public String uploadFile(MultipartFile file) {
+
+        return "";
     }
 }
