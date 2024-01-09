@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BoardImageRepository {
 
-    public int addImages(BoardImageFileVo list, SqlSessionTemplate template) {
-        return template.insert("BoardImageMapper.addImages", list);
+    public int addImages(BoardImageFileVo vo, SqlSessionTemplate template) {
+        return template.insert("BoardImageMapper.addImages", vo);
     }
 
 

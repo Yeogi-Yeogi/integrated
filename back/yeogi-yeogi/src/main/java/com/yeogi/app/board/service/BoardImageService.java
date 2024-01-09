@@ -47,10 +47,7 @@ public class BoardImageService {
      * @return
      */
     public int addImages(List<MultipartFile> imageList, String recentBoardNo) {
-        //MultipartFile -> BoardImageVo로 변환
-        //map & forEach
-        // common: 반복문 처럼 동작
-        // diff: 반환값의 유무
+        //MultipartFile -> BoardImageFileVo로 변환
         List<BoardImageFileVo> voList = imageList.stream().map(m -> {
             try {
                 return getBoardImageVo(recentBoardNo, m);

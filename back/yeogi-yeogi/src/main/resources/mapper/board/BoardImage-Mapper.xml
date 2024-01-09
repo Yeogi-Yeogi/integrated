@@ -5,8 +5,8 @@
 
 <mapper namespace="BoardImageMapper">
 
-    <insert id="addImages">
-         INSERT INTO BOARD_IMAGE_FILE (NO, BOARD_NO, FILE_URL, FILE_NAME) VALUES
+    <insert id="addImages" parameterType="com.yeogi.app.board.vo.BoardImageFileVo">
+         INSERT INTO BOARD_IMAGE_FILE VALUES
         (SEQ_BOARDIMAGEFILE_NO.NEXTVAL, #{boardNo}, #{fileUrl}, #{fileName})
     </insert>
 
