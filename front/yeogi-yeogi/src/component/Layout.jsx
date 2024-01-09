@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
+import { Route, Routes } from 'react-router-dom';
+import ClubLayout from './club/ClubLayout';
 
 const StyledLayOutDiv = styled.div`
     width: 100vw;
@@ -17,7 +19,10 @@ const Layout = () => {
     return (
         <StyledLayOutDiv>
             <Header />
-            <Main />
+            <Routes>
+                <Route path='/' element={<Main/>}/>
+                <Route path='/club/*' element={<ClubLayout/>}/>
+            </Routes>
             <Footer />
         </StyledLayOutDiv>
     );

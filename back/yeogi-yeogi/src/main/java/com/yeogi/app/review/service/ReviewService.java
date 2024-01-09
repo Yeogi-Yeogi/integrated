@@ -26,6 +26,12 @@ public class ReviewService {
     private final CheckClubMember checkMember;
     private final SqlSessionTemplate template;
 
+    /**
+     * 리뷰 조회
+     * @param dto
+     * @return
+     * @throws NotClubMemberException
+     */
     public List<ReviewDetailDto> getReviews(ReviewReqDto dto) throws NotClubMemberException {
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
         if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
