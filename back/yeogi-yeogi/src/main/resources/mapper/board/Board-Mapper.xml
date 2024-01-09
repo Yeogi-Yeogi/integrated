@@ -117,5 +117,7 @@
         ORDER BY 5 DESC
     </select>
 
-
+    <delete id="deleteBoardByNo">
+        DELETE FROM BOARD WHERE NO = #{boardNo}
+    </delete>
 </mapper>

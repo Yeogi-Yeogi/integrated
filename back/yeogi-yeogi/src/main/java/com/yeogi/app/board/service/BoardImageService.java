@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.yeogi.app.board.repository.BoardImageRepository;
+import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.board.vo.BoardImageFileVo;
 import com.yeogi.app.util.config.S3Config;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardImageService {
 
-    private final BoardImageRepository repository;
+    private final BoardImageRepository imageRepository;
+    private final BoardRepository boardRepository;
     private final SqlSessionTemplate template;
     private AmazonS3Client s3Client;
     private final S3Config s3Config;
@@ -45,10 +47,7 @@ public class BoardImageService {
      * @return
      */
     public int addImages(List<MultipartFile> imageList, String recentBoardNo) {
-        //MultipartFile -> BoardImageVo로 변환
-        //map & forEach
-        // common: 반복문 처럼 동작
-        // diff: 반환값의 유무
+        //MultipartFile -> BoardImageFileVo로 변환
         List<BoardImageFileVo> voList = imageList.stream().map(m -> {
             try {
                 return getBoardImageVo(recentBoardNo, m);
@@ -58,12 +57,18 @@ public class BoardImageService {
         }).collect(Collectors.toList());
 
         log.info("voList = {}", voList);
+        log.info("voList.size() = {}", voList.size() );
         int result = 0;
 
         try {
-            result = repository.addImages(voList, template);
+            //count는 0이어도 1임, Stream 한번 볼것
+            for(BoardImageFileVo b : voList) {
+                result += imageRepository.addImages(b, template);
+            }
         } catch (Exception e) {
-//            voList.stream().forEach(i -> deleteServerImage(i.getFileName()));
+            e.printStackTrace();
+            voList.stream().forEach(i -> deleteServerImage(i.getFileName()));
+            boardRepository.deleteBoardByNo(recentBoardNo, template);
         }
         return result;
     }

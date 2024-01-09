@@ -8,9 +8,11 @@ import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.FailAddReviewException;
 import com.yeogi.app.util.check.CheckClubMember;
+import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.context.expression.CachedExpressionEvaluator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,11 @@ public class ReviewService {
     private final CheckClubMember checkMember;
     private final SqlSessionTemplate template;
 
-    public List<ReviewDetailDto> getReviews(ReviewReqDto dto) {
+    public List<ReviewDetailDto> getReviews(ReviewReqDto dto) throws NotClubMemberException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
+        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        }
 
         RowBounds rowBounds = new RowBounds(Integer.parseInt(dto.getOffset()) * 10, 10);
         return repository.getReviewListByBoardNo(dto.getBoardNo(), template, rowBounds);
