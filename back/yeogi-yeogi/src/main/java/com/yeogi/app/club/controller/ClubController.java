@@ -4,26 +4,25 @@ import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.dto.EditClubDto;
 import com.yeogi.app.club.dto.EditClubMemberDto;
+import com.yeogi.app.club.service.ClubImageService;
 import com.yeogi.app.club.service.ClubService;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
-@ResponseBody
 @RequestMapping("club")
 public class ClubController {
 
     private final ClubService service;
+    private final ClubImageService imgService;
 
     /**
      * 클럽 검색
@@ -45,11 +44,13 @@ public class ClubController {
      * @return
      */
     @PostMapping("createClub")
-    public int createClub(CreateClubDto createClubDto){
+    public int createClub(CreateClubDto createClubDto) throws IOException {
+        // 클럽이미지 선택x == 기본이미지
+        createClubDto.setFileName(createClubDto.getFile().getOriginalFilename());
+        createClubDto.setFileUrl(imgService.uploadFile(createClubDto));
         log.info("createClubDto = {}", createClubDto);
         int result = service.createClub(createClubDto);
         log.info("result = {}", result);
-        // 클럽이미지 선택x == 기본이미지
         return result;
     }
 
