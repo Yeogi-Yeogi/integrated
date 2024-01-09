@@ -26,6 +26,11 @@ const StyledHeaderDiv = styled.div`
         justify-content: flex-end;
         align-items: center;
         margin-right: 300px;
+
+        & > a {
+            text-decoration: none;
+            color: black;
+        }
         & > a:nth-child(1){
             font-weight: bold;
             margin-right: 50px;
