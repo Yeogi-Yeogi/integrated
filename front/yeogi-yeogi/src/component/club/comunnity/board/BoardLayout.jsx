@@ -6,6 +6,8 @@ import InnerNavBar from './common/InnerNavBar';
 import BoardSideBar from './common/BoardSideBar';
 import BoardWrite from './BoardWrite';
 import NoticeLayout from '../notice/NoticeLayout';
+import BoardDetail from './BoardDetail';
+
 
 const StyledBoardLayout = styled.div`
     width: 100%;
@@ -29,6 +31,7 @@ const BoardLayout = () => {
                     <Route path='/list' element={<BoardList />}/>
                     <Route path='/notice/*' element={<NoticeLayout />} />
                     <Route path='/write' element={<BoardWrite />} />
+                    <Route path='/detail' element={<BoardDetail />} />
                 </Routes>
             </div>
         </StyledBoardLayout>
