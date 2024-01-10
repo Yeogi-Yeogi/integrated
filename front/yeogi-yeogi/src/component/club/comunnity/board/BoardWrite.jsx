@@ -103,13 +103,15 @@ const BoardWrite = () => {
      */
     const showImage = (image, index) => {
         const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageUrl([...imageUrl ,{
-                "index": index,
-                "src": reader.result
-            }]);
-        };
-        reader.readAsDataURL(image);
+
+        if(image) {
+            reader.onloadend = () => {
+                setImageUrl([...imageUrl ,reader.result]);
+            };
+            reader.readAsDataURL(image);
+        }
+
+
     }
 
     // 선택한 미리보기 사진 삭제하는 함수
@@ -134,7 +136,7 @@ const BoardWrite = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
-        formData.append("imageList", imageList);
+        imageList.forEach(el => formData.append("imageList", el));
 
         console.log(formData);
     }
@@ -161,7 +163,7 @@ const BoardWrite = () => {
                             {
                                 imageUrl.map((element, index) => (
                                     <div key={uuidv4()} style={{ position: 'relative' }}>
-                                        <PreviewImg src={element.src} />
+                                        <PreviewImg src={element} />
                                         <Button
                                         size="sm"
                                         style={{ position: 'absolute', top: 0, right: 0 }}
@@ -171,7 +173,7 @@ const BoardWrite = () => {
                                         </Button>
                                     </div>
                                 ))}
-                                <Form.Control ref={uploadImage} onChange={addImageFile} type="file" name="imageList" id='imageList' hidden multiple/>
+                                <Form.Control ref={uploadImage} onChange={addImageFile} type="file" name="imageList" id='imageList' hidden/>
                                 <ImageInputDiv onClick={changeImage}>+</ImageInputDiv>
                             </td>
                         </tr>
