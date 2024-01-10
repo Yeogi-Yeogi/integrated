@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import PreviewImg from './PreviewImg';
@@ -14,6 +14,23 @@ const StyledBoardWriteDiv = styled.div`
     & > form {
         width: 80%;
 
+        & textarea {
+            resize: none;
+
+            &:focus {
+                border-color: #6c1895;
+                box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
+            }
+        }
+
+        & input {
+
+            &:focus {
+                border-color: #6c1895;
+                box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
+            }
+        }
+
         & tr > td:first-child {
             width: 10%;
         }
@@ -22,10 +39,7 @@ const StyledBoardWriteDiv = styled.div`
             color: #999999;
             font-weight: 600;
         }
-
-
     }
-
 `;
 
 const ImageInputDiv = styled.div`
@@ -154,7 +168,7 @@ const BoardWrite = () => {
                         </tr>
                         <tr>
                             <td>내용</td>
-                            <td><Form.Control as="textarea" name='content' rows={10} onInput={handleContent} /></td>
+                            <td><Form.Control as="textarea" name='content' rows={10} onInput={handleContent}/></td>
                         </tr>
                         <tr>
                             <td>사진</td>
@@ -166,7 +180,7 @@ const BoardWrite = () => {
                                         <PreviewImg src={element} />
                                         <Button
                                         size="sm"
-                                        style={{ position: 'absolute', top: 0, right: 0 }}
+                                        style={{ position: 'absolute', top: 0, right: 0, backgroundColor: '#6c1895' }}
                                         onClick={() => deleteImage(index)}
                                         >
                                         X
