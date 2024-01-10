@@ -4,8 +4,8 @@ import { Route, Routes } from 'react-router-dom';
 import BoardList from './BoardList';
 import InnerNavBar from './common/InnerNavBar';
 import BoardSideBar from './common/BoardSideBar';
-import NoticeLayout from '../notice/NoticeLayout';
 import BoardWrite from './BoardWrite';
+import NoticeLayout from '../notice/NoticeLayout';
 
 const StyledBoardLayout = styled.div`
     width: 100%;
