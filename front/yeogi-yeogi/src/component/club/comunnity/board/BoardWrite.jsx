@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import PreviewImg from './PreviewImg';
+import { v4 as uuidv4 } from 'uuid';
 
 const StyledBoardWriteDiv = styled.div`
     width: 100%;
@@ -63,15 +64,17 @@ const BoardWrite = () => {
 
     const uploadImage = useRef(null);   //이미지 미리 보여주는 div
     const imgTd = useRef(null); //사진 올리는 td
-    const [imageList, setImageList] = useState([]);
+    const [imageList, setImageList] = useState([]); //서버 전달용 파일 객체
+    const [imageUrl, setImageUrl] = useState([]); //미리보기용 url
+    const [title, setTitle] = useState();
+    const [content, setContent] = useState();
 
-    const [imageUrl, setImageUrl] = useState([]);
+    const handleTitle = (e) => {
+        setTitle(e.target.value);
+    }
 
-    
-    const uploadBoard = (e) => {
-        e.preventDefault();
-
-        console.log(imageList);
+    const handleContent = (e) => {
+        setContent(e.target.value);
     }
 
     const changeImage = () => {
@@ -91,7 +94,7 @@ const BoardWrite = () => {
         const image = event.target.files[0];
         setImageList([...imageList, image]);
         //미리 보여주기
-        showImage(image, imageList.length-1);
+        showImage(image, imageList.length);
     }
 
     /**
@@ -110,17 +113,32 @@ const BoardWrite = () => {
     }
 
     // 선택한 미리보기 사진 삭제하는 함수
-    const deleteImage = (e) => {
-        console.log(e.target);
-        // 기존의 이미지 리스트를 복사한 후, index에 해당하는 이미지를 제외
-        // const updatedImageList = [...imageList];
-        // updatedImageList.splice(index, 1);
-        // setImageList(updatedImageList);
+    const deleteImage = (index) => {
+        // 이미지 리스트에서 해당 인덱스에 해당하는 이미지 제거
+        const updatedImageList = [...imageList];
+        updatedImageList.splice(index, 1);
+        setImageList(updatedImageList);
+      
+        // 이미지 URL도 갱신
+        const updatedImageUrl = [...imageUrl];
+        updatedImageUrl.splice(index, 1);
+        setImageUrl(updatedImageUrl);
+      };
 
-        // const updatedImageUrl = [...imageUrl];
-        // updatedImageUrl.splice(index, 1);
-        // setImageUrl(updatedImageUrl);
+
+      const uploadBoard = (e) => {
+        e.preventDefault();
+
+        console.log(imageList);
+
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("content", content);
+        formData.append("imageList", imageList);
+
+        console.log(formData);
     }
+
     //////////////////////////////////////////////////////////
     return (
         <StyledBoardWriteDiv>
@@ -130,30 +148,29 @@ const BoardWrite = () => {
                     <tbody>
                         <tr>
                             <td>제목</td>
-                            <td><Form.Control type="text" placeholder="제목을 입력하세요" /></td>
+                            <td><Form.Control type="text" name='title' onInput={handleTitle} placeholder="제목을 입력하세요" /></td>
                         </tr>
                         <tr>
                             <td>내용</td>
-                            <td><Form.Control as="textarea" rows={10} /></td>
+                            <td><Form.Control as="textarea" name='content' rows={10} onInput={handleContent} /></td>
                         </tr>
                         <tr>
                             <td>사진</td>
                             <td style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gridAutoRows: 'true' }}>
                                 
-                                {   //컴포넌트화 하기
-                                    imageUrl.map(element => (
-                                        <div key={element.index} style={{ position: 'relative' }}>
-                                            <PreviewImg src={element.src} />
-                                            <Button
-                                                size="sm"
-                                                style={{ position: 'absolute', top: 0, right: 0 }}
-                                                onClick={(e) => deleteImage(e)}
-                                            >
-                                                X
-                                            </Button>
-                                        </div>
-                                    ))
-                                }
+                            {
+                                imageUrl.map((element, index) => (
+                                    <div key={uuidv4()} style={{ position: 'relative' }}>
+                                        <PreviewImg src={element.src} />
+                                        <Button
+                                        size="sm"
+                                        style={{ position: 'absolute', top: 0, right: 0 }}
+                                        onClick={() => deleteImage(index)}
+                                        >
+                                        X
+                                        </Button>
+                                    </div>
+                                ))}
                                 <Form.Control ref={uploadImage} onChange={addImageFile} type="file" name="imageList" id='imageList' hidden multiple/>
                                 <ImageInputDiv onClick={changeImage}>+</ImageInputDiv>
                             </td>
