@@ -1,10 +1,7 @@
 package com.yeogi.app.club.service;
 
 import com.yeogi.app.club.dao.ClubDao;
-import com.yeogi.app.club.dto.ClubSearchDto;
-import com.yeogi.app.club.dto.CreateClubDto;
-import com.yeogi.app.club.dto.EditClubDto;
-import com.yeogi.app.club.dto.EditClubMemberDto;
+import com.yeogi.app.club.dto.*;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -23,39 +22,54 @@ public class ClubService {
 
     private final ClubDao dao;
     private final SqlSessionTemplate sst;
+    private final ClubImageService imgService;
 
     public List<ClubVo> getClubList(ClubSearchDto clubSearchDto) {
         return dao.getClubList(clubSearchDto, sst);
     }
 
-    @Transactional
-    public int createClub(CreateClubDto createClubDto) {
+
+    public int createClub(MultipartFile file, CreateClubDto createClubDto, String type) throws IOException {
         int result = dao.createClub(createClubDto, sst);
-        // 클럽에 insert 성공하면 클럽이미지에 insert
+
+        // 글자수제한 관련
         if(result == 1){
-            dao.insertClubMaster(createClubDto, sst);
-            int clubImageResult = dao.insertClubImage(createClubDto, sst);
-            log.info("clubImageResult = {}", clubImageResult);
+            // 클럽에 insert 성공하면 클럽이미지에 insert
+            ClubImageDto clubImageDto = new ClubImageDto();
+            clubImageDto.setNo(createClubDto.getCreatorNo());
+            int imgInsert = imgService.uploadFile(clubImageDto, file, sst, type);
+            if(imgInsert == 1){
+
+            }
+            log.info("createClubDto = {}", createClubDto);
+            log.info("result = {}", result);
         }
 
-        return result;
+        // 클럽장 insert 후 결과 리턴
+        return dao.insertClubMaster(createClubDto, sst);
     }
 
     public ClubVo getClubDescription(String clubNo) {
         return dao.getClubDescription(sst, clubNo);
     }
 
-    @Transactional
     public int joinClub(ClubVo vo) {
         return dao.joinClub(sst, vo);
     }
 
-    @Transactional
-    public int editClub(EditClubDto editClubDto) {
-        return  dao.editClub(sst, editClubDto);
+    public int editClub(EditClubDto editClubDto, MultipartFile file) throws IOException {
+        // 클럽 이미지
+        if(file != null) {
+            String type = "update";
+            ClubImageDto clubImageDto = new ClubImageDto();
+            clubImageDto.setNo(editClubDto.getClubNo());
+            // 대표이미지 수정시 이미지 파일 삭제 후 => 파일업로드 + db 업데이트
+            return imgService.uploadFile(clubImageDto, file, sst, type);
+        } else {
+            return  dao.editClub(sst, editClubDto);
+        }
     }
 
-    @Transactional
     public int editClubMember(EditClubMemberDto editClubMemberDto) {
         return dao.editClubMember(sst, editClubMemberDto);
     }
@@ -72,7 +86,6 @@ public class ClubService {
         return dao.getClubMemberList(sst, clubNo);
     }
 
-    @Transactional
     public int quitClub(EditClubDto editClubDto) {
         return dao.quitClub(sst, editClubDto);
     }

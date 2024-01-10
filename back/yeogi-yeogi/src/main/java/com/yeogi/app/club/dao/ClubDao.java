@@ -1,19 +1,17 @@
 package com.yeogi.app.club.dao;
 
-import com.yeogi.app.club.dto.ClubSearchDto;
-import com.yeogi.app.club.dto.CreateClubDto;
-import com.yeogi.app.club.dto.EditClubDto;
-import com.yeogi.app.club.dto.EditClubMemberDto;
+import com.yeogi.app.club.dto.*;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckDto;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Repository
+@Slf4j
 public class ClubDao {
 
     /**
@@ -36,9 +34,9 @@ public class ClubDao {
         return sst.insert("ClubMapper.createClub", createClubDto);
     }
 
-    public int insertClubImage(CreateClubDto createClubDto, SqlSessionTemplate sst) {
-        return sst.insert("ClubMapper.insertClubImage", createClubDto);
-    }
+//    public int insertClubImage(CreateClubDto createClubDto, SqlSessionTemplate sst) {
+//        return sst.insert("ClubMapper.insertClubImage", createClubDto);
+//    }
 
     public ClubVo getClubDescription(SqlSessionTemplate sst, String clubNo) {
         return sst.selectOne("ClubMapper.clubDescription", clubNo);
@@ -73,11 +71,22 @@ public class ClubDao {
         return sst.delete("ClubMapper.quitClub", editClubDto);
     }
 
-    public void insertClubMaster(CreateClubDto createClubDto, SqlSessionTemplate sst) {
+    public int insertClubMaster(CreateClubDto createClubDto, SqlSessionTemplate sst) {
+        return sst.insert("ClubMapper.insertClubMaster", createClubDto);
     }
 
-    public String uploadFile(MultipartFile file) {
+    public int uploadFile(ClubImageDto clubImageDto, SqlSessionTemplate sst) {
 
-        return "";
+        log.info("dao clubImageDto = {}", clubImageDto);
+
+        return sst.insert("ClubMapper.insertClubImage", clubImageDto);
+    }
+
+    public int updateFile(ClubImageDto clubImageDto, SqlSessionTemplate sst) {
+        return sst.update("ClubMapper.updateFile", clubImageDto);
+    }
+
+    public String getClubImgName(String no, SqlSessionTemplate sst) {
+        return sst.selectOne("ClubMapper.getClubImgName", no);
     }
 }

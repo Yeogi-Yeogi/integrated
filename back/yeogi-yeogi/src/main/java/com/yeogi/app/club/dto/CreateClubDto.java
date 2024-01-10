@@ -1,9 +1,12 @@
 package com.yeogi.app.club.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Getter;
 
 @Data
+@Getter
+@AllArgsConstructor
 public class CreateClubDto {
 
     private String name;
@@ -12,7 +15,6 @@ public class CreateClubDto {
     private String ageLimit;
     private String signupLimit;
     private String clubDescription;
-    private String fileUrl;
-    private String fileName;
-    private MultipartFile file;
+    private ClubImageDto clubImageDto;
+
 }
