@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.yeogi.app.club.dao.ClubDao;
 import com.yeogi.app.club.dto.ClubImageDto;
-import com.yeogi.app.club.dto.CreateClubDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -30,21 +29,23 @@ public class ClubImageService {
     private String bucket;
 
     /**
-     * @param createClubDto
+     * @param clubImageDto
+     * @param file
      * @param sst
+     * @param type
      * @return
      * @throws IOException
      */
-    public int uploadFile(CreateClubDto createClubDto, MultipartFile file, SqlSessionTemplate sst) throws IOException {
+    public int uploadFile(ClubImageDto clubImageDto, MultipartFile file, SqlSessionTemplate sst, String type) throws IOException {
 //        try {
-        log.info("serviceCreateClubDto = {}", createClubDto);
+        log.info("clubImageDto = {}", clubImageDto);
         log.info("serviceFile = {}", file.getOriginalFilename());
         String fileName = file.getOriginalFilename();
         String customName= UUID.randomUUID()+ "_" + LocalDateTime.now() + "_" + fileName;
 
         String fileUrl = amazonS3Client.getUrl(bucket, customName).toString();
-
-        createClubDto.setClubImageDto(new ClubImageDto(fileUrl, customName));
+        clubImageDto.setFileName(customName);
+        clubImageDto.setFileUrl(fileUrl);
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
@@ -52,12 +53,18 @@ public class ClubImageService {
 
         amazonS3Client.putObject(bucket,customName, file.getInputStream(),metadata);
 
-
         ResponseEntity<String> responseEntity = ResponseEntity.ok(fileUrl);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             log.info("File uploaded successfully. File URL: {}", fileUrl);
-            return dao.uploadFile(createClubDto, sst);
+            if(type.equals("update")){
+                String prevFileName = dao.getClubImgName(clubImageDto.getNo(), sst);
+                log.info("prevFile = {}", prevFileName);
+                amazonS3Client.deleteObject(bucket, prevFileName);
+                return dao.updateFile(clubImageDto, sst);
+            } else {
+                return dao.uploadFile(clubImageDto, sst);
+            }
         } else {
             return 0;
         }

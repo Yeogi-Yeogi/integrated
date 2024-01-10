@@ -75,10 +75,18 @@ public class ClubDao {
         return sst.insert("ClubMapper.insertClubMaster", createClubDto);
     }
 
-    public int uploadFile(CreateClubDto createClubDto, SqlSessionTemplate sst) {
-        ClubImageDto clubImageDto = createClubDto.getClubImageDto();
+    public int uploadFile(ClubImageDto clubImageDto, SqlSessionTemplate sst) {
+
         log.info("dao clubImageDto = {}", clubImageDto);
 
         return sst.insert("ClubMapper.insertClubImage", clubImageDto);
+    }
+
+    public int updateFile(ClubImageDto clubImageDto, SqlSessionTemplate sst) {
+        return sst.update("ClubMapper.updateFile", clubImageDto);
+    }
+
+    public String getClubImgName(String no, SqlSessionTemplate sst) {
+        return sst.selectOne("ClubMapper.getClubImgName", no);
     }
 }

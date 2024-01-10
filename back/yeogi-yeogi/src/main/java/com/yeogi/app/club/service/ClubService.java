@@ -1,10 +1,7 @@
 package com.yeogi.app.club.service;
 
 import com.yeogi.app.club.dao.ClubDao;
-import com.yeogi.app.club.dto.ClubSearchDto;
-import com.yeogi.app.club.dto.CreateClubDto;
-import com.yeogi.app.club.dto.EditClubDto;
-import com.yeogi.app.club.dto.EditClubMemberDto;
+import com.yeogi.app.club.dto.*;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
@@ -32,20 +29,23 @@ public class ClubService {
     }
 
 
-    public int createClub(MultipartFile file, CreateClubDto createClubDto) throws IOException {
+    public int createClub(MultipartFile file, CreateClubDto createClubDto, String type) throws IOException {
         int result = dao.createClub(createClubDto, sst);
+
         // 글자수제한 관련
         if(result == 1){
             // 클럽에 insert 성공하면 클럽이미지에 insert
-            int imgInsert = imgService.uploadFile(createClubDto, file, sst);
+            ClubImageDto clubImageDto = new ClubImageDto();
+            clubImageDto.setNo(createClubDto.getCreatorNo());
+            int imgInsert = imgService.uploadFile(clubImageDto, file, sst, type);
             if(imgInsert == 1){
 
             }
-            // 클럽장 insert
             log.info("createClubDto = {}", createClubDto);
             log.info("result = {}", result);
         }
 
+        // 클럽장 insert 후 결과 리턴
         return dao.insertClubMaster(createClubDto, sst);
     }
 
@@ -57,12 +57,14 @@ public class ClubService {
         return dao.joinClub(sst, vo);
     }
 
-    public int editClub(EditClubDto editClubDto) {
+    public int editClub(EditClubDto editClubDto, MultipartFile file) throws IOException {
         // 클럽 이미지
-        if(editClubDto.getClubImageFile() != null) {
+        if(file != null) {
+            String type = "update";
+            ClubImageDto clubImageDto = new ClubImageDto();
+            clubImageDto.setNo(editClubDto.getClubNo());
             // 대표이미지 수정시 이미지 파일 삭제 후 => 파일업로드 + db 업데이트
-//            return imgService.uploadFile();
-            return 1;
+            return imgService.uploadFile(clubImageDto, file, sst, type);
         } else {
             return  dao.editClub(sst, editClubDto);
         }

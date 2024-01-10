@@ -48,10 +48,10 @@ public class ClubController {
 
         log.info("file = {}", file);
         log.info("createClubDto = {}", createClubDto);
-
+        String type = "create";
         // 클럽이미지 선택x == 기본이미지
         // 클럽 insert 하고,,, 시퀀스,,,
-        int result = service.createClub(file, createClubDto);
+        int result = service.createClub(file, createClubDto, type);
 
         return result;
     }
@@ -117,8 +117,8 @@ public class ClubController {
      * @return
      */
     @PostMapping("editClub")
-    public int editClub(EditClubDto editClubDto){
-        return service.editClub(editClubDto);
+    public int editClub(EditClubDto editClubDto, MultipartFile file) throws IOException {
+        return service.editClub(editClubDto, file);
     }
 
     /**

@@ -140,11 +140,14 @@
         SELECT *
         FROM CLUB
     </select>
-
-<!--    클럽 관리(소개글, 대표이미지, 모임인원, 가입연령 변경) + 실행되는 쿼리마다 리턴값을 다르게해서 구분하고싶은데... -->
+<!--    클럽 관리( 이전 대표이미지 URL 불러오기)-->
+    <select id="getClubImgName" resultType="String">
+        SELECT FILE_NAME
+        FROM CLUB_IMAGE_FILE
+        WHERE NO = #{no}
+    </select>
+<!--    클럽 관리(소개글, 모임인원, 가입연령 변경) + 실행되는 쿼리마다 리턴값을 다르게해서 구분하고싶은데... 모르겠다.-->
     <update id="editClub">
-        <choose>
-            <when test="clubImageFile == null">
                 UPDATE CLUB
                 SET
                 <if test="clubDescription != null">
@@ -156,15 +159,14 @@
                 <if test="signupLimit != null">
                     SIGNUP_LIMIT = #{signupLimit}
                 </if>
-                WHERE NO = #{no}
-            </when>
-            <otherwise>
-                UPDATE CLUB_IMAGE_FILE
-                SET FILE_URL = #{clubImageFile}
-                WHERE NO = #{no}
-            </otherwise>
-        </choose>
-
+                WHERE NO = #{clubNo}
+    </update>
+<!--    클럽 관리(대표이미지 변경)-->
+    <update id="updateFile">
+        UPDATE CLUB_IMAGE_FILE
+        SET FILE_URL = #{fileUrl}
+            ,FILE_NAME = #{fileName}
+        WHERE NO = #{no}
     </update>
 <!--    클럽 관리(클럽 회원 목록 불러오기)-->
     <select id="getClubMemberList" resultType="com.yeogi.app.club.vo.ClubMemberVo">
