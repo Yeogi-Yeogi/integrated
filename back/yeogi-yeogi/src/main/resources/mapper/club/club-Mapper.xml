@@ -91,15 +91,17 @@
         VALUES (SEQ_CLUB_NO.NEXTVAL, #{categoryNo}, #{creatorNo}, #{name}, #{clubDescription}, #{ageLimit}, #{signupLimit})
     </insert>
 
-<!--    클럽 생성 (MEMBER_CLUB 에 모임장 INSERT) 클럽 insert 성공시 실행?-->
+<!--    클럽 생성 (MEMBER_CLUB 에 모임장 INSERT)-->
     <insert id="insertClubMaster">
-
+        INSERT INTO
+        MEMBER_CLUB(MEMBER_NO, CLUB_NO, ADMIN_YN)
+        VALUES(#{creatorNo}, SEQ_CLUB_NO.CURRVAL,'Y')
     </insert>
 <!--    클럽 생성(클럽 대표이미지 추가), 클럽 insert 성공시 실행?-->
     <insert id="insertClubImage">
         <choose>
-            <when test="clubImageFile != null or clubImageFile.equals('')">
-                INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, '테스트2', '테스트2')
+            <when test="fileName != null">
+                INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, #{fileUrl}, #{fileName})
             </when>
             <otherwise>
                 INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, '기본이미지', '기본이미지')

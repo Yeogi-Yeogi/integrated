@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -23,39 +25,49 @@ public class ClubService {
 
     private final ClubDao dao;
     private final SqlSessionTemplate sst;
+    private final ClubImageService imgService;
 
     public List<ClubVo> getClubList(ClubSearchDto clubSearchDto) {
         return dao.getClubList(clubSearchDto, sst);
     }
 
-    @Transactional
-    public int createClub(CreateClubDto createClubDto) {
+
+    public int createClub(MultipartFile file, CreateClubDto createClubDto) throws IOException {
         int result = dao.createClub(createClubDto, sst);
-        // 클럽에 insert 성공하면 클럽이미지에 insert
+        // 글자수제한 관련
         if(result == 1){
-            dao.insertClubMaster(createClubDto, sst);
-            int clubImageResult = dao.insertClubImage(createClubDto, sst);
-            log.info("clubImageResult = {}", clubImageResult);
+            // 클럽에 insert 성공하면 클럽이미지에 insert
+            int imgInsert = imgService.uploadFile(createClubDto, file, sst);
+            if(imgInsert == 1){
+
+            }
+            // 클럽장 insert
+            log.info("createClubDto = {}", createClubDto);
+            log.info("result = {}", result);
         }
 
-        return result;
+        return dao.insertClubMaster(createClubDto, sst);
     }
 
     public ClubVo getClubDescription(String clubNo) {
         return dao.getClubDescription(sst, clubNo);
     }
 
-    @Transactional
     public int joinClub(ClubVo vo) {
         return dao.joinClub(sst, vo);
     }
 
-    @Transactional
     public int editClub(EditClubDto editClubDto) {
-        return  dao.editClub(sst, editClubDto);
+        // 클럽 이미지
+        if(editClubDto.getClubImageFile() != null) {
+            // 대표이미지 수정시 이미지 파일 삭제 후 => 파일업로드 + db 업데이트
+//            return imgService.uploadFile();
+            return 1;
+        } else {
+            return  dao.editClub(sst, editClubDto);
+        }
     }
 
-    @Transactional
     public int editClubMember(EditClubMemberDto editClubMemberDto) {
         return dao.editClubMember(sst, editClubMemberDto);
     }
@@ -72,7 +84,6 @@ public class ClubService {
         return dao.getClubMemberList(sst, clubNo);
     }
 
-    @Transactional
     public int quitClub(EditClubDto editClubDto) {
         return dao.quitClub(sst, editClubDto);
     }

@@ -4,13 +4,13 @@ import com.yeogi.app.club.dto.ClubSearchDto;
 import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.dto.EditClubDto;
 import com.yeogi.app.club.dto.EditClubMemberDto;
-import com.yeogi.app.club.service.ClubImageService;
 import com.yeogi.app.club.service.ClubService;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ClubController {
 
     private final ClubService service;
-    private final ClubImageService imgService;
+
 
     /**
      * 클럽 검색
@@ -44,13 +44,15 @@ public class ClubController {
      * @return
      */
     @PostMapping("createClub")
-    public int createClub(CreateClubDto createClubDto) throws IOException {
-        // 클럽이미지 선택x == 기본이미지
-        createClubDto.setFileName(createClubDto.getFile().getOriginalFilename());
-        createClubDto.setFileUrl(imgService.uploadFile(createClubDto));
+    public int createClub(MultipartFile file, CreateClubDto createClubDto) throws IOException {
+
+        log.info("file = {}", file);
         log.info("createClubDto = {}", createClubDto);
-        int result = service.createClub(createClubDto);
-        log.info("result = {}", result);
+
+        // 클럽이미지 선택x == 기본이미지
+        // 클럽 insert 하고,,, 시퀀스,,,
+        int result = service.createClub(file, createClubDto);
+
         return result;
     }
 
@@ -116,7 +118,6 @@ public class ClubController {
      */
     @PostMapping("editClub")
     public int editClub(EditClubDto editClubDto){
-
         return service.editClub(editClubDto);
     }
 
