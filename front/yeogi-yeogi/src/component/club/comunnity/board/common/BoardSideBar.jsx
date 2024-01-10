@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Navbar } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledSideBar = styled(Navbar)`
@@ -10,8 +11,6 @@ const StyledSideBar = styled(Navbar)`
     width: 20em;
     height: 100%;
 
-
-    
     & > div {
         width: 100%;
         display: flex;
@@ -20,32 +19,34 @@ const StyledSideBar = styled(Navbar)`
 
         &  > a {
             text-align: right;
+            color: black;
+            text-decoration: none;
             width:100%;
             height: 100%;
             font-size: 1.1em;
             font-weight: 600;
             padding: 0.5em;
 
-            &:active {
+
+            &.active {
                 background-color: #6c1895;
                 color: white;
             }
-     }
+        }
     }
 `;
-
 
 const BoardSideBar = () => {
     return (
         <StyledSideBar>
             <Container>
-                <Nav.Link href="/club/board/list">자유</Nav.Link>
+                <NavLink to="/club/board/list">자유</NavLink>
             </Container>
             <Container>
-                <Nav.Link href='/club/board/notice/list'>공지사항</Nav.Link>
+                <NavLink to='/club/board/notice/list'>공지사항</NavLink>
             </Container>
             <Container>
-                <Nav.Link href='/club/board/write'>작성하기</Nav.Link>
+                <NavLink to='/club/board/write'>작성하기</NavLink>
             </Container>
         </StyledSideBar>
     );

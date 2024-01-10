@@ -8,7 +8,6 @@ const StyledBoardListDiv = styled.div`
     margin: auto;
     margin-top: 3em;
     padding-left: 2em;
-    padding-right: 2em;
 `;
 const BoardList = () => {
     return (
