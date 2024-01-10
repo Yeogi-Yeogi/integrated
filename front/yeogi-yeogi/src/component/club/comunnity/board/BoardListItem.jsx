@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const StyledBoardListItemDiv = styled.div`
     margin: auto;
-    margin-top: 1em;
+    margin-top: 0.5em;
     margin-bottom: 4em;
     & * {
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

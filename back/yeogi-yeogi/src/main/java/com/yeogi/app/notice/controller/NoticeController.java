@@ -27,6 +27,7 @@ public class NoticeController {
     /**
      * 공지사항 리스트 가져오기
      * (15개씩 페이징 처리)
+     * 전체 페이지 개수 가져오기
      * @param checkDto
      * @param pageNo
      * @return
