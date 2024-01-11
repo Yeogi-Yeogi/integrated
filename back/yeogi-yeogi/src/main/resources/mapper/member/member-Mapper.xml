@@ -39,7 +39,7 @@
 		    ,PWD
 		    ,NICK
 		    ,ENROLL_DATE
-		    ,DEL_YN
+		    ,QUIT_YN
 		FROM MEMBER
 		WHERE ID = #{id}
 		AND PWD = #{pwd}
