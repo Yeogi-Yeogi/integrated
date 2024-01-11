@@ -3,7 +3,7 @@ import { Container, Navbar } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-const StyledSideBar = styled(Navbar)`
+const StyledScheduleSideBar = styled(Navbar)`
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -36,20 +36,17 @@ const StyledSideBar = styled(Navbar)`
     }
 `;
 
-const BoardSideBar = () => {
+const ScheduleSideBar = () => {
     return (
-        <StyledSideBar>
+        <StyledScheduleSideBar>
             <Container>
-                <NavLink to="list">자유</NavLink>
+                <NavLink to="upcoming">예정</NavLink>
             </Container>
             <Container>
-                <NavLink to='notice/list'>공지사항</NavLink>
+                <NavLink to='past'>지난일정</NavLink>
             </Container>
-            <Container>
-                <NavLink to='write'>작성하기</NavLink>
-            </Container>
-        </StyledSideBar>
+        </StyledScheduleSideBar>
     );
 };
 
-export default BoardSideBar;
+export default ScheduleSideBar;
