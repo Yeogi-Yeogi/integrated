@@ -2,8 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import { getValue } from '@testing-library/user-event/dist/utils';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const StyledNavbar = styled(Navbar)`
   margin: auto;
@@ -34,27 +33,23 @@ const StyledNavbar = styled(Navbar)`
     }
   }
 `;
-
 const InnerNavBar = () => {
 
-  const isSpecialCondition = true;
-  const boardDynamicToValue = isSpecialCondition
-    ? ['/club/board/list', '/club/board/notice/list', '/club/board/detail']
-    : '/club/board/write';
-
+  const boardDynamicToValue = ['/club/commu/board/list', '/club/commu/board/notice/list', '/club/commu/board/detail', '/club/commu/board/write'];
+  const navigate = useNavigate();
   return (
     <StyledNavbar expand="lg">
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto m-auto">
-            <NavLink to={boardDynamicToValue}>
+            <NavLink to={'/club/commu/board'}>
               게시글
             </NavLink>
-            <NavLink to="/club/schedule/list">
+            <NavLink to="/club/commu/schedule">
               일정
             </NavLink>
-            <NavLink to="/club/gallery/list">
+            <NavLink to="/club/commu/gallery/list">
               갤러리
             </NavLink>
           </Nav>

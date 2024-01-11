@@ -40,13 +40,13 @@ const BoardSideBar = () => {
     return (
         <StyledSideBar>
             <Container>
-                <NavLink to="/club/board/list">자유</NavLink>
+                <NavLink to="list">자유</NavLink>
             </Container>
             <Container>
-                <NavLink to='/club/board/notice/list'>공지사항</NavLink>
+                <NavLink to='notice/list'>공지사항</NavLink>
             </Container>
             <Container>
-                <NavLink to='/club/board/write'>작성하기</NavLink>
+                <NavLink to='write'>작성하기</NavLink>
             </Container>
         </StyledSideBar>
     );

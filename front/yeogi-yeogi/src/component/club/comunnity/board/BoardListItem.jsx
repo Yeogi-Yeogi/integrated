@@ -8,6 +8,10 @@ const StyledBoardListItemDiv = styled.div`
     & * {
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const FirstDiv = styled.div`
