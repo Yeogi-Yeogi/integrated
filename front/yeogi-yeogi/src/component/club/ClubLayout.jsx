@@ -16,7 +16,7 @@ const ClubLayout = () => {
             <Routes>
                 <Route path='/board/*' element={<BoardLayout />}/>
                 <Route path='/manage/*' element={<ManageLayout />}/>
-                <Route path='/schedule/*' element={ScheduleList />}/>
+                <Route path='/schedule/*' element={<ScheduleList />}/>
             </Routes>
         </StyledClubLayoutDiv>
     );
