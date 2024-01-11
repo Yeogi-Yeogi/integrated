@@ -39,7 +39,7 @@ const InnerNavBar = () => {
 
   const isSpecialCondition = true;
   const boardDynamicToValue = isSpecialCondition
-    ? ['/club/board/list', '/club/board/notice/list']
+    ? ['/club/board/list', '/club/board/notice/list', '/club/board/detail']
     : '/club/board/write';
 
   return (
