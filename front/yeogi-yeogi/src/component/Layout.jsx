@@ -7,11 +7,10 @@ import { Route, Routes } from 'react-router-dom';
 import ClubLayout from './club/ClubLayout';
 
 const StyledLayOutDiv = styled.div`
-    width: 100vw;
+    width: 100%;
     height: 100vh;
-    /* background-color: #00d9ff; */
     display: grid;
-    grid-template-rows: 100px 5fr 1.5fr;
+    grid-template-rows: auto;
 
 `;
 

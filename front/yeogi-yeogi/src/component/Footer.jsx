@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const StyledFooterDiv = styled.div`
     border-top: 1px solid black;
+    height: 200px;
 `;
 
 const Footer = () => {
