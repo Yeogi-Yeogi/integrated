@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import ScheduleUpcoming from './ScheduleUpcoming';
 import SchedulePast from './SchedulePast';
 import ScheduleSideBar from './ScheduleSideBar';
+import ScheduleDetail from '../../manage/ScheduleDetail';
 
 const StyledScheduleLayout = styled.div`
     width: 100%;
@@ -26,6 +27,7 @@ const ScheduleLayout = () => {
                     <Route path='/' element={<ScheduleUpcoming/>}/>
                     <Route path='upcoming' element={<ScheduleUpcoming />}/>
                     <Route path='past' element={<SchedulePast />}/>
+                    <Route path='detail' element={<ScheduleDetail />}/>
                 </Routes>
             </div>
         </StyledScheduleLayout>

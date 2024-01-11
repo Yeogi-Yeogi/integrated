@@ -10,6 +10,8 @@ const StyledBoardListDiv = styled.div`
     padding-left: 2em;
 `;
 const BoardList = () => {
+
+
     return (
         <StyledBoardListDiv>
             <BoardListItem/>
