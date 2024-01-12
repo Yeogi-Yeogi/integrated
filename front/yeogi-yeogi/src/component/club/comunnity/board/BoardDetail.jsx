@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
+import ReviewList from './common/ReviewList';
 
 
 const StyledNoticeDetailDiv = styled.div`
@@ -14,7 +15,7 @@ const StyledNoticeDetailDiv = styled.div`
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
 
-    & > div {
+    & > div:first-child {
         margin: auto;
         width:70%;
         //첫번째 div
@@ -73,26 +74,44 @@ const ContentDiv = styled.div`
 `;
 
 const ReviewDiv = styled.div`
+    margin-top: 5em;
+    margin-bottom: 1.5em;
 
      & > form  {
         display: flex;
         justify-content: space-between;
+        align-items: center;
 
         & button {
-            width: 50%;
+            width: 4em;
+            height: 4em;
+            background-color: #6c1895;
+            border-color: #6c1895;
+            font-weight: 600;
+
+            &:hover {
+                background-color: #5d1582;
+            }
         }
         
         & textarea {
             resize: none;
             width: 30em;
+
+            &:focus {
+                border-color: #6c1895;
+                box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
+            }
         }
      }
-     
-     
      
 `;
 
 const BoardDetail = (props) => {
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    }
     return (
         <StyledNoticeDetailDiv>
             <div>
@@ -123,13 +142,15 @@ const BoardDetail = (props) => {
                 </ContentDiv>
                 <hr/>
                 <ReviewDiv>
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                         <Form.Control as="textarea" name='content' rows={3}/>
-                        <Button variant='secondary' type="submit" >작성하기</Button>
+                        <Button variant='secondary' type="submit" >작성</Button>
                     </Form>
                 </ReviewDiv>
+                <hr />
+                <ReviewList />
             </div>
-
+            
         </StyledNoticeDetailDiv>
     );
 };

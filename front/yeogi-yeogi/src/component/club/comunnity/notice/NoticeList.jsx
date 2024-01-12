@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination, Table } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -69,7 +69,7 @@ const NoticeList = () => {
     const [noticeList, setNoticeList] = useState();   //공지사항 리스트
     const [pageVo, setPageVo] = useState();
     const [items, setItems] = useState([]);
-
+    const {clubNo} = useParams();
     //페이지 번호 갱신 될때마다 데이터 불러오기
 
     // 페이지 번호 클릭 시 실행될 함수
@@ -78,7 +78,7 @@ const NoticeList = () => {
     };
     const getList = (pageNo) => {
         console.log(pageNo); //
-        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=1&clubNo=2`)
+        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=1&clubNo=${clubNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.data);
@@ -114,7 +114,7 @@ const NoticeList = () => {
     const navigate = useNavigate();
 
     const handleClick = (no) => {
-        navigate('/club/commu/board/notice/detail', no)
+        navigate(`/club/${clubNo}/commu/board/notice/detail`, no)
     }
 
     return (
