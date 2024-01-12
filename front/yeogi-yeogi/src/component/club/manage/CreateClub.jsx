@@ -18,6 +18,7 @@ const StyledCreateClubdiv = styled.div`
         padding: 10px;
         outline: none;
         font-size: 0.8rem;
+        
     }
 
     & select {
@@ -52,7 +53,7 @@ const StyledCreateClubdiv = styled.div`
                     height: 150px;
                     margin-bottom: 15px;
                     border-radius: 10px;
-                    border: 1px solid black;
+                    border: 1px solid #e8e8e8;
                     
                 }
             }
@@ -119,43 +120,40 @@ const StyledCreateClubdiv = styled.div`
 
 const CreateClub = () => {
 
-    const [imgFile, setImgFile] = useState();
+    const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
 
-    const saveImgFile = () => {
-        const file = imgRef.current.files[0]; // 첫 번째 파일만 사용
-        if (file) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
-                setImgFile(reader.result);
-            };
-        }
+    // 이미지 업로드 input의 onChange
+    const handleChangeFile = () => {
+        if (!imgRef.current.files.length) {
+            // 파일이 선택되지 않은 경우
+            setImgFile(""); // 이미지 초기화
+            return;
+          }
+      
+        const file = imgRef.current.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setImgFile(reader.result);
+        };
     };
 
-    const handleSubmit = () => {
-
-    };
-
-    const handleChangeFile = (e) => {
-        setImgFile(e.target.files[0]);
-        console.log(imgFile);
-        saveImgFile();
-    }
 
     return (
         <StyledCreateClubdiv>
             <div>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <div>
                         <div>
                             <img
-                                src={imgFile}
+                                src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
                                 alt="클럽 대표 이미지"
-                                style={{width: "100px", height: "100px"}}
+                                id='previewImgTag'
+                                style={{width: "100%", height: "100%", borderRadius: "10px"}}
                             />
                         </div>
-                        <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} />
+                        <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
                         <label htmlFor="fileInput" >사진 선택</label>
                     </div>
                     <div>
