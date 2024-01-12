@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pagination, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -74,7 +74,10 @@ const NoticeList = () => {
     );
     }
 
+    // const 
+
     //데이터 불러오기
+    // useEffect( , []);
 
     const navigate = useNavigate();
 

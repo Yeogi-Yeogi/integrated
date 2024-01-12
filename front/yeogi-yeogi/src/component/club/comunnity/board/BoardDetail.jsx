@@ -79,7 +79,7 @@ const ReviewDiv = styled.div`
         justify-content: space-between;
 
         & button {
-            width
+            width: 50%;
         }
         
         & textarea {

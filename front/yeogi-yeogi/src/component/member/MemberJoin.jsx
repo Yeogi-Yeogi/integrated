@@ -7,7 +7,9 @@ const StyledMemberJoinDiv = styled.div`
 
 const MemberJoin = () => {
 
-    const 
+    const handleMemberJoinSubmit = () => {
+
+    }
 
     return (
         <StyledMemberJoinDiv>
