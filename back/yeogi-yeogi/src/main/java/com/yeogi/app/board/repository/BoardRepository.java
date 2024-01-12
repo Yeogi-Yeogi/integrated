@@ -3,6 +3,7 @@ package com.yeogi.app.board.repository;
 import com.yeogi.app.board.dto.*;
 import com.yeogi.app.notice.dto.NoticeDetailDto;
 import com.yeogi.app.notice.dto.NoticeListDto;
+import com.yeogi.app.util.check.CheckDto;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -75,12 +76,14 @@ public class BoardRepository {
 
     /**
      * 공지사항 리스트 가져오기
+     *
      * @param template
+     * @param clubMember
      * @param rowBounds
      * @return
      */
-    public List<NoticeListDto> getNoticeList(SqlSessionTemplate template, RowBounds rowBounds) {
-        return template.selectList("BoardMapper.getNoticeList", rowBounds);
+    public List<NoticeListDto> getNoticeList(SqlSessionTemplate template, CheckDto clubMember, RowBounds rowBounds) {
+        return template.selectList("BoardMapper.getNoticeList", clubMember, rowBounds);
     }
 
     /**
@@ -101,5 +104,13 @@ public class BoardRepository {
      */
     public void deleteBoardByNo(String BoardNo, SqlSessionTemplate template) {
         template.delete("BoardMapper.deleteBoardByNo", BoardNo);
+    }
+
+    /**
+     * 공지사항 전체 개수(페이징용)
+     * @return
+     */
+    public int getTotalCount(String clubNo, SqlSessionTemplate template) {
+        return Integer.parseInt(template.selectOne("BoardMapper.getTotalCount", clubNo));
     }
 }

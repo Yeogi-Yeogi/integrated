@@ -93,6 +93,13 @@
         FETCH FIRST 1 ROWS ONLY
     </select>
 
+    <select id="getTotalCount" resultType="String">
+        SELECT COUNT(NO)
+        FROM BOARD
+        WHERE CLUB_NO = #{clubNo}
+        AND NOTICE_YN = 'Y'
+        AND DEL_YN = 'N'
+    </select>
 
     <select id="getNoticeList" resultType="com.yeogi.app.board.dto.BoardListDto">
         SELECT
@@ -100,7 +107,7 @@
             B.TITLE,
             B.HIT,
             TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE,
-            M.NICK MEMBER_NAME,
+            M.NICK MEMBER_NAME
 <!--            COUNT(R.NO) AS REVIEW_COUNT-->
         FROM
         BOARD B

@@ -1,5 +1,6 @@
 package com.yeogi.app.notice.dto;
 
+import com.yeogi.app.util.page.PageVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,4 +14,5 @@ public class NoticeListDto {
     private String title;
     private String hit;
     private String enrollDate;
+
 }
