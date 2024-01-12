@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pagination, Table } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 
@@ -11,6 +12,10 @@ const StyledTableDiv = styled.div`
     & > table {
         border-collapse: collapse;
 
+        & tbody > tr:hover {
+            cursor: pointer;
+        }
+
         & * {
             text-align: center;
         }
@@ -20,11 +25,15 @@ const StyledTableDiv = styled.div`
         }
 
         & tr > *:nth-child(2) {
-            width: 20%;
+            width: 15%;
         }
 
         & tr > *:nth-child(3) {
-            width: 30%;
+            width: 25%;
+        }
+
+        & tr > *:nth-child(4) {
+            width: 10%;
         }
     }
 
@@ -65,6 +74,14 @@ const NoticeList = () => {
     );
     }
 
+    //데이터 불러오기
+
+    const navigate = useNavigate();
+
+    const handleClick = (no) => {
+        navigate('/club/commu/board/notice/detail', no)
+    }
+
     return (
         <StyledTableDiv>
             <Table >
@@ -73,82 +90,81 @@ const NoticeList = () => {
                     <th>제목</th>
                     <th>작성자</th>
                     <th>작성일자</th>
+                    <th>조회수</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr onClick={handleClick}>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
-                </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                    <td>120</td>
                 </tr>
                 <tr>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
+                    <td>120</td>
                 </tr>
                 <tr>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
-                </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                    <td>120</td>
                 </tr>
                 <tr>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
+                    <td>120</td>
                 </tr>
                 <tr>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
-                </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                    <td>120</td>
                 </tr>
                 <tr>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
-                </tr><tr>
+                    <td>120</td>
+                </tr>
+                <tr>
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
+                    <td>120</td>
                 </tr>
                 <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>120</td>
                 </tr>
                 <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>120</td>
+                </tr>
+                <tr>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>120</td>
+                </tr>
+                <tr>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>120</td>
+                </tr>
+                <tr>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>120</td>
                 </tr>
                 </tbody>
             </Table>

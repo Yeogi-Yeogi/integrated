@@ -10,6 +10,9 @@ const StyledScheduleLisDiv = styled.div`
     padding-left: 2em;
 `;
 const ScheduleUpcoming = () => {
+
+     //데이터 받아오기
+
     return (
         <StyledScheduleLisDiv>
             <ScheduleItem/>

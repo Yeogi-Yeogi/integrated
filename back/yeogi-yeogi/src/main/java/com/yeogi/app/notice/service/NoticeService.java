@@ -38,8 +38,9 @@ public class NoticeService {
      * @return
      */
     public List<NoticeListDto> getNoticeList(CheckDto checkDto, String pageNo) throws NotClubMemberException {
+
         CheckDto clubMember = check.isClubMember(checkDto, template);
-        if(!(checkDto != null && !clubMember.getMemberNo().equals(checkDto.getMemberNo()))) {
+        if(!clubMember.getMemberNo().equals(checkDto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
@@ -55,7 +56,7 @@ public class NoticeService {
      */
     public NoticeDetailDto getOne(BoardDetailValidDto dto) throws NotClubMemberException {
         CheckDto clubMember = check.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
-        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+        if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 

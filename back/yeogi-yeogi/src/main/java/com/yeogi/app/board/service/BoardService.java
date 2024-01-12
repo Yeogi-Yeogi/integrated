@@ -41,9 +41,13 @@ public class BoardService {
      * @return
      */
     public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException {
-        CheckDto clubMember = checkMember.isClubMember(dto, template);
-        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
-            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        if(dto != null && dto.getMemberNo() != null && dto.getClubNo() != null) {
+            CheckDto clubMember = checkMember.isClubMember(dto, template);
+            if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
+                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+            }
+        } else {
+                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*10, 10);
@@ -72,6 +76,7 @@ public class BoardService {
      * @return
      */
     public BoardDetailDto getOneByBoardNo(BoardDetailValidDto valid) throws NotClubMemberException {
+
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(valid.getClubNo(), valid.getMemberNo()), template);
         if(!(valid.getMemberNo() != null && clubMember.getMemberNo().equals(valid.getMemberNo()))) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
@@ -106,10 +111,12 @@ public class BoardService {
      * @return
      */
     public int addBoard(BoardAddDto dto) throws NotClubMemberException {
+
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
-        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+        if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("회원만 작성 가능합니다.");
         }
+
         int result = boardRepository.addBoard(dto, template);
 
         //이미지 사진 저장

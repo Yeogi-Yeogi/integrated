@@ -57,13 +57,4 @@ public class NoticeController {
         return headers;
     }
 
-    @ExceptionHandler(value = NotClubMemberException.class)
-    public ResponseEntity<ErrorResult> handleErrorNotMember(NotClubMemberException e) {
-        e.printStackTrace();
-        ErrorResult response = new ErrorResult();
-        response.setCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage(e.getMessage());
-
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
-    }
 }

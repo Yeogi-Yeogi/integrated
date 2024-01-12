@@ -45,7 +45,7 @@ public class ReviewController {
      * @throws FailAddReviewException
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addReview(@RequestBody ReviewAddDto review) throws FailAddReviewException {
+    public ResponseEntity<String> addReview(@RequestBody ReviewAddDto review) throws FailAddReviewException, NotClubMemberException {
         int result = service.addReview(review);
 
         if(result != 1) throw new FailAddReviewException("리뷰 작성 실패");
@@ -59,29 +59,5 @@ public class ReviewController {
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         return headers;
     }
-    
-    @ExceptionHandler(value = NotClubMemberException.class)
-    public ResponseEntity<ErrorResult> handleErrorNotMember(NotClubMemberException e) {
-        e.printStackTrace();
-        ErrorResult response = new ErrorResult();
-        response.setCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage(e.getMessage());
 
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * 리뷰 작성 실패 시
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(value = FailAddReviewException.class)
-    public ResponseEntity<ErrorResult> handleErrorFailAddReview(FailAddReviewException e) {
-        e.printStackTrace();
-        ErrorResult response = new ErrorResult();
-        response.setCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage(e.getMessage());
-
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
-    }
 }

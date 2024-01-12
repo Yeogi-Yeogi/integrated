@@ -34,6 +34,7 @@ public class BoardController {
     @GetMapping("/list/{pageNo}")
     public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException {
         HttpHeaders headers = getHttpHeaders();
+        log.info("check = {}", dto);
         return new ResponseEntity<>(service.getBoardListByClubNo(dto, pageNo), headers, HttpStatus.OK);
     }
 
@@ -66,50 +67,11 @@ public class BoardController {
         return new ResponseEntity<>(service.getOneByBoardNo(valid), headers, HttpStatus.OK);
     }
 
-    /**
-     * 게시글 상세조회 실패 시 오류
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(value = NoResultException.class)
-    public ResponseEntity<ErrorResult> handleErrorNoResult(NoResultException e) {
-        e.printStackTrace();
-        ErrorResult response = new ErrorResult();
-        response.setCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage(e.getMessage());
-
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
-    }
-
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         return headers;
     }
 
-    /**
-     * 모임에 가입한 회원이 아닐 경우
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(value = NotClubMemberException.class)
-    public ResponseEntity<ErrorResult> handleErrorNotMember(NotClubMemberException e) {
-        e.printStackTrace();
-        ErrorResult response = new ErrorResult();
-        response.setCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage(e.getMessage());
 
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
-    }
-
-
-    @ExceptionHandler(value = IllegalStateException.class)
-    public ResponseEntity<ErrorResult> handleIOE(IllegalStateException e) {
-        e.printStackTrace();
-        ErrorResult response = new ErrorResult();
-        response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.ordinal());
-        response.setMessage(e.getMessage());
-
-        return new ResponseEntity<>(response, null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 }
