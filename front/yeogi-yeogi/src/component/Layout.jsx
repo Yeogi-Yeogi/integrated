@@ -21,7 +21,7 @@ const Layout = () => {
             <Header />
             <Routes>
                 <Route path='/' element={<Main/>}/>
-                <Route path='/member/*' element={<MemberLayoutoutyout/>}/>
+                <Route path='/member/*' element={<MemberLayout/>}/>
                 <Route path='/club/*' element={<ClubLayout/>}/>
             </Routes>
             <Footer />
