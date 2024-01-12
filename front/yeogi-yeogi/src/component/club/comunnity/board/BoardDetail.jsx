@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 
 
@@ -74,6 +74,22 @@ const ContentDiv = styled.div`
 
 const ReviewDiv = styled.div`
 
+     & > form  {
+        display: flex;
+        justify-content: space-between;
+
+        & button {
+            width
+        }
+        
+        & textarea {
+            resize: none;
+            width: 30em;
+        }
+     }
+     
+     
+     
 `;
 
 const BoardDetail = (props) => {
@@ -107,7 +123,10 @@ const BoardDetail = (props) => {
                 </ContentDiv>
                 <hr/>
                 <ReviewDiv>
-
+                    <Form>
+                        <Form.Control as="textarea" name='content' rows={3}/>
+                        <Button variant='secondary' type="submit" >작성하기</Button>
+                    </Form>
                 </ReviewDiv>
             </div>
 
