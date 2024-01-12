@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("club")
+@CrossOrigin("*")
 public class ClubController {
 
     private final ClubService service;
@@ -44,14 +45,13 @@ public class ClubController {
      * @return
      */
     @PostMapping("createClub")
-    public int createClub(MultipartFile file, CreateClubDto createClubDto) throws IOException {
+    public int createClub(CreateClubDto createClubDto) throws IOException {
 
-        log.info("file = {}", file);
         log.info("createClubDto = {}", createClubDto);
         String type = "create";
         // 클럽이미지 선택x == 기본이미지
         // 클럽 insert 하고,,, 시퀀스,,,
-        int result = service.createClub(file, createClubDto, type);
+        int result = service.createClub(createClubDto.getFile(), createClubDto, type);
 
         return result;
     }
@@ -62,8 +62,9 @@ public class ClubController {
      * @return
      */
     @PostMapping("checkClubName")
-    public String checkClubName(String clubName){
-        // 중복되는 클럽명 있으면 어떻게 처리할지 써야됨
+    public String checkClubName(@RequestBody String clubName){
+        log.info("clubName = {}", clubName);
+        // 중복되는 클럽명 있으면 어떻게 처리할지
         return service.checkClubName(clubName);
     }
 

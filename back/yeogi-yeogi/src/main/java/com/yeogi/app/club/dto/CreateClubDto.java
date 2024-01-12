@@ -3,6 +3,7 @@ package com.yeogi.app.club.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Getter
@@ -15,6 +16,6 @@ public class CreateClubDto {
     private String ageLimit;
     private String signupLimit;
     private String clubDescription;
-    private ClubImageDto clubImageDto;
+    private MultipartFile file;
 
 }
