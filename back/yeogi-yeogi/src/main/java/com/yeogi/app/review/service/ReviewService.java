@@ -1,6 +1,5 @@
 package com.yeogi.app.review.service;
 
-import com.yeogi.app.board.dto.CheckIsMemberDto;
 import com.yeogi.app.review.dto.ReviewAddDto;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
@@ -12,7 +11,6 @@ import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.context.expression.CachedExpressionEvaluator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +31,9 @@ public class ReviewService {
      * @throws NotClubMemberException
      */
     public List<ReviewDetailDto> getReviews(ReviewReqDto dto) throws NotClubMemberException {
+
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
-        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+        if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
@@ -48,15 +47,12 @@ public class ReviewService {
      * @return
      * @throws FailAddReviewException
      */
-    public int addReview(ReviewAddDto review) throws FailAddReviewException {
-        checkIsMember(review);
+    public int addReview(ReviewAddDto review) throws FailAddReviewException, NotClubMemberException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(review.getClubNo(), review.getWriterNo()), template);
+        if(!clubMember.getMemberNo().equals(review.getWriterNo())) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        }
         return repository.addReview(review, template);
     }
 
-    private void checkIsMember(ReviewAddDto review) throws FailAddReviewException {
-        CheckDto clubMember = checkMember.isClubMember(new CheckDto(review.getClubNo(), review.getWriterNo()), template);
-        if(!(review.getWriterNo() == null && clubMember.getMemberNo().equals(review.getWriterNo()))) {
-            throw new FailAddReviewException("모임에 가입한 회원만 이용 가능합니다");
-        }
-    }
 }
