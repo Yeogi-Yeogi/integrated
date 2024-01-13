@@ -6,7 +6,7 @@ import InnerLayout from './comunnity/board/common/InnerLayout';
 
 
 const StyledClubLayoutDiv = styled.div`
-
+    height: 100%;
     width: 100%;
 `;
 const ClubLayout = () => {
