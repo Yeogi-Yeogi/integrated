@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const StyledCreateClubdiv = styled.div`
     &{
@@ -25,6 +27,7 @@ const StyledCreateClubdiv = styled.div`
         text-align: center;
         -webkit-appearance:none; 
         background:url('/img/arrow-icon.png') no-repeat 97% 50%/20px auto;
+        background-color: #fff;
     }
 
     & > div:nth-of-type(1){
@@ -60,6 +63,7 @@ const StyledCreateClubdiv = styled.div`
             & > div:nth-of-type(2) > button{
                 color: #fff;
                 background-color: #6C1895;
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
                 border: none;
                 width: 100px;
                 height: 40px;
@@ -72,6 +76,7 @@ const StyledCreateClubdiv = styled.div`
         }
         & > form > div:nth-of-type(1) > label {
             background-color: #6C1895;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
             color: #fff;
             width: 120px;
             padding: 10px 15px;
@@ -86,9 +91,11 @@ const StyledCreateClubdiv = styled.div`
             border-radius: 25px;
             border: none;
             background-color: #6C1895;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
             color: #fff;
             font-weight: bold;
             font-size: 18px;
+            
         }
 
         & > form textarea[id='clubDescription']{
@@ -122,10 +129,12 @@ const CreateClub = () => {
     // const str = window.sessionStorage.getItem("loginMemberVo");
     // const vo = JSON.parse(str);
     // const creatorNo = vo.no;
-
+    
+    const navigate = useNavigate();
     const creatorNo = "2";  // 클럽 생성한 사람 번호....임시....
 
     const [imgFile, setImgFile] = useState("");
+    const [clubNameCheck, setClubNameCheck] = useState(false);
     const imgRef = useRef();
     const [createClubDto, setCreateClubDto] = useState({
         "creatorNo" : creatorNo
@@ -147,6 +156,10 @@ const CreateClub = () => {
 
     const handleChangeInput = (input) => {
         const {name, value} = input.target;
+        if(name === "name"){
+            setClubNameCheck(false);
+        }
+        
         setCreateClubDto({
             ...createClubDto,
             [name] : value
@@ -159,15 +172,29 @@ const CreateClub = () => {
         input.preventDefault();
         console.log(createClubDto);
 
-        if(createClubDto.name === ""){
-            alert("이름 입력 ㄱㄱ");
+        if(!clubNameCheck){
+            Swal.fire({
+                icon: 'warning',                  
+                text: '모임명 중복확인을 진행하셔야합니다.', 
+            });
+            return;
         }
+        // if(createClubDto.name === ""){
+        //     Swal.fire({
+        //         icon: 'warning',                  
+        //         text: '이름 입력해야지', 
+        //     });
+        // }
         // 빈값에 대한거 작성..
 
         const formData = new FormData();
         formData.append("file", imgRef.current.files[0]);
-        formData.append("createClubDto", JSON.stringify(createClubDto));
-        // formData.append("createClubDto", new Blob([JSON.stringify(createClubDto)], { type: "application/json" }));
+        formData.append("name", createClubDto.name);
+        formData.append("categoryNo", createClubDto.categoryNo);
+        formData.append("creatorNo", createClubDto.creatorNo);
+        formData.append("ageLimit", createClubDto.ageLimit);
+        formData.append("signupLimit", createClubDto.signupLimit);
+        formData.append("clubDescription", createClubDto.clubDescription);
 
 
         fetch("http://127.0.0.1:8885/club/createClub", {
@@ -177,19 +204,31 @@ const CreateClub = () => {
         .then(resp => resp.text())
         .then(data => {
             console.log(data);
+            if(data === "1"){
+                Swal.fire({
+                    icon: 'success',                  
+                    text: '클럽 생성에 성공했다', 
+                  });
+                navigate("");
+            }
+            // 실패시에는..?
         })
         .catch(error => {
             console.error("Error : ", error);
         });
-        
-
+    
     };
 
-    const handleNameCheck = () => {
+    const handleNameCheck = (e) => {
+        e.preventDefault();
         const name = document.querySelector('#name');
  
         if(name.value === ""){
-            alert("입력을하세요");
+            Swal.fire({
+                icon: 'error',                  
+                // title: '에러',    
+                text: '모임 이름을 입력해주세요', 
+              });
             return;
         }
 
@@ -200,20 +239,26 @@ const CreateClub = () => {
         .then( (resp) => resp.text())
         .then(data => {
             console.log(data);
-            if(data === createClubDto.name){
-                alert("사용불가넝");
-                name.value = "";
-            } else {
-                alert("중복 업ㅈ승ㅁ");  
-            } 
-
+            if(data === "success"){
+                Swal.fire({
+                    icon: 'success',                  
+                    text: '사용할 수 있는 모임 이름입니다.', 
+                });
+                setClubNameCheck(true);
+                return;
+            }
+            Swal.fire({
+                icon: 'warning',                  
+                text: '현재 사용중인 모임 이름입니다.', 
+            });
+            name.value = "";
         })
     };
 
     return (
         <StyledCreateClubdiv>
             <div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <div>
                         <div>
                             <img
@@ -259,7 +304,7 @@ const CreateClub = () => {
                             <option value="4">4</option>
                         </select>
                     </div>
-                    <textarea name="clubDescription" id="clubDescription" spellcheck="false" placeholder='모임 소개를 입력해주세요'  onChange={handleChangeInput}></textarea>
+                    <textarea name="clubDescription" id="clubDescription" placeholder='모임 소개를 입력해주세요'  onChange={handleChangeInput} spellCheck={false}/>
 
                     <input type="submit" value="모임 만들기" />
                 </form>

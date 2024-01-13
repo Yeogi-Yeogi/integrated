@@ -45,19 +45,20 @@ public class ClubController {
      * @return
      */
     @PostMapping("createClub")
-    public int createClub(CreateClubDto createClubDto) throws IOException {
+    public int createClub(@RequestBody MultipartFile file, CreateClubDto createClubDto) throws IOException {
 
         log.info("createClubDto = {}", createClubDto);
+        log.info("file = {}", file);
         String type = "create";
         // 클럽이미지 선택x == 기본이미지
         // 클럽 insert 하고,,, 시퀀스,,,
-        int result = service.createClub(createClubDto.getFile(), createClubDto, type);
+        int result = service.createClub(file, createClubDto, type);
 
         return result;
     }
 
     /**
-     * 클럽 생성 - 클럽명 중복 확인 - 이미지파일관련 수정 필요
+     * 클럽 생성 - 클럽명 중복 확인
      * @param clubName
      * @return
      */
@@ -65,7 +66,11 @@ public class ClubController {
     public String checkClubName(@RequestBody String clubName){
         log.info("clubName = {}", clubName);
         // 중복되는 클럽명 있으면 어떻게 처리할지
-        return service.checkClubName(clubName);
+        String getClubName =  service.checkClubName(clubName);
+        if(getClubName == null){
+            getClubName = "success";
+        }
+        return getClubName;
     }
 
     /**

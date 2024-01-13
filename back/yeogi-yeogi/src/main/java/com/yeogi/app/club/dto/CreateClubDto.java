@@ -16,6 +16,5 @@ public class CreateClubDto {
     private String ageLimit;
     private String signupLimit;
     private String clubDescription;
-    private MultipartFile file;
 
 }
