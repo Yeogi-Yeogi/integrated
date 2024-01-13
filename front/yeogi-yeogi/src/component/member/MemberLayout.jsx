@@ -6,15 +6,25 @@ import MemberLogin from './MemberLogin';
 
 const StyledMemberLayouDiv = styled.div`
     width: 100%;
+    margin: auto;
+
+    & > div {
+        /* width: 70em; */
+        display: flex;
+        justify-content: space-between;
+        margin: auto;
+    }
 `;
 
 const MemberLayout = () => {
     return (
         <StyledMemberLayouDiv>
-            <Routes>
-                <Route path='/join' element={<MemberJoin/>}/>
-                <Route path='/login'element={<MemberLogin/>}/>
-            </Routes>          
+            <div>
+                <Routes>
+                    <Route path='/join' element={<MemberJoin/>}/>
+                    <Route path='/login'element={<MemberLogin/>}/>
+                </Routes>  
+            </div>                   
         </StyledMemberLayouDiv>
     );
 };
