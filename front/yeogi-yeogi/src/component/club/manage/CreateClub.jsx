@@ -114,36 +114,106 @@ const StyledCreateClubdiv = styled.div`
                 font-weight: bold;
             }
         }
-
     }
 `;
 
 const CreateClub = () => {
 
+    // const str = window.sessionStorage.getItem("loginMemberVo");
+    // const vo = JSON.parse(str);
+    // const creatorNo = vo.no;
+
+    const creatorNo = "2";  // 클럽 생성한 사람 번호....임시....
+
     const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
+    const [createClubDto, setCreateClubDto] = useState({
+        "creatorNo" : creatorNo
+    });
 
-    // 이미지 업로드 input의 onChange
     const handleChangeFile = () => {
         if (!imgRef.current.files.length) {
-            // 파일이 선택되지 않은 경우
-            setImgFile(""); // 이미지 초기화
+            // 파일 선택 취소했을때
             return;
-          }
+        }
       
         const file = imgRef.current.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setImgFile(reader.result);
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onloadend = () => {
+            setImgFile(fileReader.result);
         };
     };
 
+    const handleChangeInput = (input) => {
+        const {name, value} = input.target;
+        setCreateClubDto({
+            ...createClubDto,
+            [name] : value
+        });
+    };
+
+    
+
+    const handleSubmit = (input) => {
+        input.preventDefault();
+        console.log(createClubDto);
+
+        if(createClubDto.name === ""){
+            alert("이름 입력 ㄱㄱ");
+        }
+        // 빈값에 대한거 작성..
+
+        const formData = new FormData();
+        formData.append("file", imgRef.current.files[0]);
+        formData.append("createClubDto", JSON.stringify(createClubDto));
+        // formData.append("createClubDto", new Blob([JSON.stringify(createClubDto)], { type: "application/json" }));
+
+
+        fetch("http://127.0.0.1:8885/club/createClub", {
+            method : "POST",
+            body : formData
+        })
+        .then(resp => resp.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("Error : ", error);
+        });
+        
+
+    };
+
+    const handleNameCheck = () => {
+        const name = document.querySelector('#name');
+ 
+        if(name.value === ""){
+            alert("입력을하세요");
+            return;
+        }
+
+        fetch("http://127.0.0.1:8885/club/checkClubName",{
+            method: "POST",
+            body: createClubDto.name,
+        })
+        .then( (resp) => resp.text())
+        .then(data => {
+            console.log(data);
+            if(data === createClubDto.name){
+                alert("사용불가넝");
+                name.value = "";
+            } else {
+                alert("중복 업ㅈ승ㅁ");  
+            } 
+
+        })
+    };
 
     return (
         <StyledCreateClubdiv>
             <div>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div>
                         <div>
                             <img
@@ -157,36 +227,39 @@ const CreateClub = () => {
                         <label htmlFor="fileInput" >사진 선택</label>
                     </div>
                     <div>
-                        <input type="text" name="clubName" placeholder='모임 이름을 설정해주세요'/> <button>중복 확인</button>
+                        <input type="text" name="name" id="name" placeholder='모임 이름을 설정해주세요' onChange={handleChangeInput}/> <button onClick={handleNameCheck}>중복 확인</button>
                     </div>
                     <div className='selelctBoxdiv'>
                         <div>카테고리</div>
-                        <select name="category" id="category">
-                            <option value="테스트1">테스트1</option>
-                            <option value="테스트1">테스트2</option>
-                            <option value="테스트1">테스트3</option>
-                            <option value="테스트1">테스트4</option>
+                        <select name="categoryNo" id="category" onChange={handleChangeInput}>
+                            <option value="" disabled selected>카테고리 선택</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
                         </select>
                     </div>
                     <div className='selelctBoxdiv'>
                         <div>모임 인원</div>
-                        <select name="signupLimit" id="signupLimit">
-                            <option value="테스트1">테스트1</option>
-                            <option value="테스트1">테스트2</option>
-                            <option value="테스트1">테스트3</option>
-                            <option value="테스트1">테스트4</option>
+                        <select name="signupLimit" id="signupLimit" onChange={handleChangeInput}>
+                            <option value="" disabled selected>모임인원 선택</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
                         </select>
                     </div>
                     <div className='selelctBoxdiv'>
                         <div>나이 제한</div>
-                        <select name="ageLimit" id="ageLimit">
-                            <option value="테스트1">테스트1</option>
-                            <option value="테스트1">테스트2</option>
-                            <option value="테스트1">테스트3</option>
-                            <option value="테스트1">테스트4</option>
+                        <select name="ageLimit" id="ageLimit" onChange={handleChangeInput}>
+                            <option value="" disabled selected>나이제한 선택</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
                         </select>
                     </div>
-                    <textarea name="clubDescription" id="clubDescription" spellcheck="false" placeholder='모임 소개를 입력해주세요'></textarea>
+                    <textarea name="clubDescription" id="clubDescription" spellcheck="false" placeholder='모임 소개를 입력해주세요'  onChange={handleChangeInput}></textarea>
 
                     <input type="submit" value="모임 만들기" />
                 </form>
