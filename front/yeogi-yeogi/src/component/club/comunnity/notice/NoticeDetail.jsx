@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
-import ScheduleItem from '../schedule/ScheduleItem';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 
 const StyledNoticeDetailDiv = styled.div`
@@ -59,7 +60,38 @@ const StyledNoticeDetailDiv = styled.div`
 const ContentDiv = styled.div`
 
     & > div {
-        width: 100%;
+        width: 90%;
+        margin: auto;
+        margin-bottom: 2em;
+        padding: 1.2em;
+        background-color: #fafafa;
+
+        & > div:first-child  {
+            margin-bottom: 0.4em;
+            & > span {
+                font-size: 1.2em;
+                font-weight: 700;
+            }
+        }
+        & * {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        & > div {
+
+            & > * {
+                margin-left: 30px;
+            }
+        }
+
+        & svg {
+            font-size: 2em;
+            color: #999999;
+        }
+    }
+
+    & h4 {
+        font-weight: 600;
     }
 `;
 
@@ -84,7 +116,18 @@ const NoticeDetail = (props) => {
                 </div>
                 <hr/>
                 <ContentDiv>
-                    <ScheduleItem />
+                    <div>
+                        <div>
+                            <span>일정 이름</span>
+                        </div>
+                        <div>
+                            <FontAwesomeIcon icon={icon({name: 'calendar-check', family: 'classic', style: 'regular'})} />
+                            <span>2024년 1월 19일</span>
+                            <br/>
+                            <FontAwesomeIcon icon={icon({name: 'location-dot', family: 'classic', style: 'solid'})} />
+                            <span>서울특별시 강남구 테헤란로</span>
+                        </div>
+                    </div>
                     <h4>제목 제목 제목 제목 제목 </h4>
                     <p>내용용 내용용 내용용 내용용 내용용 </p>
                     {/* <div>

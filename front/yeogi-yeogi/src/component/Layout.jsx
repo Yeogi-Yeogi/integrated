@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import ClubLayout from './club/ClubLayout';
 import MemberLayout from './member/MemberLayout';
 
@@ -16,13 +16,14 @@ const StyledLayOutDiv = styled.div`
 `;
 
 const Layout = () => {
+
     return (
         <StyledLayOutDiv>
             <Header />
             <Routes>
                 <Route path='/' element={<Main/>}/>
                 <Route path='/member/*' element={<MemberLayout/>}/>
-                <Route path='/club/*' element={<ClubLayout/>}/>
+                <Route path='/club/:clubNo/*' element={<ClubLayout/>}/>
             </Routes>
             <Footer />
         </StyledLayOutDiv>

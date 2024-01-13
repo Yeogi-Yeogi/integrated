@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 const StyledNavbar = styled(Navbar)`
   margin: auto;
@@ -37,19 +37,20 @@ const InnerNavBar = () => {
 
   const boardDynamicToValue = ['/club/commu/board/list', '/club/commu/board/notice/list', '/club/commu/board/detail', '/club/commu/board/write'];
   const navigate = useNavigate();
+  const {clubNo} = useParams();
   return (
     <StyledNavbar expand="lg">
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto m-auto">
-            <NavLink to={'/club/commu/board'}>
+            <NavLink to={`/club/${clubNo}/commu/board`}>
               게시글
             </NavLink>
-            <NavLink to="/club/commu/schedule">
+            <NavLink to={`/club/${clubNo}/commu/schedule`}>
               일정
             </NavLink>
-            <NavLink to="/club/commu/gallery/list">
+            <NavLink to={`/club/commu/${clubNo}/commu/gallery`}>
               갤러리
             </NavLink>
           </Nav>

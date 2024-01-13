@@ -11,14 +11,16 @@ import com.yeogi.app.notice.vo.ScheduleVo;
 import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import com.yeogi.app.util.check.CheckClubMember;
+import com.yeogi.app.util.page.PageVo;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -37,15 +39,24 @@ public class NoticeService {
      * @param checkDto
      * @return
      */
-    public List<NoticeListDto> getNoticeList(CheckDto checkDto, String pageNo) throws NotClubMemberException {
+    public Map<String, Object> getNoticeList(CheckDto checkDto, String pageNo) throws NotClubMemberException {
 
-        CheckDto clubMember = check.isClubMember(checkDto, template);
-        if(!clubMember.getMemberNo().equals(checkDto.getMemberNo())) {
+        CheckDto clubMember = check.isClubMember(checkDto,template);
+;        if(!clubMember.getMemberNo().equals(checkDto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
-        RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo) * 10, 15);
-        return boardRepository.getNoticeList(template, rowBounds);
+        int totalCount = boardRepository.getTotalCount(clubMember.getClubNo(), template);
+        int pno = Integer.parseInt(pageNo);
+        int boardLimit = 15; //페이징 개수
+        PageVo pageVo = new PageVo(totalCount, pno, 5, boardLimit);
+
+        RowBounds rowBounds = new RowBounds((pno-1) * boardLimit, boardLimit);
+        List<NoticeListDto> noticeList = boardRepository.getNoticeList(template, clubMember, rowBounds);
+        Map<String, Object> resultMap =  new HashMap<>();
+        resultMap.put("list", noticeList);
+        resultMap.put("pageVo", pageVo);
+        return resultMap;
     }
 
     /**

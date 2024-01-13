@@ -22,7 +22,7 @@ public class CheckClubMember {
      * @return
      */
     public CheckDto isClubMember(CheckDto dto, SqlSessionTemplate template) throws NotClubMemberException {
-        if(!(dto.getMemberNo() != null && dto.getMemberNo() != null)) {
+        if(!(dto.getClubNo() != null && dto.getMemberNo() != null)) {
             throw new NotClubMemberException("모임에 가입한 사람만 이용 가능합니다");
         }
         return clubRepository.checkIsClubMember(dto, template);

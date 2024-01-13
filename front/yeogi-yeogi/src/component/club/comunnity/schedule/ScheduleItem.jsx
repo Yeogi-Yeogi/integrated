@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const StyledScheduleItemDiv = styled.div`
     width: 70%;
@@ -44,9 +44,9 @@ const StyledScheduleItemDiv = styled.div`
 const ScheduleItem = () => {
 
     const navigate = useNavigate();
-
+    const {clubNo} = useParams();
     const handleClick = (no) => {
-        navigate('/club/commu/board/notice/detail', no);
+        navigate(`/club/${clubNo}/commu/board/notice/detail`, no);
     }
     return (
         <StyledScheduleItemDiv onClick={handleClick}>

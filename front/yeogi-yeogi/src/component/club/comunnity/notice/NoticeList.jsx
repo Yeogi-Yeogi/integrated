@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination, Table } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -64,28 +64,61 @@ const StyledTableDiv = styled.div`
 
 const NoticeList = () => {
 
-    let active = 2;
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-    items.push(
-        <Pagination.Item key={number} active={number === active}>
-        {number}
-        </Pagination.Item>,
-    );
+    
+    const [pageNo, setPageNo] = useState(1);    //현재 페이지
+    const [noticeList, setNoticeList] = useState();   //공지사항 리스트
+    const [pageVo, setPageVo] = useState();
+    const [items, setItems] = useState([]);
+    const {clubNo} = useParams();
+    //페이지 번호 갱신 될때마다 데이터 불러오기
+
+    // 페이지 번호 클릭 시 실행될 함수
+    const handlePageClick = (pageNumber) => {
+        setPageNo(pageNumber);
+    };
+    const getList = (pageNo) => {
+        console.log(pageNo); //
+        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=1&clubNo=${clubNo}`)
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.data);
+            }
+            
+            return res.json();
+        })
+        .then(data => {
+            setNoticeList(data.list);
+            setPageVo(data.pageVo);
+        })
+        .then(() => {
+            console.log(pageVo);
+            const newItem = []
+            for (let number = pageVo?.startPage; number <= pageVo?.pageLimit; number++) {
+                newItem.push(
+                    <Pagination.Item key={number} active={number === pageNo}>
+                    {number}
+                    </Pagination.Item>
+                );
+            }
+            setItems([...newItem]);
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
-    // const 
-
-    //데이터 불러오기
-    // useEffect( , []);
+    useEffect(() => {
+        getList(pageNo);
+    } , [pageNo]);
 
     const navigate = useNavigate();
 
     const handleClick = (no) => {
-        navigate('/club/commu/board/notice/detail', no)
+        navigate(`/club/${clubNo}/commu/board/notice/detail`, no)
     }
 
     return (
+        //게시글 데이터 뿌리기 작업 필요.
         <StyledTableDiv>
             <Table >
                 <thead>
@@ -172,7 +205,17 @@ const NoticeList = () => {
                 </tbody>
             </Table>
             <div>
-                <Pagination>{items}</Pagination>
+                <Pagination>
+                    {items.map((item, index) => (
+                        <Pagination.Item
+                            key={index}
+                            active={index + pageVo.startPage === pageNo}
+                            onClick={() => handlePageClick(index + pageVo.startPage)}
+                        >
+                            {index + pageVo.startPage}
+                        </Pagination.Item>
+                    ))}
+                </Pagination>
             </div>
         </StyledTableDiv>
 

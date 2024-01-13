@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledBoardListItemDiv = styled.div`
@@ -65,9 +65,9 @@ const SecondDiv = styled.div`
 const BoardListItem = () => {
 
     const navigate = useNavigate();
-
+    const {clubNo} = useParams();
     const handleClick = (no) => {
-        navigate('/club/commu/board/detail', no);
+        navigate(`/club/${clubNo}/commu/board/detail`, no);
     }
     return (
         <StyledBoardListItemDiv onClick={handleClick}>            

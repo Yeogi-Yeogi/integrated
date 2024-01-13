@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/notice")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class NoticeController {
 
     private final NoticeService service;
@@ -34,9 +36,11 @@ public class NoticeController {
      * @throws NotClubMemberException
      */
     @GetMapping("/list/{pageNo}")
-    public ResponseEntity<List<NoticeListDto>> getNoticeList(@ModelAttribute CheckDto checkDto, @PathVariable String pageNo) throws NotClubMemberException {
+    public ResponseEntity<Map<String,Object>> getNoticeList(CheckDto checkDto, @PathVariable String pageNo) throws NotClubMemberException {
+        log.info("dto = {}", checkDto);
         HttpHeaders headers = getHttpHeaders();
-        return new ResponseEntity<>(service.getNoticeList(checkDto, pageNo), headers, HttpStatus.OK);
+        Map<String, Object> result = service.getNoticeList(checkDto, pageNo);
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
 
     /**
