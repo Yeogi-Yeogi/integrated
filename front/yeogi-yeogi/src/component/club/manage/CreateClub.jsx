@@ -171,20 +171,23 @@ const CreateClub = () => {
     const handleSubmit = (input) => {
         input.preventDefault();
         console.log(createClubDto);
+        
+        if(!createClubDto.categoryNo){
+            Swal.fire({
+                icon: 'warning',                  
+                text: '카테고리를 선택해주세요', 
+                confirmButtonText: '확인'
+            });
+        }
 
         if(!clubNameCheck){
             Swal.fire({
                 icon: 'warning',                  
                 text: '모임명 중복확인을 진행하셔야합니다.', 
+                confirmButtonText: '확인'
             });
             return;
         }
-        // if(createClubDto.name === ""){
-        //     Swal.fire({
-        //         icon: 'warning',                  
-        //         text: '이름 입력해야지', 
-        //     });
-        // }
         // 빈값에 대한거 작성..
 
         const formData = new FormData();
@@ -207,8 +210,10 @@ const CreateClub = () => {
             if(data === "1"){
                 Swal.fire({
                     icon: 'success',                  
-                    text: '클럽 생성에 성공했다', 
+                    text: '모임 생성 완료!', 
+                    confirmButtonText: '확인'
                   });
+                // 성공시에 만든 클럽 페이지로 이동시키기...
                 navigate("");
             }
             // 실패시에는..?
@@ -226,8 +231,8 @@ const CreateClub = () => {
         if(name.value === ""){
             Swal.fire({
                 icon: 'error',                  
-                // title: '에러',    
                 text: '모임 이름을 입력해주세요', 
+                confirmButtonText: '확인'
               });
             return;
         }
@@ -243,6 +248,7 @@ const CreateClub = () => {
                 Swal.fire({
                     icon: 'success',                  
                     text: '사용할 수 있는 모임 이름입니다.', 
+                    confirmButtonText: '확인'
                 });
                 setClubNameCheck(true);
                 return;
@@ -250,11 +256,21 @@ const CreateClub = () => {
             Swal.fire({
                 icon: 'warning',                  
                 text: '현재 사용중인 모임 이름입니다.', 
+                confirmButtonText: '확인'
             });
             name.value = "";
         })
     };
 
+    const signupLimit = [];
+    for (let i = 5; i <= 20; i++) {
+        signupLimit.push(<option key={i} value={i}>{i}</option>);
+    }
+
+    const ageLimit = [];
+    for (let i = 1; i <= 100; i++) {
+        ageLimit.push(<option key={i} value={i}>{i}</option>);
+    }
     return (
         <StyledCreateClubdiv>
             <div>
@@ -288,25 +304,19 @@ const CreateClub = () => {
                         <div>모임 인원</div>
                         <select name="signupLimit" id="signupLimit" onChange={handleChangeInput}>
                             <option value="" disabled selected>모임인원 선택</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                            {signupLimit}
                         </select>
                     </div>
                     <div className='selelctBoxdiv'>
                         <div>나이 제한</div>
                         <select name="ageLimit" id="ageLimit" onChange={handleChangeInput}>
                             <option value="" disabled selected>나이제한 선택</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                            {ageLimit}
                         </select>
                     </div>
                     <textarea name="clubDescription" id="clubDescription" placeholder='모임 소개를 입력해주세요'  onChange={handleChangeInput} spellCheck={false}/>
 
-                    <input type="submit" value="모임 만들기" />
+                    <input type="submit" value="모임 만들기"/>
                 </form>
             </div>
         </StyledCreateClubdiv>
