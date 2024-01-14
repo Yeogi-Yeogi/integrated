@@ -13,6 +13,7 @@ const Footer = () => {
             footer
             <Link to="/club/createClub"><button>클럽만들기 ㄱㄱ</button></Link>
             <Link to="/club/1/commu/board"><button>클럽 ㄱㄱ</button></Link>
+            <Link to="/club/1/manage/editClub"><button>클럽정보수정 </button></Link>
         </StyledFooterDiv>
     );
 };

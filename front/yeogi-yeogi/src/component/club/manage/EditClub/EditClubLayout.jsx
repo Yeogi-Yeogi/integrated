@@ -5,8 +5,11 @@ import EditMember from './EditMember';
 
 
 const StyledEditClubLayoutDiv = styled.div`
-    width: 100%;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 70px;
+    margin-bottom: 70px;
 `;
 
 
