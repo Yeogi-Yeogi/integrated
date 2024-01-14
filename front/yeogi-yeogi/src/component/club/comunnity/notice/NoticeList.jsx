@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pagination, Table } from 'react-bootstrap';
+import { Button, Pagination, Table } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -8,6 +8,7 @@ const StyledTableDiv = styled.div`
     width: 100%;
     margin-top: 3em;
     padding-left: 2em;
+    
 
     & > table {
         border-collapse: collapse;
@@ -37,6 +38,8 @@ const StyledTableDiv = styled.div`
         }
     }
 
+    
+
     & ul  {
         
         margin: auto;
@@ -60,7 +63,23 @@ const StyledTableDiv = styled.div`
         color: black;
     }
 `;
+const StyledWriteNoticeDiv = styled.div`
+    display: flex;
+    justify-content: end;
+    
 
+    & > button {
+        background-color: #6c1895;
+        border-color: #6c1895;
+        font-weight: 600;
+        
+
+        &:hover {
+            background-color: #5d1582;
+        }
+    }
+
+`;
 
 const NoticeList = () => {
 
@@ -70,6 +89,7 @@ const NoticeList = () => {
     const [pageVo, setPageVo] = useState();
     const [items, setItems] = useState([]);
     const {clubNo} = useParams();
+    const navigate = useNavigate();
     //페이지 번호 갱신 될때마다 데이터 불러오기
 
     // 페이지 번호 클릭 시 실행될 함수
@@ -111,11 +131,20 @@ const NoticeList = () => {
         getList(pageNo);
     } , [pageNo]);
 
-    const navigate = useNavigate();
 
+    /**
+     * 공지사항 상세 조회 페이지로 이동
+     * @param {*} no 게시글 번호
+     */
     const handleClick = (no) => {
         navigate(`/club/${clubNo}/commu/board/notice/detail`, no)
     }
+
+    const navigateWriteNotice = () => {
+        navigate(`/club/${clubNo}/commu/board/notice/write`)
+    }
+
+
 
     return (
         //게시글 데이터 뿌리기 작업 필요.
@@ -204,6 +233,9 @@ const NoticeList = () => {
                 </tr>
                 </tbody>
             </Table>
+            <StyledWriteNoticeDiv>
+                <Button onClick={navigateWriteNotice}>공지사항 작성하기</Button>
+            </StyledWriteNoticeDiv>
             <div>
                 <Pagination>
                     {items.map((item, index) => (
