@@ -123,10 +123,12 @@
             , C.DEL_YN
             , CC.CATEGORY_NAME
             , M.NICK
+            , CIF.FILE_URL
             , (SELECT COUNT(MEMBER_NO) FROM MEMBER_CLUB WHERE CLUB_NO = #{no}) AS MEMBER_COUNT
         FROM CLUB C
-        JOIN CLUB_CATEGORY CC ON C.NO = CC.CATEGORY_NO
+        JOIN CLUB_CATEGORY CC ON C.CATEGORY_NO = CC.CATEGORY_NO
         JOIN MEMBER M ON C.CREATOR_NO = M.NO
+        JOIN CLUB_IMAGE_FILE CIF ON C.NO = CIF.NO
         WHERE C.NO = #{no}
     </select>
 
@@ -174,7 +176,7 @@
             MC.MEMBER_NO
             ,MC.CLUB_NO
             ,MC.ADMIN_YN
-            ,MC.REG_DATE
+            ,TO_CHAR(MC.REG_DATE, 'YYYY-MM-DD') AS REG_DATE
             ,M.NICK
             ,M.NAME
             ,M.PHONE

@@ -98,12 +98,12 @@ public class ClubController {
 
     /**
      * 클럽 관리 (클럽 관리 화면) -> 클럽 정보 + 가입유저 정보
-     * @param no
+     * @param clubNo
      * @return
      */
-    @GetMapping("management")
-    public ClubVo clubManagement(String no){
-        return service.getClubInfo(no);
+    @GetMapping("management/{clubNo}")
+    public ClubVo clubManagement(@PathVariable String clubNo){
+        return service.getClubInfo(clubNo);
     }
 
     /**
@@ -111,9 +111,11 @@ public class ClubController {
      * @param clubNo 클럽번호
      * @return
      */
-    @GetMapping("clubMemberList")
-    public List<ClubMemberVo> clubMemberList(String clubNo){
-        return service.getClubMemberList(clubNo);
+    @GetMapping("clubMemberList/{clubNo}")
+    public List<ClubMemberVo> clubMemberList(@PathVariable String clubNo){
+        List<ClubMemberVo> list = service.getClubMemberList(clubNo);
+        log.info("list = {}", list);
+        return list;
     }
 
     /**

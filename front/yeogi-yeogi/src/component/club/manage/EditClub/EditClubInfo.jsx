@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledEditClubInfoDiv = styled.div`
 
-    /* background-color: pink; //임시
-    height: 375px;
-    width: 1000px;
-    display: grid;
-    grid-template-columns: 350px 650px; */
     & > form {
-        background-color: pink;
+        /* background-color: pink; */
         height: 375px;
         width: 1000px;
         display: grid;
@@ -55,7 +51,7 @@ const StyledEditClubInfoDiv = styled.div`
         padding: 10px;
         & > div:nth-child(1){
             display: grid;
-            grid-template-columns: 3fr 1fr 1fr 1fr;
+            grid-template-columns: 4fr 0.8fr 0.8fr 0.8fr;
             align-items: center;
             justify-items: center;
         }
@@ -141,11 +137,41 @@ const StyledEditClubInfoDiv = styled.div`
 
 const EditClubInfo = () => {
 
+    let { clubNo } = useParams();
+    const [clubInfo, setClubInfo] = useState({});
+
+    console.log(clubNo);
+    const loadClubInfo = () => {
+        fetch("http://127.0.0.1:8885/club/management/" + clubNo)
+        .then(resp => resp.json())
+        .then(clubInfo => {
+            console.log(clubInfo);
+            setClubInfo(clubInfo);
+            console.log(clubInfo);
+        })
+    };
+
+    useEffect(() => {
+        loadClubInfo();
+    }, []); 
+
+
     const signupLimit = [];
     for (let i = 5; i <= 20; i++) {
         signupLimit.push(<option key={i} value={i}>{i}</option>);
     }
 
+    const ageLimit = [];
+    for (let i = 5; i <= 20; i++) {
+        ageLimit.push(<option key={i} value={i}>{i}</option>);
+    }
+
+    const handleChange = (e) => {
+        setClubInfo({ 
+            ...clubInfo, 
+            clubDescription: e.target.value 
+        });
+    };
     return (
         <StyledEditClubInfoDiv>
             <form>
@@ -153,11 +179,11 @@ const EditClubInfo = () => {
                     <div>
                         <img
                             // src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
-                            src="/img/defaultClubImage.png"
+                            src={clubInfo.fileUrl}
                             alt="클럽 대표 이미지"
                             id='previewImgTag'
                             style={{width: "100%", height: "100%", borderRadius:"10px"}}
-                            />
+                        />
                     </div>
                     <input type="file" name="f" id="fileInput" accept="image/*" />
                     <label htmlFor="fileInput">대표이미지 변경</label>
@@ -166,28 +192,28 @@ const EditClubInfo = () => {
                 
                 <div>  
                     <div>
-                        <h2 style={{color:"#3A3A3A"}}>모임이름 들어가는곳</h2>
-                        <span style={{color:"#3A3A3A"}}>모임장 박종범</span>
-                        <span style={{color:"#999999"}}>회원수 10</span>
+                        <h2 style={{color:"#3A3A3A"}}>{clubInfo.name}</h2>
+                        <span style={{color:"#3A3A3A"}}>모임장 {clubInfo.nick}</span>
+                        <span style={{color:"#999999"}}>회원수 {clubInfo.memberCount}</span>
                         <button type='button' id='deleteBtn'>모임삭제</button>
                     </div>
                     <div>
-                        <textarea name="" id="" cols="30" rows="10">
-                            모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳모임소개적는곳
+                        <textarea name="" id="" cols="30" rows="10" value={clubInfo.clubDescription} onChange={handleChange} spellCheck="false">
+                           
                         </textarea>
                     </div>
                     <div>
                         <span>모임 인원</span>
                         <select name="signupLimit" id="signupLimit">
-                            <option value="" disabled selected>모임인원 선택</option>
+                            <option value="" disabled selected>현재 인원제한 {clubInfo.signupLimit}</option>
                             {signupLimit}
                         </select>
                     </div>
                     <div>
                         <span>나이 제한</span>
                         <select name="ageLimit" id="ageLimit">
-                            <option value="" disabled selected>나이제한 선택</option>
-                            <option value=""></option>
+                            <option value="" disabled selected>현재 나이제한 {clubInfo.ageLimit}</option>
+                            {ageLimit}
                         </select>
                     </div>
                     <div>
