@@ -62,32 +62,30 @@ const StyledReviewListDiv = styled.div`
         }
     }
 `;
-const ReviewList = () => {
-    const [reviews , setReviews] = useState();
+const ReviewList = ({data}) => {
+
+    const handleDeleteReview = () => {
+
+    }
+
     return (
         <StyledReviewListDiv>
-            <div>
-                <div>
-                    <img src="https://i.namu.wiki/i/w11dbZZeomJI4bD3_KItw3vq7tgglcM1YQA_xHULxMsixPpY1S7KcB8WrEFhJNuSuejiiQkicGKMH12JvpUqBQ.webp" alt="" />
-                    <span className='userSpan'>사용자</span>
-                    <span className='dateSpan'>2024. 1. 12. 18:40</span>
-                    <Button className='review-delete' variant="link">삭제</Button>
-                </div>
-                <div>
-                    <span>뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글뎃글 뎃글 뎃글 뎃글 뎃글 뎃글</span>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <img src="https://i.namu.wiki/i/w11dbZZeomJI4bD3_KItw3vq7tgglcM1YQA_xHULxMsixPpY1S7KcB8WrEFhJNuSuejiiQkicGKMH12JvpUqBQ.webp" alt="" />
-                    <span className='userSpan'>사용자</span>
-                    <span className='dateSpan'>2024. 1. 12. 18:40</span>
-                    <Button className='review-delete' variant="link">삭제</Button>
-                </div>
-                <div>
-                    <span>뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글 뎃글뎃글 뎃글 뎃글 뎃글 뎃글 뎃글</span>
-                </div>
-            </div>
+            { 
+                data?.map(el => 
+                    <div>
+                        <div>
+                            <img src={el.memberProfile} alt="" />
+                            <span className='userSpan'>{el.memberNick}</span>
+                            <span className='dateSpan'>{el.enrollDate}</span>
+                            <Button className='review-delete' variant="link" onClick={handleDeleteReview}>삭제</Button>
+                        </div>
+                        <div>
+                            <span>{el.content}</span>
+                        </div>
+                    </div>
+                )
+                
+            }
         </StyledReviewListDiv>
     );
 };

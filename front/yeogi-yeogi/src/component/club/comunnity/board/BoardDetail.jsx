@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import ReviewList from './common/ReviewList';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 const StyledNoticeDetailDiv = styled.div`
@@ -107,7 +109,41 @@ const ReviewDiv = styled.div`
      
 `;
 
-const BoardDetail = (props) => {
+const BoardDetail = () => {
+
+    const [vo, setVo] = useState();
+    const {clubNo, boardNo} = useParams();
+
+    useEffect(() => {
+        fetch(`http://localhost:8885/board/detail?memberNo=2&boardNo=${boardNo}&clubNo=${clubNo}`)
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.json());
+            }
+            return res.json();
+        })
+        .then(data => {
+            console.log(data);
+            setVo(data);
+        })
+        .catch(err => {
+            console.error(err);
+        })
+    }, [])
+
+    /**
+     * 수정
+     */
+    const handleUpdate = () => {
+
+    }
+
+    /**
+     * 삭제
+     */
+    const handleDelete = () => {
+
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -117,27 +153,25 @@ const BoardDetail = (props) => {
             <div>
                 <div>
                     <div>
-                        <img src={props.src} alt="" />
-                        <span>사용자</span>
-                        <span>2024. 12. 24. 22:54</span>
+                        <img src={`${vo?.memberProfile}`} alt="" />
+                        <span>{vo?.memberName}</span>
+                        <span>{vo?.enrollDate}</span>
                     </div>
                     <div>
-                        <Button variant="link">수정</Button>
-                        <Button variant="link">삭제</Button>
+                        <Button variant="link" onClick={handleUpdate}>수정</Button>
+                        <Button variant="link" onClick={handleDelete}>삭제</Button>
                     </div>
                 </div>
                 <hr/>
                 <ContentDiv>
-                    <h4>제목 제목 제목 제목 제목 </h4>
-                    <p>내용용 내용용 내용용 내용용 내용용 </p>
+                    <h4>{vo?.title}</h4>
+                    <p>{vo?.content}</p>
                     <div>
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
+                        {
+                            vo?.images.map(el => 
+                                <img src={el.fileUrl} alt="" key={el.boardImageNo}/>
+                            )
+                        }
                     </div>
                 </ContentDiv>
                 <hr/>
@@ -148,7 +182,7 @@ const BoardDetail = (props) => {
                     </Form>
                 </ReviewDiv>
                 <hr />
-                <ReviewList />
+                <ReviewList data={vo?.reviews}/>
             </div>
             
         </StyledNoticeDetailDiv>
