@@ -14,6 +14,18 @@ const StyledMemberJoinDiv = styled.div`
         align-items: center;
         justify-content: space-evenly;
     }
+
+    form > {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
+
+    joinbutton > {
+        border-radius: 
+    }
     
 `;
 
@@ -48,14 +60,14 @@ const MemberJoin = () => {
     })
     const navigate = useNavigate();
 
-    // const handleInputChange = (event) => {
-    //     const{name, value} = event.target;
+    const handleInputChange = (event) => {
+        const{name, value} = event.target;
 
-    //     setVo({
-    //         ...vo,
-    //         [name] : value
-    //     });
-    // }
+        setVo({
+            ...vo,
+            [name] : value
+        });
+    }
 
     
     const handleMemberJoinSubmit = (event) => {
@@ -68,7 +80,7 @@ const MemberJoin = () => {
             isFetching = true;
         }
 
-        fetch("http://127.0.0.1:8888/yeogi/member/join", {
+        fetch("http://127.0.0.1:8888/member/join", {
         method:"post",
         headers:{
             "Content-Type":"application/json"
@@ -105,30 +117,32 @@ const MemberJoin = () => {
     return (
         <StyledMemberJoinDiv>
             <div>
-                <form onSubmit={handleMemberJoinSubmit}>
+            <form onSubmit={handleMemberJoinSubmit}>
+                <div>
                     <div>
-                        <div>
-                            <div>이름 <input type="text" id='name' name="name" placeholder='이름을 입력하세요'/></div>
-                            <div>비밀번호<input type="text" id='name' name="name" placeholder='이름을 입력하세요'/></div>
-                            <div>비밀번호 확인<input type="text" id='name' name="name" placeholder='이름을 입력하세요'/></div>
-                            <div>닉네임<input type="text" id='name' name="name" placeholder='이름을 입력하세요'/></div>
-                            <div>전화번호<input type="text" id='name' name="name" placeholder='이름을 입력하세요'/></div>
-                            <div>이메일<input type="text" id='name' name="name" placeholder='이름을 입력하세요'/></div>
-                            <div>주민등록번호<input type="text" id='name' name="name" placeholder='이름을 입력하세요'/></div>
-                            {/* <div>
-                                <img src={imgFile ? imgFile : `/img/defaultMemberImage.png`}
-                                    alt="대표프로필이미지" id='previewImgTag'
-                                />
-                            </div>
-                            <input type="file" name="f" id="fileInput" accept="image/*" onchange={handleChangeFile} ref={imgRef}/>
-                            <label htmlFor="fileInput">사진선택</label> */}
-                        </div>
+                        <div>이름 <input type="text" id='name' name="name" placeholder='이름을 입력하세요' onChange={handleInputChange}/></div>
+                        <div>아이디 <input type="text" id='name' name="id" placeholder='아이디를 입력하세요' onChange={handleInputChange}/></div>
+                        <div>비밀번호<input type="text" id='name' name="pwd" placeholder='비밀번호를 입력하세요' onChange={handleInputChange}/></div>
+                        <div>비밀번호 확인<input type="text" id='name' name="pwdCheck" placeholder='비밀번호 입력하세요'/></div>
+                        <div>닉네임<input type="text" id='name' name="nick" placeholder='닉네임을 입력하세요' onChange={handleInputChange}/></div>
+                        <div>전화번호<input type="text" id='name' name="phone" placeholder='전화번호를 입력하세요' onChange={handleInputChange}/></div>
+                        <div>이메일<input type="text" id='name' name="email" placeholder='이메일을 입력하세요' onChange={handleInputChange}/></div>
+                        <div>주민등록번호<input type="text" id='name' name="resiNum" placeholder='주민등록번호를 입력하세요' onChange={handleInputChange}/></div>
                         {/* <div>
-                            <input type="text" name="MemberName" placeholder='모임'
-                        </div> */}
-                        <div><input type="submit" value="회원가입"/></div>
+                            <img src={imgFile ? imgFile : `/img/defaultMemberImage.png`}
+                                alt="대표프로필이미지" id='previewImgTag'
+                            />
+                        </div>
+                        <input type="file" name="f" id="fileInput" accept="image/*" onchange={handleChangeFile} ref={imgRef}/>
+                        <label htmlFor="fileInput">사진선택</label> */}
                     </div>
-                </form>
+                    {/* <div>
+                        <input type="text" name="MemberName" placeholder='모임'
+                    </div> */}
+                    <div><input type="submit" id="joinbutton" value="회원가입"/></div>
+                    <div><input type="reset" value="리셋"/></div>
+                </div>
+            </form>                       
             </div>            
         </StyledMemberJoinDiv>
     );

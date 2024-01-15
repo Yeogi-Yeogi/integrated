@@ -56,7 +56,7 @@ public class MemberController {
         return map;        
     }
     
-    // 회원 탈퇴
+    // 회원 탈퇴-회원정보페이지에서 회원탈퇴버튼 누르면 실행(로그인이 된 사람만 회원탈퇴가 가능한 구조)
     @PostMapping("quit")
     public Map<String,String> quit(MemberVo vo) throws Exception {
         int result = service.quit(vo);
@@ -93,8 +93,7 @@ public class MemberController {
 		if(result != 1) {
 			map.put("msg", "bad");
 		}        
-        return map;
-        
+        return map;        
     }
     
     //
