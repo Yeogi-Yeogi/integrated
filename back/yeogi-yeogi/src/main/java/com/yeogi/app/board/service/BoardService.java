@@ -41,16 +41,14 @@ public class BoardService {
      * @return
      */
     public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException {
-        if(dto != null && dto.getMemberNo() != null && dto.getClubNo() != null) {
-            CheckDto clubMember = checkMember.isClubMember(dto, template);
-            if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
-                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
-            }
-        } else {
-                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+
+        CheckDto clubMember = checkMember.isClubMember(dto, template);
+        if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
 
-        RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*10, 10);
+        int boardLimit = 5;
+        RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*boardLimit, boardLimit);
         List<BoardListDto> boardList = boardRepository.getBoardListIgnoreFileUrl(dto.getClubNo(), template, rowBounds);
 
         Map<String, BoardListDto> boardMap = new HashMap<>();

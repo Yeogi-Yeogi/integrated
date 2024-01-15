@@ -8,7 +8,7 @@ const NoticeLayout = () => {
     return (
         <Routes>
             <Route path='list' element={<NoticeList />}/>
-            <Route path='detail' element={<NoticeDetail />}/>
+            <Route path='detail/:noticeNo' element={<NoticeDetail />}/>
             <Route path='write' element={<NoticeWrite />}/>
         </Routes>
     );
