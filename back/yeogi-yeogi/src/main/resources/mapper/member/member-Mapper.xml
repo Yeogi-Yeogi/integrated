@@ -67,14 +67,12 @@
             ,RESI_NUM
          FROM MEMBER
          WHERE NO = #{no}
-         ;
 	</select>
 	
 	<update id="edit">
 		UPDATE MEMBER
 			SET
-				NO
-	           ,ID = #{id}
+	           ID = #{id}
 	           ,PWD = #{pwd}
 	           ,NICK = #{nick}
 	           ,PHONE = #{phone}

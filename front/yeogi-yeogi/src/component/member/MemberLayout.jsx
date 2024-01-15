@@ -3,8 +3,13 @@ import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import MemberJoin from './MemberJoin';
 import MemberLogin from './MemberLogin';
+import MemberMySelect from './MemberMyselect';
+import MemberEdit from './MemberEdit';
+import MemberLogout from './MemberLogout';
+import MemberQuit from './MemberQuit';
+import MemberMyselect from './MemberMyselect';
 
-const StyledMemberLayouDiv = styled.div`
+const StyledMemberLayoutDiv = styled.div`
     width: 100%;
     margin: auto;
 
@@ -18,14 +23,18 @@ const StyledMemberLayouDiv = styled.div`
 
 const MemberLayout = () => {
     return (
-        <StyledMemberLayouDiv>
+        <StyledMemberLayoutDiv>
             <div>
                 <Routes>
                     <Route path='/join' element={<MemberJoin/>}/>
                     <Route path='/login'element={<MemberLogin/>}/>
+                    <Route path='/mySelect' element={<MemberMyselect/>}/>
+                    <Route path='/edit' element={<MemberEdit/>}/>
+                    <Route path='/logout' element={<MemberLogout/>}/>
+                    <Route path='/quit' element={<MemberQuit/>}/>
                 </Routes>  
             </div>                   
-        </StyledMemberLayouDiv>
+        </StyledMemberLayoutDiv>
     );
 };
 
