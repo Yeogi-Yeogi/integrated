@@ -34,12 +34,12 @@ public class MemberService {
 		return dao.quit(sst, vo);
 	}
 	
-	//내 정보 조회-이름,  비밀번호, 아이디, 비밀번호, 닉네임, 전화번호, 이메일, 가입일자, 수정일자, 프로필이미지, 주민등록번호
+	//내 정보 조회-이름, 아이디, 비밀번호, 닉네임, 전화번호, 이메일, 가입일자, 수정일자, 프로필이미지, 주민등록번호
 	public MemberVo mySelect(MemberVo vo) {
 		return dao.mySelect(sst,vo);
 	}
 	
-	//내 정보 수정( 회원 정보 조회-이름, 아이디, 주민등록번호 조회)
+	//내 정보 수정(회원 정보 조회-이름, 아이디, 주민등록번호 조회)
 	
 	//내 정보 수정
 	public int edit(MemberVo vo) {
