@@ -101,7 +101,7 @@
         AND DEL_YN = 'N'
     </select>
 
-    <select id="getNoticeList" resultType="com.yeogi.app.board.dto.BoardListDto">
+    <select id="getNoticeList" resultType="com.yeogi.app.notice.dto.NoticeListDto">
         SELECT
             B.NO NOTICE_NO,
             B.TITLE,

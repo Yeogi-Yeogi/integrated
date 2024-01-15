@@ -50,7 +50,7 @@ const InnerNavBar = () => {
             <NavLink to={`/club/${clubNo}/commu/schedule`}>
               일정
             </NavLink>
-            <NavLink to={`/club/commu/${clubNo}/commu/gallery`}>
+            <NavLink to={`/club/${clubNo}/commu/gallery/list `}>
               갤러리
             </NavLink>
           </Nav>

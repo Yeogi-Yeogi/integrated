@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/board")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class BoardController {
 
     private final BoardService service;

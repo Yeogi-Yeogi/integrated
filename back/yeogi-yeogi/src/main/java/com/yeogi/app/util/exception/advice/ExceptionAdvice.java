@@ -56,7 +56,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         response.setCode(HttpStatus.BAD_REQUEST.value());
         response.setMessage(e.getMessage());
 
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, null, HttpStatus.NOT_FOUND);
     }
 
     /**

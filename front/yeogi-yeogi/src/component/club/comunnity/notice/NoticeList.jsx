@@ -85,7 +85,7 @@ const NoticeList = () => {
 
     
     const [pageNo, setPageNo] = useState(1);    //현재 페이지
-    const [noticeList, setNoticeList] = useState();   //공지사항 리스트
+    const [noticeList, setNoticeList] = useState([]);   //공지사항 리스트
     const [pageVo, setPageVo] = useState();
     const [items, setItems] = useState([]);
     const {clubNo} = useParams();
@@ -106,14 +106,13 @@ const NoticeList = () => {
             
             return res.json();
         })
-        .then(data => {
-            setNoticeList(data.list);
+        .then((data) => {
+            console.log(data);
+            setNoticeList([...data.list]);
             setPageVo(data.pageVo);
-        })
-        .then(() => {
             console.log(pageVo);
             const newItem = []
-            for (let number = pageVo?.startPage; number <= pageVo?.pageLimit; number++) {
+            for (let number = pageVo?.startPage; number <= pageVo?.maxPage; number++) {
                 newItem.push(
                     <Pagination.Item key={number} active={number === pageNo}>
                     {number}
@@ -137,7 +136,7 @@ const NoticeList = () => {
      * @param {*} no 게시글 번호
      */
     const handleClick = (no) => {
-        navigate(`/club/${clubNo}/commu/board/notice/detail`, no)
+        navigate(`/club/${clubNo}/commu/board/notice/detail/${no}`);
     }
 
     const navigateWriteNotice = () => {
@@ -159,78 +158,16 @@ const NoticeList = () => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr onClick={handleClick}>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>120</td>
-                </tr>
+                    {
+                        noticeList.map(el => 
+                            <tr onClick={() => {handleClick(el.noticeNo);}} key={el.noticeNo}>
+                                <td>{el.title}</td>
+                                <td>{el.memberName}</td>
+                                <td>{el.enrollDate}</td>
+                                <td>{el.hit}</td>
+                            </tr>
+                        )
+                    }
                 </tbody>
             </Table>
             <StyledWriteNoticeDiv>

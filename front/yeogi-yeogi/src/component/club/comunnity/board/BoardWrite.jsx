@@ -69,8 +69,13 @@ const StyledButton = styled(Button)`
     border-color: #6c1895;
     font-weight: 600;
     width: 8em;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 
     &:hover {
+        background-color: #5d1582;
+    }
+
+    &:active {
         background-color: #5d1582;
     }
 `;

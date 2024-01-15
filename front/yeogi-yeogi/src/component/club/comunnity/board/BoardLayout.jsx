@@ -30,7 +30,7 @@ const BoardLayout = () => {
                     <Route path='/list' element={<BoardList />}/>
                     <Route path='/notice/*' element={<NoticeLayout />} />
                     <Route path='/write' element={<BoardWrite />} />
-                    <Route path='/detail' element={<BoardDetail />} />
+                    <Route path='/detail/:boardNo' element={<BoardDetail />} />
                 </Routes>
             </div>
         </StyledBoardLayout>

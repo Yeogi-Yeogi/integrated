@@ -3,6 +3,7 @@ import { Button, Form, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import PreviewImg from '../board/PreviewImg';
+import ScheduleDateTimePicker from './ScheduleDateTimePicker';
 
 const StyledNoticeWriteDiv = styled.div`
     width: 100%;
@@ -23,13 +24,22 @@ const StyledNoticeWriteDiv = styled.div`
             }
         }
 
-        & input[type=text] {
+        & td > input[type=text] {
 
             &:focus {
                 border-color: #6c1895;
                 box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
             }
         }
+
+        & td > div > input[type=text]:first-child {
+
+            &:focus {
+                border-color: #6c1895;
+                box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
+            }
+        }
+
 
         & tr > td:first-child {
             width: 10%;
@@ -48,6 +58,12 @@ const customSwitchCheckedSvg = `
 `;
   
 const StyledSwitch = styled(Form.Switch)`
+
+    margin-bottom: 1em;
+    & > .form-check-label {
+        color: #999999;
+    }
+
     & #custom-switch {
         
 
@@ -106,7 +122,8 @@ const NoticeWrite = () => {
     const [imageList, setImageList] = useState([]); //서버 전달용 파일 객체
     const [imageUrl, setImageUrl] = useState([]); //미리보기용 url
     const [title, setTitle] = useState();
-    const [show, setShow] = useState(true); //토글 스위치 상태 저장 변수
+    const [scheduleTitle, setScheduleTitle] = useState();
+    const [show ,setShow] = useState(false); //일정 생성 여부
     const [content, setContent] = useState();
 
     const handleTitle = (e) => {
@@ -115,6 +132,10 @@ const NoticeWrite = () => {
 
     const handleContent = (e) => {
         setContent(e.target.value);
+    }
+
+    const handleScheduleTitle = (e) => {
+        setScheduleTitle(e.target.value);
     }
 
     const changeImage = () => {
@@ -176,6 +197,7 @@ const NoticeWrite = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
+        formData.append("scheduleTitle", scheduleTitle);
         imageList.forEach(el => formData.append("imageList", el));
 
         console.log(formData);
@@ -207,6 +229,12 @@ const NoticeWrite = () => {
                                     label="일정 등록하기"
                                     onClick={() => setShow(!show)}
                                 />
+                                {show && (
+                                            <div>
+                                                <Form.Control type="text" name='scheduleTitle' onInput={handleScheduleTitle} placeholder="제목을 입력하세요" />
+                                                <ScheduleDateTimePicker/>
+                                            </div>
+                                        )}
                             </td>
                         </tr>
                         <tr>
