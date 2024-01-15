@@ -55,25 +55,52 @@ public class MemberController {
         }
         return map;        
     }
-
+    
     // 회원 탈퇴
-    @GetMapping("quit")
-    public String quit(MemberVo vo , HttpSession session) throws Exception {
+    @PostMapping("quit")
+    public Map<String,String> quit(MemberVo vo) throws Exception {
         int result = service.quit(vo);
-        if(result != 1) {
-            throw new Exception();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("msg", "good");
+		if(result != 1) {
+			map.put("msg", "bad");
+		}        
+        return map;
+        
+    }
+
+    //회원정보조회
+    @PostMapping("mySelect")
+    public Map<String, Object> mySelect(MemberVo vo) throws Exception {
+    	
+    	MemberVo loginMember = service.mySelect(vo);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("msg","good");
+        map.put("loginMember", loginMember);
+        System.out.println(loginMember);
+        if( loginMember == null ) {
+        	map.put("msg", "bad");
         }
-        session.removeAttribute("loginMember");
-        session.setAttribute("alertMsg", "회원 탈퇴 완료");
-        return "redirect:/home";
+        return map;  
     }
-
-    // 로그아웃
-    @GetMapping("logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/home";
-
+    
+    //내 정보 수정하기 
+    @PostMapping("edit")
+    public Map<String,String> edit(MemberVo vo) throws Exception {
+        int result = service.edit(vo);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("msg", "good");
+		if(result != 1) {
+			map.put("msg", "bad");
+		}        
+        return map;
+        
     }
-
-}
+    
+    //
+//    @PostMapping("memberLogin")
+//    public 
+    
+    
+    
+}//class

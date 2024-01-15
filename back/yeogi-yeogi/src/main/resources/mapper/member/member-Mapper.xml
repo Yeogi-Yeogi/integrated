@@ -48,7 +48,7 @@
 	<update id="quit">
 		UPDATE MEMBER
 		    SET 
-		        DEL_YN = 'Y'
+		        QUIT_YN = 'Y'
 		WHERE NO = #{no}
 	</update>
 	
@@ -66,6 +66,7 @@
             ,PROFILE_IMG
             ,RESI_NUM
          FROM MEMBER
+         WHERE NO = #{no}
          ;
 	</select>
 	
