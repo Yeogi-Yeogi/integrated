@@ -127,4 +127,9 @@
     <delete id="deleteBoardByNo">
         DELETE FROM BOARD WHERE NO = #{boardNo}
     </delete>
+
+    <insert id="addNotice">
+        INSERT INTO BOARD(NO, CLUB_NO, MEMBER_NO, TITLE, CONTENT, NOTICE_YN)
+        VALUES (SEQ_BOARD_NO.NEXTVAL, #{clubNo}, #{memberNo}, #{title}, #{content}, #{noticeYn})
+    </insert>
 </mapper>

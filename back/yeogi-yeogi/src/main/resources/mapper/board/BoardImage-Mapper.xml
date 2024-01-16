@@ -3,12 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="BoardImageMapper">
+    <mapper namespace="BoardImageMapper">
 
-    <insert id="addImages">
-         INSERT INTO BOARD_IMAGE_FILE VALUES
-        (SEQ_BOARDIMAGEFILE_NO.NEXTVAL, #{boardNo}, #{fileUrl}, #{fileName})
-    </insert>
+        <insert id="addImages">
+             INSERT INTO BOARD_IMAGE_FILE VALUES
+            (SEQ_BOARDIMAGEFILE_NO.NEXTVAL, #{boardNo}, #{fileUrl}, #{fileName})
+        </insert>
 
+        <select id="getListByBoardNo" resultType="com.yeogi.app.board.vo.BoardImageFileVo">
+            SELECT
+                NO
+                , BOARD_NO
+                , FILE_URL
+                , FILE_NAME
+            FROM BOARD_IMAGE_FILE
+            WHERE BOARD_NO = #{boardNo}
+        </select>
 
-</mapper>
+    <delete id="deleteByBoardNo">
+        DELETE FROM BOARD_IMAGE_FILE
+        WHERE BOARD_NO = #{boardNo}
+    </delete>
+    </mapper>

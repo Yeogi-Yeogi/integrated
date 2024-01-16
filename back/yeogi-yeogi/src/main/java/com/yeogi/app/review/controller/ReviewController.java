@@ -4,7 +4,6 @@ import com.yeogi.app.review.dto.ReviewAddDto;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
 import com.yeogi.app.review.service.ReviewService;
-import com.yeogi.app.util.exception.ErrorResult;
 import com.yeogi.app.util.exception.FailAddReviewException;
 
 import com.yeogi.app.util.exception.NotClubMemberException;
@@ -23,7 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/review")
 @RequiredArgsConstructor
-public class ReviewController {
+@CrossOrigin("*")
+public class ReviewController{
     private final ReviewService service;
 
     /**
@@ -46,6 +46,7 @@ public class ReviewController {
      */
     @PostMapping("/add")
     public ResponseEntity<String> addReview(@RequestBody ReviewAddDto review) throws FailAddReviewException, NotClubMemberException {
+        log.info("review = {}", review);
         int result = service.addReview(review);
 
         if(result != 1) throw new FailAddReviewException("리뷰 작성 실패");

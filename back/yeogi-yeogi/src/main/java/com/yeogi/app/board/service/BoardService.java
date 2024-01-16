@@ -55,16 +55,28 @@ public class BoardService {
         boardList.stream().forEach(e -> boardMap.put(e.getBoardNo(), e));
 
         List<String> collect = boardList.stream()
-                .filter(o -> o.getImageCount().equals("-1"))
+                .filter(o -> o.getImageCount() != -1)
                 .map(e -> e.getBoardNo())
                 .collect(Collectors.toList());
 
         if(collect != null && collect.size() != 0) {
             List<BoardListFileUrlDto> fileUrlByBoardNo = boardRepository.getFileUrlByBoardNo(collect, template);
-            fileUrlByBoardNo.stream().forEach(e-> boardMap.get(e.getBoardNo()).setImagePath(e.getFileUrl()));
+            System.out.println("fileUrlByBoardNo = " + fileUrlByBoardNo);
+            for (BoardListFileUrlDto imageDto:
+                 fileUrlByBoardNo) {
+                BoardListDto boardListDto = boardMap.get(imageDto.getBoardNo());
+                boardListDto.setImagePath(imageDto.getFileUrl());
+                boardMap.put(imageDto.getBoardNo(), boardListDto);
+            }
         }
 
+
         boardList = boardMap.entrySet().stream().map(e -> e.getValue()).collect(Collectors.toList());
+
+        for (BoardListDto b:
+             boardList) {
+            System.out.println("b = " + b);
+        }
         return boardList;
     }
 
@@ -120,11 +132,12 @@ public class BoardService {
         //이미지 사진 저장
         int imageResult = 0;
         if(result == 1 && dto.getImageList().size() != 0) {
-            String recentBoardNo = boardRepository.getNoByMemberNo(dto, template);
+            String recentBoardNo = boardRepository.getNoByMemberNo(clubMember, template);
             System.out.println("recentBoardNo = " + recentBoardNo);
             imageResult = boardImageService.addImages(dto.getImageList(), recentBoardNo);
         }
         return imageResult;
+
     }
 
 }

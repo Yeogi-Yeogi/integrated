@@ -2,11 +2,14 @@ package com.yeogi.app.notice.controller;
 
 import com.yeogi.app.board.dto.BoardDetailValidDto;
 import com.yeogi.app.board.dto.CheckIsMemberDto;
+import com.yeogi.app.board.vo.BoardVo;
+import com.yeogi.app.notice.dto.NoticeAddDto;
 import com.yeogi.app.notice.dto.NoticeDetailDto;
 import com.yeogi.app.notice.dto.NoticeListDto;
 import com.yeogi.app.notice.service.NoticeService;
 import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.ErrorResult;
+import com.yeogi.app.util.exception.NotAdminException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +55,17 @@ public class NoticeController {
     @GetMapping("/detail")
     public ResponseEntity<NoticeDetailDto> getDetail(@ModelAttribute BoardDetailValidDto dto) throws NotClubMemberException {
         return new ResponseEntity<>(service.getOne(dto), getHttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addNotice(NoticeAddDto notice) throws NotClubMemberException, NotAdminException {
+        log.info("notice = {}", notice);
+        int result = service.addNotice(notice);
+
+        if(result != 1) {
+            throw new IllegalStateException("공지사항 작성에 실패하셨습니다.");
+        }
+        return new ResponseEntity<>("공지사항을 등록하셨습니다", getHttpHeaders(), HttpStatus.OK);
     }
 
 

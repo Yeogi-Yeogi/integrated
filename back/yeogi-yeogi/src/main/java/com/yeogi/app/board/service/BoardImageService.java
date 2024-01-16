@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.yeogi.app.board.dto.BoardListFileUrlDto;
 import com.yeogi.app.board.repository.BoardImageRepository;
 import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.board.vo.BoardImageFileVo;
@@ -77,7 +78,7 @@ public class BoardImageService {
      * 오류 시 파일 삭제
      * @param fileName
      */
-    private void deleteServerImage(String fileName) {
+    public void deleteServerImage(String fileName) {
         s3Client.deleteObject(s3Config.getBucket(), fileName);
     }
 
@@ -102,5 +103,22 @@ public class BoardImageService {
         //customName, url을 DB에 저장;
         String fileUrl = s3Client.getUrl(s3Config.getBucket(), customName).toString();
         return new BoardImageFileVo(recentBoardNo, fileUrl, customName);
+    }
+
+    /**
+     * 삭제하기 위한 이미지 리스트 가져오기
+     * @param recentNo
+     * @return
+     */
+    public List<BoardImageFileVo> getListByBoardNo(String recentNo) {
+        return imageRepository.getListByBoardNo(recentNo, template);
+    }
+
+    /**
+     * 번호로 사진 데이터 삭제
+     * @param recentNo
+     */
+    public int deleteByBoardNo(String recentNo) {
+        return imageRepository.deleteByBoardNo(recentNo, template);
     }
 }

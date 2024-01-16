@@ -15,4 +15,14 @@ public class ScheduleRepository {
     public ScheduleVo getScheduleByBoardNo(String boardNo, SqlSessionTemplate template) {
         return  template.selectOne("ScheduleMapper.getScheduleByBoardNo", boardNo);
     }
+
+    /**
+     * 일정 등록
+     * @param scheduleVo
+     * @param template
+     * @return
+     */
+    public int addSchedule(ScheduleVo scheduleVo, SqlSessionTemplate template) {
+        return template.insert("ScheduleMapper.addSchedule", scheduleVo);
+    }
 }

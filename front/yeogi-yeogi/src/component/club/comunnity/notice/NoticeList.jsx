@@ -89,6 +89,7 @@ const NoticeList = () => {
     const [pageVo, setPageVo] = useState();
     const [items, setItems] = useState([]);
     const {clubNo} = useParams();
+    const [isAdmin, setIsAdmin] = useState(false);
     const navigate = useNavigate();
     //페이지 번호 갱신 될때마다 데이터 불러오기
 
@@ -98,7 +99,7 @@ const NoticeList = () => {
     };
     const getList = (pageNo) => {
         console.log(pageNo); //
-        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=1&clubNo=${clubNo}`)
+        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=3&clubNo=${clubNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.data);
@@ -110,11 +111,16 @@ const NoticeList = () => {
             console.log(data);
             setNoticeList([...data.list]);
             setPageVo(data.pageVo);
+            setIsAdmin(data.adminYn)
             console.log(pageVo);
+            
+            return data.pageVo;
+        })
+        .then((pageVo) => {
             const newItem = []
             for (let number = pageVo?.startPage; number <= pageVo?.maxPage; number++) {
                 newItem.push(
-                    <Pagination.Item key={number} active={number === pageNo}>
+                    <Pagination.Item key={number} active={number === pageNo} onClick={() => handlePageClick(number)}>
                     {number}
                     </Pagination.Item>
                 );
@@ -171,19 +177,16 @@ const NoticeList = () => {
                 </tbody>
             </Table>
             <StyledWriteNoticeDiv>
-                <Button onClick={navigateWriteNotice}>공지사항 작성하기</Button>
+                {
+                    isAdmin &&
+                    <Button onClick={navigateWriteNotice}>공지사항 작성하기</Button>
+                }
             </StyledWriteNoticeDiv>
             <div>
                 <Pagination>
-                    {items.map((item, index) => (
-                        <Pagination.Item
-                            key={index}
-                            active={index + pageVo.startPage === pageNo}
-                            onClick={() => handlePageClick(index + pageVo.startPage)}
-                        >
-                            {index + pageVo.startPage}
-                        </Pagination.Item>
-                    ))}
+                    {items.map((item) => 
+                        item
+                    )}
                 </Pagination>
             </div>
         </StyledTableDiv>

@@ -15,4 +15,8 @@
         WHERE BOARD_NO = #{boardNo}
     </select>
 
+    <insert id="addSchedule">
+        INSERT INTO SCHEDULE(NO, CLUB_NO, BOARD_NO, START_TIME, LOCATION, TITLE)
+        VALUES (SEQ_SCHEDULE_NO.NEXTVAL, #{clubNo}, #{boardNo}, TO_DATE(#{startTime}, 'YYYY-MM-DD HH24:MI'), #{location}, #{title})
+    </insert>
 </mapper>
