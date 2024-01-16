@@ -21,6 +21,7 @@ public class BoardDetailDto {
     private String memberName;
     //작성일자
     private String enrollDate;
+    private String hit;
     //제목
     private String title;
     //내용
