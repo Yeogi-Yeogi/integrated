@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { useParams } from 'react-router-dom';
 
 
 const StyledNoticeDetailDiv = styled.div`
@@ -100,6 +101,26 @@ const ReviewDiv = styled.div`
 `;
 
 const NoticeDetail = (props) => {
+
+    const [notice, setNotice] = useState();
+    const {clubNo, noticeNo} = useParams();
+    
+
+    useEffect(() => {
+        fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=3&boardNo=${noticeNo}`)
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.json());
+            }
+
+            return res.json();
+        })
+        .then(data => {
+            console.log(data);
+            setNotice(data);
+        })
+    },[])
+
     return (
         <StyledNoticeDetailDiv>
             <div>

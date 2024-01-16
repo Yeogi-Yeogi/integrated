@@ -54,6 +54,7 @@ public class NoticeController {
      */
     @GetMapping("/detail")
     public ResponseEntity<NoticeDetailDto> getDetail(@ModelAttribute BoardDetailValidDto dto) throws NotClubMemberException {
+        log.info("valid = {}", dto);
         return new ResponseEntity<>(service.getOne(dto), getHttpHeaders(), HttpStatus.OK);
     }
 

@@ -119,7 +119,7 @@ const BoardDetail = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8885/board/detail?memberNo=2&boardNo=${boardNo}&clubNo=${clubNo}`)
+        fetch(`http://localhost:8885/board/detail?memberNo=3&boardNo=${boardNo}&clubNo=${clubNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.json());
@@ -147,6 +147,29 @@ const BoardDetail = () => {
      */
     const handleDelete = () => {
 
+        const data = {
+            memberNo: "3",
+            clubNo: clubNo,
+            boardNo: boardNo
+        }
+
+        fetch(`http://localhost:8885/board/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.data);
+            }
+
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+        })
     }
 
     const handleReview = (e) => {

@@ -1,6 +1,7 @@
     package com.yeogi.app.notice.service;
 
     import com.yeogi.app.board.dto.BoardDetailValidDto;
+    import com.yeogi.app.board.dto.BoardListFileUrlDto;
     import com.yeogi.app.board.repository.BoardRepository;
     import com.yeogi.app.board.service.BoardImageService;
     import com.yeogi.app.board.vo.BoardImageFileVo;
@@ -24,6 +25,7 @@
     import java.util.HashMap;
     import java.util.List;
     import java.util.Map;
+    import java.util.stream.Collectors;
 
     @Service
     @Transactional
@@ -69,6 +71,7 @@
 
         /**
          * 공지사항 상세 조회
+         * (내가 작성했는지 로직 추가 필요)
          * @param dto
          * @return
          * @throws NotClubMemberException
@@ -79,8 +82,20 @@
                 throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
             }
 
+            int result = boardRepository.increaseHit(dto.getBoardNo(), template);
+
+            if(result != 1) {
+                throw new IllegalStateException("해당 게시글이 없습니다");
+            }
             NoticeDetailDto findNotice = boardRepository.getOne(dto, template);
             ScheduleVo findSchedule = scheduleRepository.getScheduleByBoardNo(findNotice.getBoardNo(), template);
+            findNotice.setSchedule(findSchedule);
+
+            List<BoardImageFileVo> list = imageService.getListByBoardNo(findNotice.getBoardNo());
+            List<BoardListFileUrlDto> collect = list.stream().map(e -> new BoardListFileUrlDto(e.getNo(), e.getBoardNo(), e.getFileUrl())).collect(Collectors.toList());
+
+            findNotice.setList(collect);
+            System.out.println("findNotice = " + findNotice);
             return findNotice;
         }
 
