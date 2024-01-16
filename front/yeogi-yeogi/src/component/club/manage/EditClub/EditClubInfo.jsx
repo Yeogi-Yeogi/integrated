@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const StyledEditClubInfoDiv = styled.div`
+
+    margin-bottom: 70px;
 
     & > form {
         /* background-color: pink; */
@@ -137,6 +140,7 @@ const StyledEditClubInfoDiv = styled.div`
 
 const EditClubInfo = () => {
 
+    // 화면 정보 불러오기
     let { clubNo } = useParams();
     const [clubInfo, setClubInfo] = useState({});
 
@@ -155,7 +159,27 @@ const EditClubInfo = () => {
         loadClubInfo();
     }, []); 
 
+    // 이미지 미리보기
+    const [imgFile, setImgFile] = useState("");
+    const imgRef = useRef();
+    const handleChangeFile = () => {
+        if (!imgRef.current.files.length) {
+            // 파일 선택 취소했을때
+            return;
+        }
+      
+        const file = imgRef.current.files[0];
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onloadend = () => {
+            setImgFile(fileReader.result);
+        };
+    };
 
+
+    
+
+    // 모임인원, 나이제한 글자 넣기,,,(임시)
     const signupLimit = [];
     for (let i = 5; i <= 20; i++) {
         signupLimit.push(<option key={i} value={i}>{i}</option>);
@@ -166,52 +190,125 @@ const EditClubInfo = () => {
         ageLimit.push(<option key={i} value={i}>{i}</option>);
     }
 
-    const handleChange = (e) => {
-        setClubInfo({ 
-            ...clubInfo, 
-            clubDescription: e.target.value 
+    // 정보 변경 
+    const handleChange = (e) => {      
+        const {name, value} = e.target;
+
+        // textarea 글자 바꿔줌
+        if(e.target.name === "clubDescription"){
+            setClubInfo({ 
+                ...clubInfo, 
+                clubDescription : e.target.value
+            });
+        } else {
+            setClubInfo({
+                ...clubInfo,
+                [name] : value
+            })
+        }
+        console.log(clubInfo);
+    };
+
+    // 변경완료 (제출)
+    const handleSubmit = (input) => {
+        alert("ㅋㅋㅋㅋㅎ");
+        input.preventDefault();
+
+        const formData = new FormData();
+        formData.append("file", imgRef.current.files[0]);
+        formData.append("clubNo", clubNo);
+        formData.append("ageLimit", clubInfo.ageLimit);
+        formData.append("signupLimit", clubInfo.signupLimit);
+        formData.append("clubDescription", clubInfo.clubDescription);
+
+        fetch("http://127.0.0.1:8885/club/editClub", {
+            method : "POST",
+            body : formData
+        })
+        .then(resp => resp.text())
+        .then(data => {
+            console.log(data);
+            
+    
+        })
+        .catch(error => {
+            console.error("Error : ", error);
+        });
+    
+    };
+
+    const deleteClubConfirm = () => {
+        Swal.fire({
+            title: '정말 삭제 하시겠습니까?',
+            text: '클럽을 삭제하시면 다시 되돌릴 수 없습니다.',
+            icon: 'question',
+            
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', 
+            cancelButtonColor: '#d33', 
+            confirmButtonText: '확인',
+            cancelButtonText: '취소', 
+         }).then(result => {
+            if (result.isConfirmed) { 
+                deleteClub();
+            }
+         });
+    };
+    
+    const deleteClub = () => {
+        alert("클럽삭ㅈ젷ㅎㅎㅎㅎ");
+        fetch("http://127.0.0.1:8885/club/deleteClub", {
+            method : "POST",
+            body : clubNo 
+        })
+        .then(resp => resp.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("Error : ", error);
         });
     };
+    
     return (
         <StyledEditClubInfoDiv>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <div>
                         <img
-                            // src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
-                            src={clubInfo.fileUrl}
+                            src={imgFile ? imgFile : clubInfo.fileUrl}
                             alt="클럽 대표 이미지"
                             id='previewImgTag'
                             style={{width: "100%", height: "100%", borderRadius:"10px"}}
                         />
                     </div>
-                    <input type="file" name="f" id="fileInput" accept="image/*" />
+                    <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
                     <label htmlFor="fileInput">대표이미지 변경</label>
                 </div>
 
-                
+
                 <div>  
                     <div>
                         <h2 style={{color:"#3A3A3A"}}>{clubInfo.name}</h2>
                         <span style={{color:"#3A3A3A"}}>모임장 {clubInfo.nick}</span>
                         <span style={{color:"#999999"}}>회원수 {clubInfo.memberCount}</span>
-                        <button type='button' id='deleteBtn'>모임삭제</button>
+                        <button type='button' id='deleteBtn' onClick={deleteClubConfirm}>모임삭제</button>
                     </div>
                     <div>
-                        <textarea name="" id="" cols="30" rows="10" value={clubInfo.clubDescription} onChange={handleChange} spellCheck="false">
+                        <textarea name="clubDescription" id="" cols="30" rows="10" value={clubInfo.clubDescription} onChange={handleChange} spellCheck="false">
                            
                         </textarea>
                     </div>
                     <div>
                         <span>모임 인원</span>
-                        <select name="signupLimit" id="signupLimit">
+                        <select name="signupLimit" id="signupLimit" onChange={handleChange}>
                             <option value="" disabled selected>현재 인원제한 {clubInfo.signupLimit}</option>
                             {signupLimit}
                         </select>
                     </div>
                     <div>
                         <span>나이 제한</span>
-                        <select name="ageLimit" id="ageLimit">
+                        <select name="ageLimit" id="ageLimit" onChange={handleChange}>
                             <option value="" disabled selected>현재 나이제한 {clubInfo.ageLimit}</option>
                             {ageLimit}
                         </select>

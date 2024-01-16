@@ -89,4 +89,8 @@ public class ClubDao {
     public String getClubImgName(String no, SqlSessionTemplate sst) {
         return sst.selectOne("ClubMapper.getClubImgName", no);
     }
+
+    public int deleteClub(SqlSessionTemplate sst, String clubNo) {
+        return sst.update("ClubMapper.deleteClub", clubNo);
+    }
 }

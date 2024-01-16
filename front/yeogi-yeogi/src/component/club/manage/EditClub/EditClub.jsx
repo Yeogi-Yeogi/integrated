@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import EditClubInfo from './EditClubInfo';
 import EditMember from './EditMember';
+import { Route, Routes } from 'react-router-dom';
 
 
-const StyledEditClubLayoutDiv = styled.div`
+const StyledEditClubDiv = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -13,13 +14,13 @@ const StyledEditClubLayoutDiv = styled.div`
 `;
 
 
-const EditClubLayout = () => {
+const EditClub = () => {
     return (
-        <StyledEditClubLayoutDiv>
-            <EditClubInfo/>
+        <StyledEditClubDiv>
+            <EditClubInfo />
             <EditMember/>
-        </StyledEditClubLayoutDiv>
+        </StyledEditClubDiv>
     );
 };
 
-export default EditClubLayout;
+export default EditClub;
