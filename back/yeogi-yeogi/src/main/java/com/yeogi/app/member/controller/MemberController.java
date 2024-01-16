@@ -39,17 +39,18 @@ public class MemberController {
 		if(result != 1) {
 			map.put("msg", "bad");
 		}        
+		System.out.println("return 직전 ~~~");
         return map;
     }
 
 	// 로그인
     @PostMapping("login")
-    public Map<String, Object> login(MemberVo vo) throws Exception {
+    public Map<String, Object> login(@RequestBody MemberVo vo) throws Exception {
         MemberVo loginMember = service.login(vo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg","good");
         map.put("loginMember", loginMember);
-        System.out.println(loginMember);
+        System.out.println("로그인: " + loginMember);
         if(loginMember == null ) {
         	map.put("msg", "bad");
         }

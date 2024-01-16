@@ -14,8 +14,8 @@
             ,NICK
             ,PHONE
             ,EMAIL
-            ,PROFILE_IMG
             ,RESI_NUM
+            ,PROFILE_IMG
 		)
 		VALUES
 		(
@@ -26,8 +26,8 @@
 		    , #{nick}
             , #{phone}
             , #{email}
-            , #{profileImg}
             , #{resiNum}
+            , 'TEMP'
 		)
     </insert>
     

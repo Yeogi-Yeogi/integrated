@@ -4,40 +4,63 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledMemberLoginDiv = styled.div`
-    width: 100%;
-    height: 100%;
-    margin: auto;
-    & > div {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+    margin-bottom: 70px;
+    width: 100vw;
+
+    & #table-container{
+        border-radius: 100px; /* 원하는 값으로 조절 */
+        /* overflow: hidden;   /* border-radius 적용을 위해 overflow 속성 추가 */
+        width: 300px;        /* 필요에 따라 조절 */
+        height: 800px;
+        margin: auto;      /* 가운데 정렬을 위해 추가 */
+        /* border: 4px solid black; */
+        background-color: pink;
+
+        & input {
+        border: 2px solid #999999;
+        border-radius: 10px;
+        width: 500px;
+        height: 50px;
+        margin: 10px;
+        padding: 10px;
+        outline: none;
+        font-size: 0.8rem;        
+        }
+
+        & td {
+            text-align: center;
+        }
     }
 
-    form > {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
+    #loginbutton{
+        color: #fff;
+        background-color: #6C1895;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+        border: none;
+        width: 100px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 16px;
     }
-
-    /* loginbutton > {
-        border-radius: 
-    } */
+   
 `;
 
 const MemberLogin = () => {
 
     let isFetching = false;
+
+    //로그인 할 때 기본값 세팅
     const [vo,setVo] = useState({
         id :"",
         pwd: ""
     })
     const navigate = useNavigate();
 
+    //input태그의 값이 변할 때마다 값 변함
     const handleInputChange = (event) => {
         const{name, value} = event.target;
 
@@ -46,6 +69,7 @@ const MemberLogin = () => {
             [name] : value
         });
     }
+
     //로그인 전 화면으로 넘어가기
     const handleMemberLoginSubmit = (event) => {
         event.preventDefault();
@@ -57,7 +81,7 @@ const MemberLogin = () => {
             isFetching = true;
         }
 
-        fetch("http://127.0.0.1:8888/yeogi/member/login", {
+        fetch("http://127.0.0.1:8885/member/login", {
         method:"post",
         headers:{
             "Content-Type":"application/json"
@@ -72,8 +96,9 @@ const MemberLogin = () => {
         })
         .then( data => {
             if(data.msg === "good"){
+                sessionStorage.setItem("loginMember", JSON.stringify(data.loginMember));
                 alert("로그인 성공!");
-                navigate("/");
+                navigate("/main");
             }else{
                 alert("로그인실패..");
                 navigate("/failpage");
@@ -92,17 +117,25 @@ const MemberLogin = () => {
     
     return (
         <StyledMemberLoginDiv>
-            <div>
-                <div>
-                    <div><img src="/img/logo.png" alt="여기여기로고"/></div>
-                    <span>여기여기</span>
-                </div>
-                <form onSubmit={handleMemberLoginSubmit}>
-                    <div>아이디<input type="text" name="id"  placeholder='아이디를 입력하세요' onChange={handleInputChange}/></div>
-                    <div>비밀번호<input type="password" name="pwd"  placeholder='비밀번호를 입력하세요'onChange={handleInputChange}/></div>
-                    <div><input type="submit" id="loginbutton" value='로그인'/></div>
-                </form>        
-            </div>
+            <form onSubmit={handleMemberLoginSubmit} >
+                <table id="table-container">
+                    <tr>
+                        <td><img src="/img/logo.png" alt="여기여기로고"/></td>
+                        <td>여기여기</td>
+                    </tr>
+                    <tr>
+                        <td>아이디</td>
+                        <td><input type="text" name="id"  placeholder='아이디를 입력하세요' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td>비밀번호</td>
+                        <td><input type="password" name="pwd"  placeholder='비밀번호를 입력하세요'onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" id="loginbutton" value='로그인'/></td>
+                    </tr>
+                </table>                           
+            </form>            
         </StyledMemberLoginDiv>
     );
 };

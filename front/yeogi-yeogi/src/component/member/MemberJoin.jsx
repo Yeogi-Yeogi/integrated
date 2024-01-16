@@ -24,7 +24,7 @@ const StyledMemberJoinDiv = styled.div`
     }
 
     joinbutton > {
-        border-radius: 
+        border-radius: 3; 
     }
     
 `;
@@ -80,7 +80,7 @@ const MemberJoin = () => {
             isFetching = true;
         }
 
-        fetch("http://127.0.0.1:8888/member/join", {
+        fetch("http://127.0.0.1:8885/member/join", {
         method:"post",
         headers:{
             "Content-Type":"application/json"
@@ -95,6 +95,7 @@ const MemberJoin = () => {
         })
         .then( data => {
             if(data.msg === "good"){
+                
                 alert("회원가입 성공!");
                 navigate("/");
             }else{
@@ -117,7 +118,7 @@ const MemberJoin = () => {
     return (
         <StyledMemberJoinDiv>
             <div>
-            <form onSubmit={handleMemberJoinSubmit}>
+            <form onSubmit={handleMemberJoinSubmit} encType="multipart/form-data">
                 <div>
                     <div>
                         <div>이름 <input type="text" id='name' name="name" placeholder='이름을 입력하세요' onChange={handleInputChange}/></div>
@@ -131,13 +132,14 @@ const MemberJoin = () => {
                         {/* <div>
                             <img src={imgFile ? imgFile : `/img/defaultMemberImage.png`}
                                 alt="대표프로필이미지" id='previewImgTag'
+                                style={{width: "100%", height: "100%", borderRadius: "10px"}
                             />
                         </div>
                         <input type="file" name="f" id="fileInput" accept="image/*" onchange={handleChangeFile} ref={imgRef}/>
                         <label htmlFor="fileInput">사진선택</label> */}
                     </div>
                     {/* <div>
-                        <input type="text" name="MemberName" placeholder='모임'
+                        <input type="text" name="MemberName" placeholder='프로필 대표 이미지를 설정해주세요'
                     </div> */}
                     <div><input type="submit" id="joinbutton" value="회원가입"/></div>
                     <div><input type="reset" value="리셋"/></div>
