@@ -24,9 +24,9 @@ const StyledMemberLoginDiv = styled.div`
         justify-content: space-evenly;
     }
 
-    loginbutton > {
+    /* loginbutton > {
         border-radius: 
-    }
+    } */
 `;
 
 const MemberLogin = () => {
