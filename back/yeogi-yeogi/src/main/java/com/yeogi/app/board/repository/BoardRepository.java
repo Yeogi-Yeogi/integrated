@@ -118,4 +118,14 @@ public class BoardRepository {
     public int addNotice(NoticeAddDto notice, SqlSessionTemplate template) {
         return template.insert("BoardMapper.addNotice", notice);
     }
+
+    /**
+     * 조회수 증가
+     * @param boardNo
+     * @param template
+     * @return
+     */
+    public int increaseHit(String boardNo, SqlSessionTemplate template) {
+        return template.update("BoardMapper.increaseHit", boardNo);
+    }
 }
