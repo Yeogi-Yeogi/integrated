@@ -2,6 +2,7 @@ package com.yeogi.app.util.exception.advice;
 
 import com.yeogi.app.util.exception.ErrorResult;
 import com.yeogi.app.util.exception.FailAddReviewException;
+import com.yeogi.app.util.exception.NotAdminException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,6 +67,21 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(value = FailAddReviewException.class)
     public ResponseEntity<ErrorResult> handleErrorFailAddReview(FailAddReviewException e) {
+        e.printStackTrace();
+        ErrorResult response = new ErrorResult();
+        response.setCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(e.getMessage());
+
+        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 관리자가 아닐 시
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = NotAdminException.class)
+    public ResponseEntity<ErrorResult> handleNotAdmin(NotAdminException e) {
         e.printStackTrace();
         ErrorResult response = new ErrorResult();
         response.setCode(HttpStatus.BAD_REQUEST.value());
