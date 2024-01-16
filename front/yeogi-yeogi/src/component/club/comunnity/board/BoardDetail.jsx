@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import ReviewList from './common/ReviewList';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+
 
 
 const StyledNoticeDetailDiv = styled.div`
@@ -113,6 +114,9 @@ const BoardDetail = () => {
 
     const [vo, setVo] = useState();
     const {clubNo, boardNo} = useParams();
+    const [review, setReview] = useState();
+    const [isFetching, setIsFetching] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:8885/board/detail?memberNo=2&boardNo=${boardNo}&clubNo=${clubNo}`)
@@ -145,8 +149,53 @@ const BoardDetail = () => {
 
     }
 
+    const handleReview = (e) => {
+        setReview(e.target.value);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if(isFetching) {
+            alert('게시글 등록중입니다.');
+            return;
+        }
+
+        setIsFetching(true);
+
+        const data = {
+            writerNo: "3",
+            boardNo: boardNo,
+            clubNo: clubNo,
+            content: review
+        };
+
+        fetch(`http://localhost:8885/review/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.json());
+            }
+
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+        })
+        .then(() => {
+            navigate('.', { replace: true });
+        })
+        .catch(err => {
+            alert(err);
+        })
+        .finally(() => {
+            setIsFetching(false);
+        })
     }
     return (
         <StyledNoticeDetailDiv>
@@ -157,10 +206,13 @@ const BoardDetail = () => {
                         <span>{vo?.memberName}</span>
                         <span>{vo?.enrollDate}</span>
                     </div>
-                    <div>
-                        <Button variant="link" onClick={handleUpdate}>수정</Button>
-                        <Button variant="link" onClick={handleDelete}>삭제</Button>
-                    </div>
+                    {
+                        vo?.mine &&
+                        <div>
+                            <Button variant="link" onClick={handleUpdate}>수정</Button>
+                            <Button variant="link" onClick={handleDelete}>삭제</Button>
+                        </div>
+                    }
                 </div>
                 <hr/>
                 <ContentDiv>
@@ -177,7 +229,7 @@ const BoardDetail = () => {
                 <hr/>
                 <ReviewDiv>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Control as="textarea" name='content' rows={3}/>
+                        <Form.Control as="textarea" name='content' rows={3} onChange={handleReview}/>
                         <Button variant='secondary' type="submit" >작성</Button>
                     </Form>
                 </ReviewDiv>
