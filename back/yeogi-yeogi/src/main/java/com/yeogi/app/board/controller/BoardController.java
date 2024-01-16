@@ -68,6 +68,18 @@ public class BoardController {
         return new ResponseEntity<>(service.getOneByBoardNo(valid), headers, HttpStatus.OK);
     }
 
+    /**
+     * memberNo, clubNo, boardNo
+     * 연동 완료 DB 작업만 히면 됨
+     * @param dto
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) {
+        log.info("deleteDto = {} ", dto);
+        return new ResponseEntity<>("삭제 완료되었습니다.", getHttpHeaders(), HttpStatus.OK);
+    }
+
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
