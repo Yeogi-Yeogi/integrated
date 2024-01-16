@@ -11,6 +11,7 @@ public class BoardVo {
     private String no;
     private String clubNo;
     private String memberNo;
+    private String title;
     private String content;
     private String hit;
     private String enrollDate;
