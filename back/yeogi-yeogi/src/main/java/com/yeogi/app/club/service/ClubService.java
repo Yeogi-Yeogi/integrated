@@ -64,10 +64,10 @@ public class ClubService {
             ClubImageDto clubImageDto = new ClubImageDto();
             clubImageDto.setNo(editClubDto.getClubNo());
             // 대표이미지 수정시 이미지 파일 삭제 후 => 파일업로드 + db 업데이트
-            return imgService.uploadFile(clubImageDto, file, sst, type);
-        } else {
-            return  dao.editClub(sst, editClubDto);
+            // 결과 받아서 처리할게 있나..?
+            int imageResult = imgService.uploadFile(clubImageDto, file, sst, type);
         }
+        return  dao.editClub(sst, editClubDto);
     }
 
     public int editClubMember(EditClubMemberDto editClubMemberDto) {
@@ -88,5 +88,9 @@ public class ClubService {
 
     public int quitClub(EditClubDto editClubDto) {
         return dao.quitClub(sst, editClubDto);
+    }
+
+    public int deleteClub(String clubNo) {
+        return dao.deleteClub(sst, clubNo);
     }
 }

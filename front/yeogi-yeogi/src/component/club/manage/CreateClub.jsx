@@ -134,8 +134,8 @@ const CreateClub = () => {
     const creatorNo = "2";  // 클럽 생성한 사람 번호....임시....
 
     const [imgFile, setImgFile] = useState("");
-    const [clubNameCheck, setClubNameCheck] = useState(false);
     const imgRef = useRef();
+    const [clubNameCheck, setClubNameCheck] = useState(false);
     const [createClubDto, setCreateClubDto] = useState({
         "creatorNo" : creatorNo
     });
