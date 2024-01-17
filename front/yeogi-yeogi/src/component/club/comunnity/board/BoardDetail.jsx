@@ -169,6 +169,7 @@ const BoardDetail = () => {
         })
         .then(data => {
             alert(data);
+            navigate(`/club/${clubNo}/commu/board/list`);
         })
     }
 
