@@ -1,14 +1,10 @@
 package com.yeogi.app.notice.controller;
 
 import com.yeogi.app.board.dto.BoardDetailValidDto;
-import com.yeogi.app.board.dto.CheckIsMemberDto;
-import com.yeogi.app.board.vo.BoardVo;
 import com.yeogi.app.notice.dto.NoticeAddDto;
 import com.yeogi.app.notice.dto.NoticeDetailDto;
-import com.yeogi.app.notice.dto.NoticeListDto;
 import com.yeogi.app.notice.service.NoticeService;
 import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.ErrorResult;
 import com.yeogi.app.util.exception.NotAdminException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +13,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -67,6 +62,17 @@ public class NoticeController {
             throw new IllegalStateException("공지사항 작성에 실패하셨습니다.");
         }
         return new ResponseEntity<>("공지사항을 등록하셨습니다", getHttpHeaders(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws NotClubMemberException, NotAdminException {
+        log.info("dto = {}", dto);
+
+        int result = service.deleteNotice(dto);
+        if(result != 1) {
+            throw new IllegalStateException("공지사항 작성 실패");
+        }
+        return new ResponseEntity<>("공지사항이 삭제되었습니다", getHttpHeaders(), HttpStatus.OK);
     }
 
 

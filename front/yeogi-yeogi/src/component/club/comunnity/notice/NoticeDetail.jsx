@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const StyledNoticeDetailDiv = styled.div`
@@ -38,6 +38,11 @@ const StyledNoticeDetailDiv = styled.div`
                     width: 45px;
                     height: 45px;
                     border-radius: 10px;
+                }
+
+                & > span:nth-child(4) {
+                    font-weight: lighter;
+                    color: #999999;
                 }
             }
 
@@ -100,17 +105,18 @@ const ReviewDiv = styled.div`
 
 `;
 
-const NoticeDetail = (props) => {
+const NoticeDetail = () => {
 
     const [notice, setNotice] = useState();
     const {clubNo, noticeNo} = useParams();
-    
+    const [isFetching, setIsFetching] = useState(false); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=3&boardNo=${noticeNo}`)
         .then(res => {
             if(!res.ok) {
-                throw new Error(res.json());
+                throw new Error(res.data);
             }
 
             return res.json();
@@ -119,38 +125,88 @@ const NoticeDetail = (props) => {
             console.log(data);
             setNotice(data);
         })
+        .catch(err => {
+            console.error(err);
+        })
     },[])
+
+    const deleteNotice = () => {
+
+        if(isFetching) {
+            alert('삭제중입니다.');
+            return;
+        }
+
+        setIsFetching(true);
+        const data = {
+            memberNo: "3",
+            clubNo: clubNo,
+            boardNo: noticeNo
+        }
+
+        fetch(`http://localhost:8885/notice/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.text());
+            }
+
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+            navigate(`/club/${clubNo}/commu/board/notice/list`);
+        })
+        .catch(err => {
+            alert(err);
+        })
+        .finally(() => {
+            setIsFetching(false);
+        })
+    }
 
     return (
         <StyledNoticeDetailDiv>
             <div>
                 <div>
                     <div>
-                        <img src={props.src} alt="" />
-                        <span>관리자</span>
-                        <span>2024. 12. 24. 22:54</span>
+                        <img src={notice?.memberProfile} alt="" />
+                        <span>{notice?.memberName}</span>
+                        <span>{notice?.enrollDate}</span>
+                        <span>조회수 {notice?.hit}</span>
                     </div>
-                    <div>
-                        <Button variant="link">수정</Button>
-                        <Button variant="link">삭제</Button>
-                    </div>
+                    {
+                        notice?.mine && 
+                        <div>
+                            <Button variant="link">수정</Button>
+                            <Button variant="link" onClick={deleteNotice}>삭제</Button>
+                        </div>
+                    }
                 </div>
                 <hr/>
                 <ContentDiv>
-                    <div>
+                    {
+                        notice?.schedule &&
                         <div>
-                            <span>일정 이름</span>
+                            <div>
+                                <span>{notice?.schedule.title}</span>
+                            </div>
+                            <div>
+                                <FontAwesomeIcon icon={icon({name: 'calendar-check', family: 'classic', style: 'regular'})} />
+                                <span>{notice?.schedule.startTime}</span>
+                                <br/>
+                                <FontAwesomeIcon icon={icon({name: 'location-dot', family: 'classic', style: 'solid'})} />
+                                <span>{notice?.schedule.location}</span>
+                            </div>
                         </div>
-                        <div>
-                            <FontAwesomeIcon icon={icon({name: 'calendar-check', family: 'classic', style: 'regular'})} />
-                            <span>2024년 1월 19일</span>
-                            <br/>
-                            <FontAwesomeIcon icon={icon({name: 'location-dot', family: 'classic', style: 'solid'})} />
-                            <span>서울특별시 강남구 테헤란로</span>
-                        </div>
-                    </div>
-                    <h4>제목 제목 제목 제목 제목 </h4>
-                    <p>내용용 내용용 내용용 내용용 내용용 </p>
+                    }
+                    <h4>{notice?.title}</h4>
+                    <p>{notice?.content}</p>
                     {/* <div>
                         <img src={props.src} alt="" />
                         <img src={props.src} alt="" />
