@@ -140,4 +140,23 @@ public class BoardService {
 
     }
 
+    /**
+     * 게시글 삭제
+     * @param dto
+     * @return
+     */
+    public int deleteBoard(BoardDetailValidDto dto) throws NotClubMemberException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
+        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        }
+
+        int result = boardRepository.deleteBoard(dto, template);
+
+        if(result != 1) {
+            throw new IllegalStateException("게시글 삭제는 본인이 작성한것만 가능합니다.");
+        }
+
+        return result;
+    }
 }

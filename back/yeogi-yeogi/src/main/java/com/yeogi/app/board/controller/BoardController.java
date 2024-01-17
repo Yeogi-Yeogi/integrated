@@ -75,8 +75,13 @@ public class BoardController {
      * @return
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) {
+    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws NotClubMemberException {
         log.info("deleteDto = {} ", dto);
+        int result = service.deleteBoard(dto);
+
+        if(result != 1) {
+            throw new IllegalStateException("게시글 삭제에 실패했습니다.");
+        }
         return new ResponseEntity<>("삭제 완료되었습니다.", getHttpHeaders(), HttpStatus.OK);
     }
 

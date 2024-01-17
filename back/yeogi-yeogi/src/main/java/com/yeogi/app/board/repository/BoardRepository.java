@@ -128,4 +128,14 @@ public class BoardRepository {
     public int increaseHit(String boardNo, SqlSessionTemplate template) {
         return template.update("BoardMapper.increaseHit", boardNo);
     }
+
+    /**
+     * 게시글 삭제
+     * @param dto
+     * @param template
+     * @return
+     */
+    public int deleteBoard(BoardDetailValidDto dto, SqlSessionTemplate template) {
+        return template.update("BoardMapper.deleteBoard", dto);
+    }
 }
