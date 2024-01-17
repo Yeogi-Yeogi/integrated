@@ -14,6 +14,5 @@ import lombok.NoArgsConstructor;
 public class ReviewReqDto {
     private String clubNo;
     private String memberNo;
-    private String offset;
     private String boardNo;
 }

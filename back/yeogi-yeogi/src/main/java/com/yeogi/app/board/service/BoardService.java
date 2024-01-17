@@ -102,10 +102,6 @@ public class BoardService {
         List<BoardListFileUrlDto> imageList = boardRepository.getImagesByBoardNo(valid.getBoardNo(), template);
         findBoard.setImages(imageList);
 
-        //리뷰 10개씩 가져오기 -> 리뷰를 가져올 때
-        RowBounds rowBounds = new RowBounds(0, 10);
-        List<ReviewDetailDto> reviewList = reviewRepository.getReviewListByBoardNo(valid.getBoardNo(), template, rowBounds);
-        findBoard.setReviews(reviewList);
 
         //내가 작성한 거면
         if(findBoard.getMemberNo().equals(clubMember.getMemberNo())) {
