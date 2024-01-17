@@ -121,7 +121,10 @@ const NoticeDetail = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=3&boardNo=${noticeNo}`)
+
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
+        fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=${memberNo}&boardNo=${noticeNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.data);

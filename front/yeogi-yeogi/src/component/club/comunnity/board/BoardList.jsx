@@ -45,8 +45,11 @@ const BoardList = () => {
     const getPost = useCallback(async () => {
         setLoad(true); //로딩 시작 
         console.log(`page = ${page}`)
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
+        
         try {
-            const res = await fetch(`http://localhost:8885/board/list/${page}?memberNo=2&clubNo=${clubNo}`);
+            const res = await fetch(`http://localhost:8885/board/list/${page}?memberNo=${memberNo}&clubNo=${clubNo}`);
             const data = await res.json();
             console.log(data);
             if(data.length === 0) { //마지막 페이지일 경우

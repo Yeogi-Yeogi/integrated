@@ -234,11 +234,14 @@ const NoticeWrite = () => {
 
         setIsFetching(true);
 
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
+
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
         formData.append("clubNo", clubNo);
-        formData.append("memberNo", "3");
+        formData.append("memberNo", memberNo);
         formData.append("noticeYn", "Y");
         if(show) {
             formData.append("scheduleTitle", scheduleTitle);

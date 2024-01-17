@@ -78,12 +78,15 @@ const ReviewList = ({data, setPageNo}) => {
         if(isFetching) {
             alert('삭제중입니다.')
         }
+        
 
         setIsFetching(true);
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
         const data = {
             reviewNo: reviewNo,
             clubNo: clubNo,
-            writerNo: "3",
+            writerNo: memberNo,
             boardNo: boardNo
         }
 

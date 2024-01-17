@@ -134,12 +134,13 @@ const BoardDetail = () => {
     const [pageNo, setPageNo] = useState(0);
     const [isFetching, setIsFetching] = useState(false);
     const navigate = useNavigate();
-
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = loginMember.no;
     /**
      * 게시글 데이터 가져오기
      */
     useEffect(() => {
-        fetch(`http://localhost:8885/board/detail?memberNo=3&boardNo=${boardNo}&clubNo=${clubNo}`)
+        fetch(`http://localhost:8885/board/detail?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.json());
@@ -157,7 +158,7 @@ const BoardDetail = () => {
 
     useEffect(() => {
         console.log(`pageNo = ${pageNo}`);
-        fetch(`http://localhost:8885/review/list/${pageNo}?memberNo=3&boardNo=${boardNo}&clubNo=${clubNo}`)
+        fetch(`http://localhost:8885/review/list/${pageNo}?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
         .then(res => {
             console.log(res);
             if(!res.ok) {
@@ -184,7 +185,7 @@ const BoardDetail = () => {
     const handleDelete = () => {
 
         const data = {
-            memberNo: "3",
+            memberNo: memberNo,
             clubNo: clubNo,
             boardNo: boardNo
         }
@@ -222,9 +223,9 @@ const BoardDetail = () => {
         }
 
         setIsFetching(true);
-
+        
         const data = {
-            writerNo: "3",
+            writerNo: memberNo ,
             boardNo: boardNo,
             clubNo: clubNo,
             content: content
