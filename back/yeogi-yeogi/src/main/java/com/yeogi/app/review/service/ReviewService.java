@@ -47,8 +47,8 @@ public class ReviewService {
         int i = Integer.parseInt(offset);
 
         Map<String, Object> map = new HashMap<>();
-
-        if( (int) Math.ceil((double)count/reviewLimit) == (i+1)) {
+        log.info("(int) Math.ceil((double)count/reviewLimit) = {},  i = {}", (int) Math.ceil((double)count/reviewLimit), i);
+        if (i >= (int) Math.ceil((double) count / reviewLimit) - 1) {
             map.put("isLast", true);
         } else {
             map.put("isLast", false);
