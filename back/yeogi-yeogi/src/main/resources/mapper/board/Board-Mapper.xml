@@ -145,7 +145,7 @@
             , M.PROFILE_IMG MEMBER_PROFILE
             , M.NICK MEMBER_NAME
             , B.MEMBER_NO
-            , B.ENROLL_DATE
+            , TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE
             , B.TITLE
             , B.CONTENT
             , B.HIT
@@ -157,4 +157,11 @@
         AND B.NOTICE_YN = 'Y'
 
     </select>
+
+    <update id="deleteBoard">
+        UPDATE BOARD
+            SET DEL_YN = 'Y'
+        WHERE NO = #{boardNo}
+        AND MEMBER_NO = #{memberNo}
+    </update>
 </mapper>
