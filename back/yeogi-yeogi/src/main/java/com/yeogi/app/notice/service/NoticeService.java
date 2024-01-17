@@ -1,6 +1,7 @@
     package com.yeogi.app.notice.service;
 
     import com.yeogi.app.board.dto.BoardDetailValidDto;
+    import com.yeogi.app.board.dto.BoardListFileUrlDto;
     import com.yeogi.app.board.repository.BoardRepository;
     import com.yeogi.app.board.service.BoardImageService;
     import com.yeogi.app.board.vo.BoardImageFileVo;
@@ -24,6 +25,7 @@
     import java.util.HashMap;
     import java.util.List;
     import java.util.Map;
+    import java.util.stream.Collectors;
 
     @Service
     @Transactional
@@ -46,10 +48,7 @@
          */
         public Map<String, Object> getNoticeList(CheckDto checkDto, String pageNo) throws NotClubMemberException {
 
-            CheckDto clubMember = check.isClubMember(checkDto,template);
-            if(!clubMember.getMemberNo().equals(checkDto.getMemberNo())) {
-                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
-            }
+            CheckDto clubMember = checkMember(checkDto.getClubNo(), checkDto.getMemberNo());
 
             int totalCount = boardRepository.getTotalCount(clubMember.getClubNo(), template);
             int pno = Integer.parseInt(pageNo);
@@ -69,18 +68,32 @@
 
         /**
          * 공지사항 상세 조회
+         * (내가 작성했는지 로직 추가 필요)
          * @param dto
          * @return
          * @throws NotClubMemberException
          */
         public NoticeDetailDto getOne(BoardDetailValidDto dto) throws NotClubMemberException {
-            CheckDto clubMember = check.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
-            if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
-                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
-            }
+            CheckDto clubMember = checkMember(dto.getClubNo(), dto.getMemberNo());
 
+            int result = boardRepository.increaseHit(dto.getBoardNo(), template);
+
+            if(result != 1) {
+                throw new IllegalStateException("해당 게시글이 없습니다");
+            }
             NoticeDetailDto findNotice = boardRepository.getOne(dto, template);
             ScheduleVo findSchedule = scheduleRepository.getScheduleByBoardNo(findNotice.getBoardNo(), template);
+            findNotice.setSchedule(findSchedule);
+
+            List<BoardImageFileVo> list = imageService.getListByBoardNo(findNotice.getBoardNo());
+            List<BoardListFileUrlDto> collect = list.stream().map(e -> new BoardListFileUrlDto(e.getNo(), e.getBoardNo(), e.getFileUrl())).collect(Collectors.toList());
+
+            findNotice.setList(collect);
+            System.out.println("findNotice = " + findNotice);
+
+            if(findNotice.getMemberNo().equals(clubMember.getMemberNo())) {
+                findNotice.setMine(true);
+            }
             return findNotice;
         }
 
@@ -90,16 +103,10 @@
          * @return
          */
         public int addNotice(NoticeAddDto notice) throws NotClubMemberException, NotAdminException {
-            CheckDto checkDto = new CheckDto(notice.getClubNo(), notice.getMemberNo());
-            CheckDto clubMember = check.isClubMember(checkDto,template);
-            if(!clubMember.getMemberNo().equals(checkDto.getMemberNo())) {
-                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
-            }
-
+            CheckDto clubMember = checkMember(notice.getClubNo(), notice.getMemberNo());
             if(!clubMember.getAdminYn().equals("Y")) {
                 throw new NotAdminException("관리자만 이용 가능합니다");
             }
-
             int result = boardRepository.addNotice(notice, template);
 
             if(result != 1){
@@ -121,17 +128,44 @@
                 if(result != 1) {
                     //게시글 삭제, 사진 삭제
                     if(imageList.size() != 0) {
-                        List<BoardImageFileVo> list = imageService.getListByBoardNo(recentNo);
-                        for(BoardImageFileVo bf : list) {
-                            imageService.deleteServerImage(bf.getFileName());
-                        }
-                        imageService.deleteByBoardNo(recentNo);
+                        imageService.deleteImagesByBoardNo(recentNo);
                     }
-
                     boardRepository.deleteBoardByNo(recentNo, template);
                     throw new IllegalStateException("공지사항 작성 실패");
                 }
             }
             return result;
+        }
+
+        /**
+         * 공지사항 삭제
+         * (일정 -> 사진 -> 공지사항 순)
+         * @param dto
+         * @return
+         */
+        public int deleteNotice(BoardDetailValidDto dto) throws NotClubMemberException, NotAdminException {
+            CheckDto clubMember = checkMember(dto.getClubNo(), dto.getMemberNo());
+
+            if(!clubMember.getAdminYn().equals("Y")) {
+                throw new NotAdminException("관리자만 이용 가능합니다");
+            }
+
+            return boardRepository.deleteBoard(dto, template);
+        }
+
+        /**
+         * 회원 검사
+         * @param clubNo
+         * @param memberNo
+         * @return
+         * @throws NotClubMemberException
+         */
+        private CheckDto checkMember(String clubNo, String memberNo) throws NotClubMemberException {
+            CheckDto checkDto = new CheckDto(clubNo, memberNo);
+            CheckDto clubMember = check.isClubMember(checkDto,template);
+            if(!clubMember.getMemberNo().equals(checkDto.getMemberNo())) {
+                throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+            }
+            return clubMember;
         }
     }

@@ -116,9 +116,12 @@ public class BoardImageService {
 
     /**
      * 번호로 사진 데이터 삭제
-     * @param recentNo
+     * @param boardNo
      */
-    public int deleteByBoardNo(String recentNo) {
-        return imageRepository.deleteByBoardNo(recentNo, template);
+    public int deleteImagesByBoardNo(String boardNo) {
+        List<BoardImageFileVo> imageList = getListByBoardNo(boardNo);
+        imageList.stream().forEach(e -> deleteServerImage(e.getFileName()));
+        int result = imageRepository.deleteByBoardNo(boardNo, template);
+        return result;
     }
 }
