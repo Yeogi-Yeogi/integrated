@@ -50,8 +50,8 @@ const Header = () => {
                 <span>여기여기(임시)</span>
             </div>
             <div>
-                <Link>로그인</Link>        
-                <Link>회원가입</Link>        
+                <Link to="/member/login">로그인</Link>        
+                <Link to="/member/join">회원가입</Link>        
             </div>         
         </StyledHeaderDiv>
     );

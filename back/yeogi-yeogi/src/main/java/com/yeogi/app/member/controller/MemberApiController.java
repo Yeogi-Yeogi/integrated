@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @ResponseBody
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-public class MemberController {
+public class MemberApiController {
 
     private final MemberService service;
 
