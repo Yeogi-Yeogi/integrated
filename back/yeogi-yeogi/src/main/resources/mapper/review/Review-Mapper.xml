@@ -24,4 +24,23 @@
         INSERT INTO REVIEW(NO, WRITER_NO, BOARD_NO, CONTENT)
         VALUES (SEQ_REVIEW_NO.NEXTVAL, #{writerNo}, #{boardNo}, #{content})
     </insert>
+
+    <select id="getReviewCountByBoardNo" resultType="String">
+        SELECT COUNT(NO)
+        FROM REVIEW
+        WHERE BOARD_NO = #{boardNo}
+    </select>
+
+    <select id="getNoByWriterNo" resultType="String">
+        SELECT NO
+        FROM REVIEW
+        WHERE NO = #{reviewNo}
+        AND WRITER_NO = #{writerNo}
+    </select>
+
+    <delete id="deleteByNo">
+        DELETE FROM
+        REVIEW
+        WHERE NO = #{findReviewNo}
+    </delete>
 </mapper>

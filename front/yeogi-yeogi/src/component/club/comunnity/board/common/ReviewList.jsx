@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 const StyledReviewListDiv = styled.div`
     width: 100%;
@@ -46,6 +47,7 @@ const StyledReviewListDiv = styled.div`
                 color: #3a3a3a;
                 padding: 0%;
                 text-decoration: none;
+                font-size: 0.8em;
                 font-weight: 600;
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
@@ -62,29 +64,71 @@ const StyledReviewListDiv = styled.div`
         }
     }
 `;
-const ReviewList = ({data}) => {
+const ReviewList = ({data, setPageNo}) => {
 
-    const handleDeleteReview = () => {
+    const {clubNo, boardNo} = useParams();
+    const [isFetching, setIsFetching] = useState(false);
+    
+    /**
+     * 리뷰 삭제 기능
+     * @param {*} reviewNo 리뷰번호
+     * @param {*} setPageNo 화면 리렌더링을 위한 함수
+     */
+    const handleDeleteReview = (reviewNo, setPageNo) => {
+        if(isFetching) {
+            alert('삭제중입니다.')
+        }
 
+        setIsFetching(true);
+        const data = {
+            reviewNo: reviewNo,
+            clubNo: clubNo,
+            writerNo: "3",
+            boardNo: boardNo
+        }
+
+        fetch(`http://localhost:8885/review/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.data);
+            }
+
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+            setPageNo(new Number(0));
+        })
+        .catch(err => {
+            alert(err);
+        })
+        .finally(() => {
+            setIsFetching(false);
+        })
     }
 
     return (
         <StyledReviewListDiv>
             { 
                 data?.map(el => 
-                    <div>
+                    <div key={el.reviewNo}>
                         <div>
                             <img src={el.memberProfile} alt="" />
                             <span className='userSpan'>{el.memberNick}</span>
                             <span className='dateSpan'>{el.enrollDate}</span>
-                            <Button className='review-delete' variant="link" onClick={handleDeleteReview}>삭제</Button>
+                            <Button className='review-delete' variant="link" onClick={() => {handleDeleteReview(el.reviewNo, setPageNo)}}>삭제</Button>
                         </div>
                         <div>
                             <span>{el.content}</span>
                         </div>
                     </div>
                 )
-                
             }
         </StyledReviewListDiv>
     );
