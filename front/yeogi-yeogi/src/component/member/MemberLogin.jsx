@@ -18,7 +18,7 @@ const StyledMemberLoginDiv = styled.div`
         height: 800px;
         margin: auto;      /* 가운데 정렬을 위해 추가 */
         /* border: 4px solid black; */
-        background-color: pink;
+        /* background-color:#edd1f4; */
 
         & input {
         border: 2px solid #999999;
@@ -33,7 +33,45 @@ const StyledMemberLoginDiv = styled.div`
 
         & td {
             text-align: center;
+            font-weight: bolder;
+            font-size: 25px;
         }
+        
+        td:nth-child(1){
+            width: 10px;
+            height: 10px;
+        }
+
+        td:nth-child(1) > div{
+            size: 100%
+        }
+
+        & > div:nth-child(1){
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: 300px;
+           
+            & > img {
+                width: 5px;
+                height: 5px;
+            }
+            & > span {
+                font-size: 100px;
+                font-weight: bold;
+            }
+        }
+
+        /* .custom-td {
+            height: 100px;
+            width: 100px;
+        }
+
+        .logo-td {
+            height: 100px;
+            width: 200px;
+        } */
+
     }
 
     #loginbutton{
@@ -120,15 +158,18 @@ const MemberLogin = () => {
             <form onSubmit={handleMemberLoginSubmit} >
                 <table id="table-container">
                     <tr>
-                        <td><img src="/img/logo.png" alt="여기여기로고"/></td>
-                        <td>여기여기</td>
+                        <td colspan="2">
+                            <div><img src="/img/logo.png" alt="여기여기로고"/>
+                            <span>여기여기(임시)</span>
+                            </div>
+                        </td>                    
                     </tr>
                     <tr>
-                        <td>아이디</td>
+                        <td></td>
                         <td><input type="text" name="id"  placeholder='아이디를 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
-                        <td>비밀번호</td>
+                        <td></td>
                         <td><input type="password" name="pwd"  placeholder='비밀번호를 입력하세요'onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
