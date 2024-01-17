@@ -3,9 +3,41 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledMemberJoinDiv = styled.div`
-    width: 100%;
-    height: 100%;
-    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+    margin-bottom: 70px;
+    width: 100vw;
+
+    & input {
+        border: 2px solid #999999;
+        border-radius: 10px;
+        width: 500px;
+        height: 50px;
+        margin: 10px;
+        padding: 10px;
+        outline: none;
+        font-size: 0.8rem;        
+    }
+
+    & #table-container > & text{
+        font-weight: bord;
+        font-size: 100px;
+
+        & input {
+            border: 2px solid #999999;
+            border-radius: 10px;
+            width: 500px;
+            height: 50px;
+            margin: 10px;
+            padding: 10px;
+            outline: none;
+            font-size: 0.8rem;        
+        }
+    }
+
+
     & > div {
         width: 100%;
         height: 100%;
@@ -23,8 +55,31 @@ const StyledMemberJoinDiv = styled.div`
         justify-content: space-evenly;
     }
 
-    joinbutton > {
-        border-radius: 3; 
+    //이 밑으로는 회원가입버튼디자인
+
+    #joinbutton{
+        color: #fff;
+        background-color: #6C1895;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+        border: none;
+        width: 100px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    & #table-container {
+        width: 100%;
+        text-align: center; // 테이블 내용 가운데 정렬
+    }
+
+    & td {
+        text-align: center; // td 요소 내용 가운데 정렬
+    }
+
+    #joinbutton {
+        margin-top: 10px; // 원하는 간격 조절
+        width: 600px; // 원하는 넓이로 조절
     }
     
 `;
@@ -117,35 +172,57 @@ const MemberJoin = () => {
     
     return (
         <StyledMemberJoinDiv>
-            <div>
             <form onSubmit={handleMemberJoinSubmit} encType="multipart/form-data">
-                <div>
-                    <div>
-                        <div>이름 <input type="text" id='name' name="name" placeholder='이름을 입력하세요' onChange={handleInputChange}/></div>
-                        <div>아이디 <input type="text" id='name' name="id" placeholder='아이디를 입력하세요' onChange={handleInputChange}/></div>
-                        <div>비밀번호<input type="text" id='name' name="pwd" placeholder='비밀번호를 입력하세요' onChange={handleInputChange}/></div>
-                        <div>비밀번호 확인<input type="text" id='name' name="pwdCheck" placeholder='비밀번호 입력하세요'/></div>
-                        <div>닉네임<input type="text" id='name' name="nick" placeholder='닉네임을 입력하세요' onChange={handleInputChange}/></div>
-                        <div>전화번호<input type="text" id='name' name="phone" placeholder='전화번호를 입력하세요' onChange={handleInputChange}/></div>
-                        <div>이메일<input type="text" id='name' name="email" placeholder='이메일을 입력하세요' onChange={handleInputChange}/></div>
-                        <div>주민등록번호<input type="text" id='name' name="resiNum" placeholder='주민등록번호를 입력하세요' onChange={handleInputChange}/></div>
-                        {/* <div>
-                            <img src={imgFile ? imgFile : `/img/defaultMemberImage.png`}
-                                alt="대표프로필이미지" id='previewImgTag'
-                                style={{width: "100%", height: "100%", borderRadius: "10px"}
-                            />
-                        </div>
-                        <input type="file" name="f" id="fileInput" accept="image/*" onchange={handleChangeFile} ref={imgRef}/>
-                        <label htmlFor="fileInput">사진선택</label> */}
-                    </div>
-                    {/* <div>
-                        <input type="text" name="MemberName" placeholder='프로필 대표 이미지를 설정해주세요'
-                    </div> */}
-                    <div><input type="submit" id="joinbutton" value="회원가입"/></div>
-                    <div><input type="reset" value="리셋"/></div>
-                </div>
-            </form>                       
-            </div>            
+                <table id="table-container">
+                    <tr>
+                        <td id="text">이름</td>
+                        <td><input type="text" id='name' name="name" placeholder='이름을 입력하세요' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">아이디</td>
+                        <td><input type="text" id='id' name="id" placeholder='3~15 영문/숫자 조합으로 입력' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="button" id='idbutton' name="idbutton" value="아이디 중복확인" onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">비밀번호</td>
+                        <td><input type="text" id='name' name="pwd" placeholder='비밀번호를 입력하세요' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">비밀번호 확인</td>
+                        <td><input type="text" id='name' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">닉네임</td>
+                        <td><input type="text" id='name' name="nick" placeholder='닉네임을 입력하세요' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">전화번호</td>
+                        <td><input type="text" id='name' name="phone" placeholder='전화번호를 입력하세요' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">이메일</td>
+                        <td><input type="text" id='name' name="email" placeholder='이메일을 입력하세요' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text"></td>
+                        <td><input type="button" id='emailbutton' name="emailbutton" value="인증번호 전송" onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">인증번호</td>
+                        <td><input type="text" id='email' name="email" placeholder='인증번호 확인' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                        <td id="text">주민등록번호</td>
+                        <td><input type="text" id='resiNum' name="resiNum" placeholder='주민등록번호를 입력하세요' onChange={handleInputChange}/></td>
+                    </tr>
+                    <tr>
+                    <td colspan="2"><input type="submit" id="joinbutton" value='회원가입'/></td>
+                    </tr>
+                </table>
+            </form>                         
         </StyledMemberJoinDiv>
     );
 };

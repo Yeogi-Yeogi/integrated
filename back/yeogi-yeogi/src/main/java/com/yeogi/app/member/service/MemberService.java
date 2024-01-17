@@ -20,8 +20,12 @@ public class MemberService {
 
 	//회원가입
 	public int join(MemberVo vo) {
-		
 		return dao.join(sst, vo);
+	}
+	
+	//아이디 중복 확인
+	public MemberVo idCheck(MemberVo vo) {
+		return dao.idCheck(sst, vo);
 	}
 	
 	// 로그인
@@ -45,7 +49,5 @@ public class MemberService {
 	public int edit(MemberVo vo) {
 		return dao.edit(sst,vo);
 	}
-	
-
 
 }

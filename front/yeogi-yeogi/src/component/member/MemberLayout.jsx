@@ -6,6 +6,7 @@ import MemberLogin from './MemberLogin';
 import MemberEdit from './MemberEdit';
 import MemberLogout from './MemberLogout';
 import MemberQuit from './MemberQuit';
+import MemberMySelect from './MemberMySelect';
 
 
 const StyledMemberLayoutDiv = styled.div`
@@ -27,7 +28,7 @@ const MemberLayout = () => {
                 <Routes>
                     <Route path='/join' element={<MemberJoin/>}/>
                     <Route path='/login'element={<MemberLogin/>}/>
-                    {/* <Route path='/mySelect' element={<MemberMySelect/>}/> */}
+                    <Route path='/mySelect' element={<MemberMySelect/>}/>
                     <Route path='/edit' element={<MemberEdit/>}/>
                     <Route path='/logout' element={<MemberLogout/>}/>
                     <Route path='/quit' element={<MemberQuit/>}/>
