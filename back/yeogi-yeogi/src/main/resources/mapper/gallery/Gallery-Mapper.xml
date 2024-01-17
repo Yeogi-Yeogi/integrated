@@ -5,17 +5,15 @@
 
 <mapper namespace="GalleryMapper">
 
-   <select id="getImageListByClubNo">
-      SELECT
-      FROM (
-            SELECT
-                  BI.NO BOARD_IMAGE_NO
-                  , BI.BOARD_NO
-                  , BI.FILE_URL
-            FROM BOARD_IMAGE_FILE BI
-            INNER JOIN BOARD B
-            ON BI.BOARD_NO = B.NO
-            WHERE B.CLUB_NO = #{clubNo}
-      )
+   <select id="getImageListByClubNo" resultType="com.yeogi.app.board.dto.BoardListFileUrlDto">
+       SELECT
+           BI.NO BOARD_IMAGE_NO
+           , BI.BOARD_NO
+           , BI.FILE_URL
+       FROM BOARD_IMAGE_FILE BI
+       INNER JOIN BOARD B
+       ON BI.BOARD_NO = B.NO
+       WHERE B.CLUB_NO = #{clubNo}
+       ORDER BY 2 DESC, 1
    </select>
 </mapper>

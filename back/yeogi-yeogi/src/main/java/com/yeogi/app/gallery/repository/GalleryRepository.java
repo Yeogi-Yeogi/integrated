@@ -1,7 +1,6 @@
 package com.yeogi.app.gallery.repository;
 
 import com.yeogi.app.board.dto.BoardListFileUrlDto;
-import com.yeogi.app.gallery.dto.GalleryListDto;
 import com.yeogi.app.util.check.CheckDto;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
