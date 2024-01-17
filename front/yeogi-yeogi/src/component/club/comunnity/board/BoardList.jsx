@@ -10,6 +10,10 @@ const StyledBoardListDiv = styled.div`
     margin: auto;
     margin-top: 3em;
     padding-left: 2em;
+
+    & > div:last-child {
+        height: 10em;
+    }
 `;
 const BoardList = () => {
     const [page, setPage] = useState(-1); //페이징 번호
@@ -67,7 +71,7 @@ const BoardList = () => {
                 load &&
                 <Spinner animation="border" />
             }
-            <div ref={obsRef}>옵저버 Element</div>
+            <div ref={obsRef}></div>
         </StyledBoardListDiv>
     );
 };
