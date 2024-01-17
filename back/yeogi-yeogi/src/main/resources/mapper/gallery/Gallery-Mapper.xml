@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="GalleryMapper">
+
+   <select id="getImageListByClubNo">
+      SELECT
+      FROM (
+            SELECT
+                  BI.NO BOARD_IMAGE_NO
+                  , BI.BOARD_NO
+                  , BI.FILE_URL
+            FROM BOARD_IMAGE_FILE BI
+            INNER JOIN BOARD B
+            ON BI.BOARD_NO = B.NO
+            WHERE B.CLUB_NO = #{clubNo}
+      )
+   </select>
+</mapper>
