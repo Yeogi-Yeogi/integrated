@@ -8,7 +8,6 @@ const StyledEditClubInfoDiv = styled.div`
     margin-bottom: 70px;
 
     & > form {
-        /* background-color: pink; */
         height: 375px;
         width: 1000px;
         display: grid;
