@@ -86,23 +86,6 @@ const StyledMemberJoinDiv = styled.div`
 
 const MemberJoin = () => {
 
-    // const [imgFile, setImgFile] = useState("");
-    // const imgRef = useRef();
-
-    // const handleChangeFile = () => {
-    //     if(!imgRef.current.files.length) {
-    //         setImgFile("");
-    //         return;
-    //     }
-
-    //     const file = imgRef.current.file[0];
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onloadend = () => {
-    //         setImgFile(reader.result);
-    //     };
-    // };
-
     let isFetching = false;
     const [vo,setVo] = useState({
         name: "",
@@ -133,6 +116,11 @@ const MemberJoin = () => {
         fileReader.onloadend = () => {
             setImgFile(fileReader.result);
         };
+
+        setVo({
+            ...vo , 
+            profileImg : file ,
+        });
     };
 
 

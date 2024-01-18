@@ -1,5 +1,6 @@
 package com.yeogi.app.member.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yeogi.app.member.service.MemberService;
 import com.yeogi.app.member.vo.MemberVo;
@@ -25,13 +27,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class MemberApiController {
-
+	
     private final MemberService service;
 
     //회원가입
     @PostMapping("join")
-    public Map<String,String> join(@RequestBody MemberVo vo) throws Exception {
-    	System.out.println(vo);
+    public Map<String,String> join(MemberVo vo , MultipartFile profileImg) throws Exception {
+    	System.out.println("vo : " + vo);
+    	System.out.println("profileImg : " + profileImg);
+    	System.out.println("profileImg.getOriginalFilename : " + profileImg.getOriginalFilename());
+    	
+    	String fullPath = saveFile(profileImg);
+		vo.setFullPath(fullPath);
+		
         int result = service.join(vo); 
         
         Map<String, String> map = new HashMap<String, String>();
@@ -42,6 +50,25 @@ public class MemberApiController {
 		System.out.println("return 직전 ~~~");
         return map;
     }
+    
+    /**
+	 * 파일을 서버에 저장하고, 파일 전체 경로를 리턴함
+	 * @param 파일객체
+	 * @param 파일경로
+	 * @return 실제파일저장경로(파일경로+파일명)
+	 * @throws Exception
+	 */	 
+	private String saveFile(MultipartFile profileImg) throws Exception {
+		String path = "C:\\dev\\final\\back\\yeogi-yeogi\\src\\main\\resources\\img\\profileImg\\";
+		String originName = profileImg.getOriginalFilename();
+		//원래는 "path + changeName(랜덤값) + 확장자" 로 해야함
+		File target = new File(path + originName);	
+
+		//파일 바이트바코드 읽어서 타겟에 저장
+		profileImg.transferTo(target);
+		
+		return path + originName;
+	}
     
     //아이디 중복 확인
     @PostMapping("idCheck")

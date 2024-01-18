@@ -15,7 +15,7 @@
             ,PHONE
             ,EMAIL
             ,RESI_NUM
-            ,PROFILE_IMG
+            ,FULL_PATH
 		)
 		VALUES
 		(
@@ -27,7 +27,7 @@
             , #{phone}
             , #{email}
             , #{resiNum}
-            , 'TEMP'
+            , #{fullPath}
 		)
     </insert>
     
@@ -69,7 +69,7 @@
             ,EMAIL
             ,ENROLL_DATE
             ,MODIFIED_DATE
-            ,PROFILE_IMG
+            ,FULL_PATH
             ,RESI_NUM
          FROM MEMBER
          WHERE NO = #{no}
@@ -83,7 +83,7 @@
 	           ,NICK = #{nick}
 	           ,PHONE = #{phone}
 	           ,EMAIL = #{email}
-	           ,PROFILE_IMG = #{profileImg}
+	           ,FULL_PATH = #{fullPath}
            WHERE NO = #{no}
 		   AND QUIT_YN = 'N'		
 	</update>
