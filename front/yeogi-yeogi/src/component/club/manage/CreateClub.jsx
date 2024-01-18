@@ -129,7 +129,7 @@ const CreateClub = () => {
     const loginMember = window.sessionStorage.getItem("loginMember");
 
     const vo = JSON.parse(loginMember);
-    const creatorNo = vo.no;
+    const creatorNo = vo?.no;
 
     console.log("loginMember ::: ", loginMember);
     console.log("vo ::: ", vo);
@@ -181,6 +181,7 @@ const CreateClub = () => {
                 text: '카테고리를 선택해주세요', 
                 confirmButtonText: '확인'
             });
+            return;
         }
 
         if(!clubNameCheck){
@@ -194,6 +195,7 @@ const CreateClub = () => {
         // 빈값에 대한거 작성..
 
         const formData = new FormData();
+
         formData.append("file", imgRef.current.files[0]);
         formData.append("name", createClubDto.name);
         formData.append("categoryNo", createClubDto.categoryNo);
@@ -202,6 +204,7 @@ const CreateClub = () => {
         formData.append("signupLimit", createClubDto.signupLimit);
         formData.append("clubDescription", createClubDto.clubDescription);
 
+        console.log(formData);
 
         fetch("http://127.0.0.1:8885/club/createClub", {
             method : "POST",
@@ -209,14 +212,15 @@ const CreateClub = () => {
         })
         .then(resp => resp.text())
         .then(data => {
-            console.log(data);
-            if(data === "1"){
+            console.log("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ :",data);
+            if(data !== "0"){
                 Swal.fire({
                     icon: 'success',                  
                     text: '모임 생성 완료!', 
                     confirmButtonText: '확인'
                   });
-                navigate("/main");
+                navigate("/club/"+ data +"/commu/board");
+                // 클럽 주소
             }
             // 실패시에는..?
         })

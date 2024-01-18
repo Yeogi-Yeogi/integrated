@@ -10,6 +10,7 @@ const StyledClubDescriptionDiv = styled.div`
     display: grid;
     grid-template-columns: 350px 650px;
     box-sizing: content-box;
+    margin: auto;
 
     & > div:nth-child(1){
         display: flex;
@@ -86,7 +87,7 @@ const ClubDescription = () => {
 
     const str = window.sessionStorage.getItem("loginMember");
     const vo = JSON.parse(str);
-    const memberNo = vo.no;
+    const memberNo = vo?.no;
 
     const { clubNo } = useParams();
     const navigate = useNavigate();

@@ -54,11 +54,14 @@ public class ClubController {
         log.info("createClubDto = {}", createClubDto);
         log.info("file = {}", file);
         String type = "create";
+
+
+        int seqNo = service.createClub(file, createClubDto, type);
+
         // 클럽이미지 선택x == 기본이미지
         // 클럽 insert 하고,,, 시퀀스,,,
-        int result = service.createClub(file, createClubDto, type);
 
-        return result;
+        return seqNo;
     }
 
     /**

@@ -99,16 +99,12 @@
     </insert>
 <!--    클럽 생성(클럽 대표이미지 추가), 클럽 insert 성공시 실행?-->
     <insert id="insertClubImage">
-        <choose>
-            <when test="fileName != null">
-                INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, #{fileUrl}, #{fileName})
-            </when>
-            <otherwise>
-                INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, '기본이미지', '기본이미지')
-            </otherwise>
-        </choose>
+        INSERT INTO CLUB_IMAGE_FILE(NO, FILE_URL, FILE_NAME) VALUES (SEQ_CLUB_NO.CURRVAL, #{fileUrl}, #{fileName})
     </insert>
-
+<!--    클럽 시퀀스 넘버 받아오기 -->
+    <select id="getClubSeqNo" resultType="java.lang.Integer">
+        SELECT SEQ_CLUB_NO.CURRVAL FROM DUAL
+    </select>
 <!--  클럽 소개(상세조회 / 클럽가입화면 )  -->
     <select id="clubDescription" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT
