@@ -5,6 +5,7 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 const StyledNavbar = styled(Navbar)`
+  margin-top: 2em;
   margin: auto;
   background-color: white;
   
