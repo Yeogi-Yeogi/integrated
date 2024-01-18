@@ -125,12 +125,13 @@ const StyledCreateClubdiv = styled.div`
 `;
 
 const CreateClub = () => {
+    
+    const loginMember = window.sessionStorage.getItem("loginMember");
 
-    const str = window.sessionStorage.getItem("loginMember");
-    const vo = JSON.parse(str);
+    const vo = JSON.parse(loginMember);
     const creatorNo = vo.no;
 
-    console.log("str ::: ", str);
+    console.log("loginMember ::: ", loginMember);
     console.log("vo ::: ", vo);
     
     const navigate = useNavigate();

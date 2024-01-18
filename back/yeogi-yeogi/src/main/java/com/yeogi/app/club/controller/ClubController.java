@@ -7,6 +7,9 @@ import com.yeogi.app.club.dto.EditClubMemberDto;
 import com.yeogi.app.club.service.ClubService;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
+import com.yeogi.app.util.check.CheckClubMember;
+import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import java.util.List;
 public class ClubController {
 
     private final ClubService service;
+
 
 
     /**
@@ -158,10 +162,12 @@ public class ClubController {
 
     @PostMapping("deleteClub")
     public int deleteClub(@RequestBody String clubNo){
-
         return service.deleteClub(clubNo);
     }
 
-
+    @PostMapping("checkMember")
+    public CheckDto checkMember(@RequestBody CheckDto checkDto) throws NotClubMemberException {
+        return service.checkMember(checkDto);
+    }
 
 }

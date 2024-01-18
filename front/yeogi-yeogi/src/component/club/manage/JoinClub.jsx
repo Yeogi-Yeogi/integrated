@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const JoinClub = () => {
+
     return (
-        <div>
-            조인클럽ㅋㅋ
-        </div>
+        <h1>asdfasfasdfㅅㅄㅎㄱㄷ햄댜흄데ㅐ햐ㅜㄴ</h1>
     );
 };
 

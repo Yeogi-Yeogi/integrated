@@ -4,6 +4,9 @@ import com.yeogi.app.club.dao.ClubDao;
 import com.yeogi.app.club.dto.*;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
+import com.yeogi.app.util.check.CheckClubMember;
+import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,6 +26,7 @@ public class ClubService {
     private final ClubDao dao;
     private final SqlSessionTemplate sst;
     private final ClubImageService imgService;
+    private final CheckClubMember checkClubMember;
 
     public List<ClubVo> getClubList(ClubSearchDto clubSearchDto) {
         return dao.getClubList(clubSearchDto, sst);
@@ -92,5 +96,9 @@ public class ClubService {
 
     public int deleteClub(String clubNo) {
         return dao.deleteClub(sst, clubNo);
+    }
+
+    public CheckDto checkMember(CheckDto checkDto) throws NotClubMemberException {
+        return checkClubMember.isClubMember(checkDto, sst);
     }
 }

@@ -5,7 +5,6 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useParams } from 'react-router-dom';
 
 const StyledEditMemberDiv = styled.div`
-    /* background-color: beige; //임시 */
     height: 500px;
     width: 1000px;
     display: flex;
@@ -14,8 +13,12 @@ const StyledEditMemberDiv = styled.div`
     & > div:nth-child(1){
         display: flex;
         justify-content: flex-start;
-        width: 800px;
+        width: 100%;
         border-bottom: 4px solid #999999;
+        & > h2 {
+            margin-left: 100px;
+            margin-bottom: 30px;
+        }
     }
     & table:nth-of-type(1) {
         width: 800px;
@@ -23,7 +26,7 @@ const StyledEditMemberDiv = styled.div`
         & > thead { 
             border-bottom: 1px solid #AFAFAF;
             & > tr > th {
-                text-align: center;
+                text-align: left;
             }
         }
         & > tbody {
@@ -31,8 +34,9 @@ const StyledEditMemberDiv = styled.div`
             max-height: 300px;
             overflow-y: auto;
             & > tr{
+
                 & > td {
-                    text-align: center;
+                    text-align: left;
                 }
             }
         }
@@ -52,11 +56,6 @@ const StyledEditMemberDiv = styled.div`
         background: rgba(220, 20, 60, .1); 
     }
 
-
-    /* .dropdown{
-        width: 10px;
-        height: 10px;
-    } */
 `;
 
 const EditMember = () => {
