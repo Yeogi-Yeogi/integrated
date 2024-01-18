@@ -25,4 +25,36 @@
         DELETE FROM SCHEDULE
         WHERE BOARD_NO = #{boardNo}
     </delete>
+
+    <select id="getUpComingList" resultType="com.yeogi.app.notice.vo.ScheduleVo">
+        SELECT
+            S.NO SCHEDULE_NO
+            , S.BOARD_NO
+            , TO_CHAR(S.START_TIME, 'YYYY"년 "MM"월 "DD"일 "HH24"시 "MI"분"') START_TIME
+            , S.LOCATION
+            , S.TITLE
+        FROM SCHEDULE S
+        INNER JOIN BOARD B
+        ON S.BOARD_NO = B.NO
+        WHERE S.CLUB_NO = #{clubNo}
+        AND TO_CHAR(S.START_TIME, 'YYYY-MM-DD HH24:MI') >= TO_CHAR(LOCALTIMESTAMP, 'YYYY-MM-DD HH24:MI')
+        AND B.DEL_YN = 'N'
+        ORDER BY 3, 2 DESC
+    </select>
+
+    <select id="getPastList" resultType="com.yeogi.app.notice.vo.ScheduleVo">
+        SELECT
+        S.NO SCHEDULE_NO
+        , S.BOARD_NO
+        , TO_CHAR(S.START_TIME, 'YYYY"년 "MM"월 "DD"일 "HH24"시 "MI"분"') START_TIME
+        , S.LOCATION
+        , S.TITLE
+        FROM SCHEDULE S
+        INNER JOIN BOARD B
+        ON S.BOARD_NO = B.NO
+        WHERE S.CLUB_NO = #{clubNo}
+        AND TO_CHAR(S.START_TIME, 'YYYY-MM-DD HH24:MI') <![CDATA[ < ]]> TO_CHAR(LOCALTIMESTAMP, 'YYYY-MM-DD HH24:MI')
+        AND B.DEL_YN = 'N'
+        ORDER BY 3 DESC, 2 DESC
+    </select>
 </mapper>

@@ -102,7 +102,7 @@ const ContentDiv = styled.div`
 
     & > div.img-div {
         width: 100%;
-        
+        background-color: #ffffff;
         & > img {
             width: 100%;
         }
@@ -221,7 +221,7 @@ const NoticeDetail = () => {
                     <div className='img-div'>
                         {
                             
-                            notice.list.map(el => 
+                            notice?.list.map(el => 
                                     <img src={el.fileUrl} key={el.boardImageNo}/>
                             )
                         }

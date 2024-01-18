@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Pagination, Table } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -100,38 +100,43 @@ const NoticeList = () => {
     const getList = (pageNo) => {
         console.log(pageNo); //
         const vo = JSON.parse(sessionStorage.getItem("loginMember"));
-        const memberNo = vo.no;
-        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=${memberNo}&clubNo=${clubNo}`)
-        .then(res => {
-            if(!res.ok) {
-                throw new Error(res.data);
-            }
-            
-            return res.json();
-        })
-        .then((data) => {
-            console.log(data);
-            setNoticeList([...data.list]);
-            setPageVo(data.pageVo);
-            setIsAdmin(data.adminYn)
-            console.log(pageVo);
-            
-            return data.pageVo;
-        })
-        .then((pageVo) => {
-            const newItem = []
-            for (let number = pageVo?.startPage; number <= pageVo?.maxPage; number++) {
-                newItem.push(
-                    <Pagination.Item key={number} active={number === pageNo} onClick={() => handlePageClick(number)}>
-                    {number}
-                    </Pagination.Item>
-                );
-            }
-            setItems([...newItem]);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+        if(vo) {
+            const memberNo = vo.no;
+            fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=${memberNo}&clubNo=${clubNo}`)
+            .then(res => {
+                if(!res.ok) {
+                    throw new Error(res.data);
+                }
+                
+                return res.json();
+            })
+            .then((data) => {
+                console.log(data);
+                setNoticeList([...data.list]);
+                setPageVo(data.pageVo);
+                setIsAdmin(data.adminYn)
+                console.log(pageVo);
+                
+                return data.pageVo;
+            })
+            .then((pageVo) => {
+                const newItem = []
+                for (let number = pageVo?.startPage; number <= pageVo?.maxPage; number++) {
+                    newItem.push(
+                        <Pagination.Item key={number} active={number === pageNo} onClick={() => handlePageClick(number)}>
+                        {number}
+                        </Pagination.Item>
+                    );
+                }
+                setItems([...newItem]);
+            })
+            .catch(err => {
+                alert(err);
+            })
+        } else {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login');
+        }
     }
 
     useEffect(() => {

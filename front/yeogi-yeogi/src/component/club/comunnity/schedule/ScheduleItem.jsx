@@ -41,23 +41,24 @@ const StyledScheduleItemDiv = styled.div`
         color: #999999;
     }
 `;
-const ScheduleItem = () => {
+const ScheduleItem = ({data}) => {
 
     const navigate = useNavigate();
     const {clubNo} = useParams();
     const handleClick = (no) => {
-        navigate(`/club/${clubNo}/commu/board/notice/detail`, no);
+        navigate(`/club/${clubNo}/commu/board/notice/detail/${no}`);
     }
     return (
-        <StyledScheduleItemDiv onClick={handleClick}>
+        <StyledScheduleItemDiv onClick={() => {handleClick(data.boardNo)}}>
             <div>
-                <span>일정 이름</span>
+                <span>{data.title}</span>
             </div>
             <div>
                 <FontAwesomeIcon icon={icon({name: 'calendar-check', family: 'classic', style: 'regular'})} />
-                <span>2024년 1월 19일</span>
+                <span>{data.startTime}</span>
+                <br />
                 <FontAwesomeIcon icon={icon({name: 'location-dot', family: 'classic', style: 'solid'})} />
-                <span>서울특별시 강남구 테헤란로</span>
+                <span>{data.location}</span>
             </div>
         </StyledScheduleItemDiv>
     );

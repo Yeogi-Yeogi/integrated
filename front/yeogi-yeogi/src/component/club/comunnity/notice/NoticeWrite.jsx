@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
@@ -51,11 +51,6 @@ const StyledNoticeWriteDiv = styled.div`
             font-weight: 600;
         }
     }
-`;
-const customSwitchCheckedSvg = `
-  <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#6c1895' class='bi bi-check-circle' viewBox='0 0 16 16'>
-    <circle cx='8' cy='8' r='7.5' fill='#6c1895'/> <!-- 변경된 부분 -->
-  </svg>
 `;
   
 const StyledSwitch = styled(Form.Switch)`
@@ -159,6 +154,12 @@ const NoticeWrite = () => {
     const {clubNo} = useParams();
     const [isFetching , setIsFetching] = useState(false);
     const navigate = useNavigate();
+    const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = vo?.no;
+
+    useEffect(() => {
+
+    }, [])
 
     const handleTitle = (e) => {
         setTitle(e.target.value);
@@ -234,8 +235,7 @@ const NoticeWrite = () => {
 
         setIsFetching(true);
 
-        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
-        const memberNo = vo.no;
+
 
         const formData = new FormData();
         formData.append("title", title);

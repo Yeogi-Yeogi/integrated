@@ -135,41 +135,48 @@ const BoardDetail = () => {
     const [isFetching, setIsFetching] = useState(false);
     const navigate = useNavigate();
     const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
-    const memberNo = loginMember.no;
+    const memberNo = loginMember?.no;
     /**
      * 게시글 데이터 가져오기
      */
     useEffect(() => {
-        fetch(`http://localhost:8885/board/detail?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
-        .then(res => {
-            if(!res.ok) {
-                throw new Error(res.json());
-            }
-            return res.json();
-        })
-        .then(data => {
-            // console.log(data);
-            setVo(data);
-        })
-        .catch(err => {
-            console.error(err);
-        })
+        if(memberNo) {
+            fetch(`http://localhost:8885/board/detail?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
+            .then(res => {
+                if(!res.ok) {
+                    throw new Error(res.json());
+                }
+                return res.json();
+            })
+            .then(data => {
+                // console.log(data);
+                setVo(data);
+            })
+            .catch(err => {
+                console.error(err);
+            })
+        } else {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login');
+        }
     }, [])
 
     useEffect(() => {
-        console.log(`pageNo = ${pageNo}`);
-        fetch(`http://localhost:8885/review/list/${pageNo}?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
-        .then(res => {
-            console.log(res);
-            if(!res.ok) {
-                throw new Error(res.json());
-            }
-            return res.json();
-        })
-        .then(data => {
-            console.log(data);
-            setReview(data);
-        })
+        if(memberNo) {
+            console.log(`pageNo = ${pageNo}`);
+            fetch(`http://localhost:8885/review/list/${pageNo}?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
+            .then(res => {
+                console.log(res);
+                if(!res.ok) {
+                    throw new Error(res.json());
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log(data);
+                setReview(data);
+            })
+        }
     }, [pageNo])
 
     /**
@@ -184,30 +191,35 @@ const BoardDetail = () => {
      */
     const handleDelete = () => {
 
-        const data = {
-            memberNo: memberNo,
-            clubNo: clubNo,
-            boardNo: boardNo
-        }
-
-        fetch(`http://localhost:8885/board/delete`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-        .then(res => {
-            if(!res.ok) {
-                throw new Error(res.data);
+        if(memberNo) {
+            const data = {
+                memberNo: memberNo,
+                clubNo: clubNo,
+                boardNo: boardNo
             }
 
-            return res.text();
-        })
-        .then(data => {
-            alert(data);
-            navigate(`/club/${clubNo}/commu/board/list`);
-        })
+            fetch(`http://localhost:8885/board/delete`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => {
+                if(!res.ok) {
+                    throw new Error(res.data);
+                }
+    
+                return res.text();
+            })
+            .then(data => {
+                alert(data);
+                navigate(`/club/${clubNo}/commu/board/list`);
+            })
+        } else {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login');
+        }
     }
 
     const handleContent = (e) => {

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from "styled-components";
 import BoardListItem from './BoardListItem';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 
 const StyledBoardListDiv = styled.div`
@@ -15,6 +15,11 @@ const StyledBoardListDiv = styled.div`
         height: 10em;
     }
 `;
+
+const SpinnerContainerDiv = styled.div`
+    display: flex;
+    justify-content: center;
+`;
 const BoardList = () => {
     const [page, setPage] = useState(-1); //페이징 번호
     const [load, setLoad] = useState(false); //==isFetching
@@ -23,12 +28,20 @@ const BoardList = () => {
     const obsRef = useRef(null); //옵저버 element
     const endRef = useRef(false); //모든 게시글 리스트 가져왔는지
     const {clubNo} = useParams();
+    const navigate = useNavigate();
+    const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = vo?.no;
 
     useEffect(() => {
-        const observer = new IntersectionObserver(obsHandler, {threshold : 0.5});
-        if(obsRef.current) observer.observe(obsRef.current);
-        return () => {observer.disconnect(); }
-    }, [])
+        if(memberNo) {
+            const observer = new IntersectionObserver(obsHandler, {threshold : 0.5});
+            if(obsRef.current) observer.observe(obsRef.current);
+            return () => {observer.disconnect(); }
+        } else {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login');
+        }
+    }, []);
 
     const obsHandler = (entries) => {
         const target = entries[0];
@@ -44,10 +57,7 @@ const BoardList = () => {
 
     const getPost = useCallback(async () => {
         setLoad(true); //로딩 시작 
-        console.log(`page = ${page}`)
-        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
-        const memberNo = vo.no;
-        
+
         try {
             const res = await fetch(`http://localhost:8885/board/list/${page}?memberNo=${memberNo}&clubNo=${clubNo}`);
             const data = await res.json();
@@ -72,7 +82,9 @@ const BoardList = () => {
             }
             {
                 load &&
-                <Spinner animation="border" />
+                <SpinnerContainerDiv>
+                    <Spinner animation="border" />
+                </SpinnerContainerDiv>
             }
             <div ref={obsRef}></div>
         </StyledBoardListDiv>
