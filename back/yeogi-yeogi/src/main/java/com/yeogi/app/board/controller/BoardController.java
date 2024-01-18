@@ -47,10 +47,8 @@ public class BoardController {
     @PostMapping("/add")
     public ResponseEntity<String> addBoard(BoardAddDto dto) throws NotClubMemberException {
         log.info("boardAddDto = {}", dto);
-        int result = service.addBoard(dto);
-        if(result != dto.getImageList().size()) {
-            throw new IllegalStateException("작성 실패");
-        }
+        int result = service.addBoard(dto); //import한 사진 개수 만큼
+
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>("작성 완료", headers, HttpStatus.OK);
     }

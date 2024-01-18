@@ -2,16 +2,17 @@ package com.yeogi.app.board.service;
 
 import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.repository.BoardRepository;
-import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -71,11 +73,11 @@ public class BoardService {
         }
 
 
-        boardList = boardMap.entrySet().stream().map(e -> e.getValue()).collect(Collectors.toList());
+        boardList = boardMap.entrySet().stream().map(e -> e.getValue()).sorted((e1, e2)-> e2.getBoardNo().compareTo(e1.getBoardNo())).collect(Collectors.toList());
 
         for (BoardListDto b:
              boardList) {
-            System.out.println("b = " + b);
+            log.info("b = {}", b);
         }
         return boardList;
     }
@@ -127,11 +129,18 @@ public class BoardService {
 
         //이미지 사진 저장
         int imageResult = 0;
-        if(result == 1 && dto.getImageList().size() != 0) {
+
+        List<MultipartFile> imageList = dto.getImageList();
+        if(result == 1 && imageList != null && imageList.size() != 0) {
             String recentBoardNo = boardRepository.getNoByMemberNo(clubMember, template);
             System.out.println("recentBoardNo = " + recentBoardNo);
-            imageResult = boardImageService.addImages(dto.getImageList(), recentBoardNo);
+            imageResult += boardImageService.addImages(dto.getImageList(), recentBoardNo);
+
+            if(imageList.size() != imageResult) {
+                throw new IllegalStateException("작성 실패");
+            }
         }
+        log.info("imageResult = {}", imageResult);
         return imageResult;
 
     }
