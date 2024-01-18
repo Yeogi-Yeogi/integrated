@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Button, Form, Table } from 'react-bootstrap';
+import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import PreviewImg from '../board/PreviewImg';
 import ScheduleDateTimePicker from './ScheduleDateTimePicker';
+import { useNavigate, useParams } from 'react-router';
 
 const StyledNoticeWriteDiv = styled.div`
     width: 100%;
@@ -115,6 +116,34 @@ const StyledButton = styled(Button)`
         background-color: #5d1582;
     }
 `;
+
+const StyledCustomModal = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15,15,15,0.5);
+
+    & > div {
+        padding: 1em;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        width: 20%;
+        height: 15%;
+        background-color: #ffffff;
+
+        & > div.spinner-border {
+            margin: auto;
+        }
+    }
+`;
 const NoticeWrite = () => {
 
     const uploadImage = useRef(null);   //이미지 미리 보여주는 div
@@ -123,8 +152,13 @@ const NoticeWrite = () => {
     const [imageUrl, setImageUrl] = useState([]); //미리보기용 url
     const [title, setTitle] = useState();
     const [scheduleTitle, setScheduleTitle] = useState();
+    const [scheduleDate , setScheduleDate] = useState(); //일정 시간
+    const [scheduleLocation, setScheduleLocation] = useState();
     const [show ,setShow] = useState(false); //일정 생성 여부
     const [content, setContent] = useState();
+    const {clubNo} = useParams();
+    const [isFetching , setIsFetching] = useState(false);
+    const navigate = useNavigate();
 
     const handleTitle = (e) => {
         setTitle(e.target.value);
@@ -136,6 +170,10 @@ const NoticeWrite = () => {
 
     const handleScheduleTitle = (e) => {
         setScheduleTitle(e.target.value);
+    }
+
+    const handleScheduleLocation = (e) => {
+        setScheduleLocation(e.target.value);
     }
 
     const changeImage = () => {
@@ -171,8 +209,6 @@ const NoticeWrite = () => {
             };
             reader.readAsDataURL(image);
         }
-
-
     }
 
     // 선택한 미리보기 사진 삭제하는 함수
@@ -188,19 +224,52 @@ const NoticeWrite = () => {
         setImageUrl(updatedImageUrl);
       };
 
-
       const uploadBoard = (e) => {
         e.preventDefault();
 
-        console.log(imageList);
+        if(isFetching) {
+            alert("등록중입니다.")
+            return;
+        }
+
+        setIsFetching(true);
+
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
 
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
-        formData.append("scheduleTitle", scheduleTitle);
+        formData.append("clubNo", clubNo);
+        formData.append("memberNo", memberNo);
+        formData.append("noticeYn", "Y");
+        if(show) {
+            formData.append("scheduleTitle", scheduleTitle);
+            formData.append("scheduleDate", scheduleDate);
+            formData.append("scheduleLocation", scheduleLocation);
+        }
         imageList.forEach(el => formData.append("imageList", el));
 
-        console.log(formData);
+        fetch(`http://localhost:8885/notice/add`, {
+            method: "POST",
+            body: formData
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.data);
+            }
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+            navigate(`/club/${clubNo}/commu/board/notice/list`);
+        })
+        .catch(err => {
+            console.error(err);
+        })
+        .finally(() => {
+            setIsFetching(false);
+        })
     }
 
     
@@ -232,7 +301,8 @@ const NoticeWrite = () => {
                                 {show && (
                                             <div>
                                                 <Form.Control type="text" name='scheduleTitle' onInput={handleScheduleTitle} placeholder="제목을 입력하세요" />
-                                                <ScheduleDateTimePicker/>
+                                                <ScheduleDateTimePicker setScheduleDate={setScheduleDate}/>
+                                                <Form.Control type="text" name='scheduleLocation' onInput={handleScheduleLocation} placeholder="장소를 입력하세요" />
                                             </div>
                                         )}
                             </td>
@@ -268,6 +338,15 @@ const NoticeWrite = () => {
                         </tr>
                     </tbody>
                 </Table>
+                {
+                    isFetching && 
+                    <StyledCustomModal>
+                        <div>
+                            <Spinner animation="border" />
+                            <h4>잠시만 기다려주세요.</h4>
+                        </div>
+                    </StyledCustomModal>
+                }
             </Form>
         </StyledNoticeWriteDiv>
     );

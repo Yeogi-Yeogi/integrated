@@ -55,16 +55,28 @@ public class BoardService {
         boardList.stream().forEach(e -> boardMap.put(e.getBoardNo(), e));
 
         List<String> collect = boardList.stream()
-                .filter(o -> o.getImageCount().equals("-1"))
+                .filter(o -> o.getImageCount() != -1)
                 .map(e -> e.getBoardNo())
                 .collect(Collectors.toList());
 
         if(collect != null && collect.size() != 0) {
             List<BoardListFileUrlDto> fileUrlByBoardNo = boardRepository.getFileUrlByBoardNo(collect, template);
-            fileUrlByBoardNo.stream().forEach(e-> boardMap.get(e.getBoardNo()).setImagePath(e.getFileUrl()));
+            System.out.println("fileUrlByBoardNo = " + fileUrlByBoardNo);
+            for (BoardListFileUrlDto imageDto:
+                 fileUrlByBoardNo) {
+                BoardListDto boardListDto = boardMap.get(imageDto.getBoardNo());
+                boardListDto.setImagePath(imageDto.getFileUrl());
+                boardMap.put(imageDto.getBoardNo(), boardListDto);
+            }
         }
 
+
         boardList = boardMap.entrySet().stream().map(e -> e.getValue()).collect(Collectors.toList());
+
+        for (BoardListDto b:
+             boardList) {
+            System.out.println("b = " + b);
+        }
         return boardList;
     }
 
@@ -90,10 +102,6 @@ public class BoardService {
         List<BoardListFileUrlDto> imageList = boardRepository.getImagesByBoardNo(valid.getBoardNo(), template);
         findBoard.setImages(imageList);
 
-        //리뷰 10개씩 가져오기 -> 리뷰를 가져올 때
-        RowBounds rowBounds = new RowBounds(0, 10);
-        List<ReviewDetailDto> reviewList = reviewRepository.getReviewListByBoardNo(valid.getBoardNo(), template, rowBounds);
-        findBoard.setReviews(reviewList);
 
         //내가 작성한 거면
         if(findBoard.getMemberNo().equals(clubMember.getMemberNo())) {
@@ -120,11 +128,31 @@ public class BoardService {
         //이미지 사진 저장
         int imageResult = 0;
         if(result == 1 && dto.getImageList().size() != 0) {
-            String recentBoardNo = boardRepository.getNoByMemberNo(dto, template);
+            String recentBoardNo = boardRepository.getNoByMemberNo(clubMember, template);
             System.out.println("recentBoardNo = " + recentBoardNo);
             imageResult = boardImageService.addImages(dto.getImageList(), recentBoardNo);
         }
         return imageResult;
+
     }
 
+    /**
+     * 게시글 삭제
+     * @param dto
+     * @return
+     */
+    public int deleteBoard(BoardDetailValidDto dto) throws NotClubMemberException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
+        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        }
+
+        int result = boardRepository.deleteBoard(dto, template);
+
+        if(result != 1) {
+            throw new IllegalStateException("게시글 삭제는 본인이 작성한것만 가능합니다.");
+        }
+
+        return result;
+    }
 }

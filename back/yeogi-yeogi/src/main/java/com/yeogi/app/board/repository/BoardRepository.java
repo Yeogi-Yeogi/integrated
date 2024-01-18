@@ -1,6 +1,7 @@
 package com.yeogi.app.board.repository;
 
 import com.yeogi.app.board.dto.*;
+import com.yeogi.app.notice.dto.NoticeAddDto;
 import com.yeogi.app.notice.dto.NoticeDetailDto;
 import com.yeogi.app.notice.dto.NoticeListDto;
 import com.yeogi.app.util.check.CheckDto;
@@ -66,12 +67,12 @@ public class BoardRepository {
 
     /**
      * 최근에 작성한 게시글 번호 가져오기
-     * @param memberNo
+     * @param checkDto
      * @param template
      * @return
      */
-    public String getNoByMemberNo(BoardAddDto memberNo, SqlSessionTemplate template) {
-        return template.selectOne("BoardMapper.getNoByMemberNo", memberNo);
+    public String getNoByMemberNo(CheckDto checkDto, SqlSessionTemplate template) {
+        return template.selectOne("BoardMapper.getNoByMemberNo", checkDto);
     }
 
     /**
@@ -112,5 +113,29 @@ public class BoardRepository {
      */
     public int getTotalCount(String clubNo, SqlSessionTemplate template) {
         return Integer.parseInt(template.selectOne("BoardMapper.getTotalCount", clubNo));
+    }
+
+    public int addNotice(NoticeAddDto notice, SqlSessionTemplate template) {
+        return template.insert("BoardMapper.addNotice", notice);
+    }
+
+    /**
+     * 조회수 증가
+     * @param boardNo
+     * @param template
+     * @return
+     */
+    public int increaseHit(String boardNo, SqlSessionTemplate template) {
+        return template.update("BoardMapper.increaseHit", boardNo);
+    }
+
+    /**
+     * 게시글 삭제
+     * @param dto
+     * @param template
+     * @return
+     */
+    public int deleteBoard(BoardDetailValidDto dto, SqlSessionTemplate template) {
+        return template.update("BoardMapper.deleteBoard", dto);
     }
 }

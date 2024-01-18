@@ -5,11 +5,13 @@ import styled from 'styled-components';
 const StyledFooterDiv = styled.div`
     background-color: lightgray;
     border-top: 1px solid black;
+
     height: 200px;
     .container{
         display: grid;
         text-align: center;
     }
+
 `;
 
 const Footer = () => {

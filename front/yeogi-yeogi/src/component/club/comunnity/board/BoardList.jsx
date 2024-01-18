@@ -10,6 +10,10 @@ const StyledBoardListDiv = styled.div`
     margin: auto;
     margin-top: 3em;
     padding-left: 2em;
+
+    & > div:last-child {
+        height: 10em;
+    }
 `;
 const BoardList = () => {
     const [page, setPage] = useState(-1); //페이징 번호
@@ -41,8 +45,11 @@ const BoardList = () => {
     const getPost = useCallback(async () => {
         setLoad(true); //로딩 시작 
         console.log(`page = ${page}`)
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
+        
         try {
-            const res = await fetch(`http://localhost:8885/board/list/${page}?memberNo=2&clubNo=${clubNo}`);
+            const res = await fetch(`http://localhost:8885/board/list/${page}?memberNo=${memberNo}&clubNo=${clubNo}`);
             const data = await res.json();
             console.log(data);
             if(data.length === 0) { //마지막 페이지일 경우
@@ -67,7 +74,7 @@ const BoardList = () => {
                 load &&
                 <Spinner animation="border" />
             }
-            <div ref={obsRef}>옵저버 Element</div>
+            <div ref={obsRef}></div>
         </StyledBoardListDiv>
     );
 };

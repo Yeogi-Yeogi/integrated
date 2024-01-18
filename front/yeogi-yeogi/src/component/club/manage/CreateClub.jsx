@@ -126,16 +126,18 @@ const StyledCreateClubdiv = styled.div`
 
 const CreateClub = () => {
 
-    // const str = window.sessionStorage.getItem("loginMemberVo");
-    // const vo = JSON.parse(str);
-    // const creatorNo = vo.no;
+    const str = window.sessionStorage.getItem("loginMember");
+    const vo = JSON.parse(str);
+    const creatorNo = vo.no;
+
+    console.log("str ::: ", str);
+    console.log("vo ::: ", vo);
     
     const navigate = useNavigate();
-    const creatorNo = "2";  // 클럽 생성한 사람 번호....임시....
 
     const [imgFile, setImgFile] = useState("");
-    const [clubNameCheck, setClubNameCheck] = useState(false);
     const imgRef = useRef();
+    const [clubNameCheck, setClubNameCheck] = useState(false);
     const [createClubDto, setCreateClubDto] = useState({
         "creatorNo" : creatorNo
     });

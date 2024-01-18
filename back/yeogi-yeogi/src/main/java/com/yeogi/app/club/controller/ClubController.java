@@ -125,7 +125,11 @@ public class ClubController {
      * @return
      */
     @PostMapping("editClub")
-    public int editClub(EditClubDto editClubDto, MultipartFile file) throws IOException {
+    public int editClub(@RequestBody MultipartFile file, EditClubDto editClubDto) throws IOException {
+        System.out.println("실행됨");
+                
+        log.info("EditClubDto = {}", editClubDto);
+        log.info("file = {}", file);
         return service.editClub(editClubDto, file);
     }
 
@@ -145,10 +149,19 @@ public class ClubController {
      * @return
      */
     @PostMapping("quitClub")
-    public int quitClub(EditClubDto editClubDto){
+    public int quitClub(@RequestBody EditClubDto editClubDto){
 
         int result = service.quitClub(editClubDto);
 
         return result;
     }
+
+    @PostMapping("deleteClub")
+    public int deleteClub(@RequestBody String clubNo){
+
+        return service.deleteClub(clubNo);
+    }
+
+
+
 }

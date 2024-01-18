@@ -13,7 +13,7 @@ const StyledLayOutDiv = styled.div`
     height: 100vh;
     display: grid;
     /* grid-template-rows: auto; */
-    grid-template-rows: 100px auto 200px;
+    grid-template-rows: 100px auto auto;
 
 `;
 

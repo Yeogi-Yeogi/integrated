@@ -21,16 +21,15 @@ public class BoardDetailDto {
     private String memberName;
     //작성일자
     private String enrollDate;
+    private String hit;
     //제목
     private String title;
     //내용
     private String content;
 
-    private String reviewCount;
     //이미지 파일 보기
     private List<BoardListFileUrlDto> images;
     //리뷰들
-    private List<ReviewDetailDto> reviews;
 
     private boolean isMine = false;
 }

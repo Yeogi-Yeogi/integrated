@@ -41,25 +41,28 @@ const SecondDiv = styled.div`
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
 
-    & > div:nth-child(2) {
-        width: 15em;
-        height: 15em;
-        background-image: url(${({data}) => data?.imagePath});
-        background-size: cover;
-        background-position: center;
-        border-radius: 10px;
-        
 
-        & > div {
-            width:100%;
-            height: 100%;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            background-color: rgba(58, 58, 58, 0.3);
-        }
+`;
+
+const ImageDiv = styled.div`
+    width: 15em;
+    height: 15em;
+    background-image: url(${props => props.src});
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    
+
+    & > div {
+        width:100%;
+        height: 100%;
+        border-radius: 10px;
+        display: flex;
+        z-index: 1;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        background-color: rgba(58, 58, 58, 0.3);
     }
 `;
 const BoardListItem = ({data}) => {
@@ -84,7 +87,7 @@ const BoardListItem = ({data}) => {
                     <p>{data.content}</p>
                     <div>댓글 {data.hit}</div>
                 </div>
-                <div>
+                <ImageDiv src={data.imagePath}>
                     {
                         data?.imageCount !== -1 && 
                         <div>
@@ -92,7 +95,7 @@ const BoardListItem = ({data}) => {
                         </div>
                     }
                     
-                </div>
+                </ImageDiv>
             </SecondDiv>
         </StyledBoardListItemDiv>
     );

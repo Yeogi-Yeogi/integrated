@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Button, Form, Table } from 'react-bootstrap';
+import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import PreviewImg from './PreviewImg';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const StyledBoardWriteDiv = styled.div`
     width: 100%;
@@ -79,6 +80,34 @@ const StyledButton = styled(Button)`
         background-color: #5d1582;
     }
 `;
+
+const StyledCustomModal = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15,15,15,0.5);
+
+    & > div {
+        padding: 1em;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        width: 20%;
+        height: 15%;
+        background-color: #ffffff;
+
+        & > div.spinner-border {
+            margin: auto;
+        }
+    }
+`;
 const BoardWrite = () => {
 
     const uploadImage = useRef(null);   //이미지 미리 보여주는 div
@@ -87,7 +116,9 @@ const BoardWrite = () => {
     const [imageUrl, setImageUrl] = useState([]); //미리보기용 url
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
-
+    const {clubNo} = useParams();
+    const navigate = useNavigate();
+    const [isFetching, setIsFetching] = useState(false);
     const handleTitle = (e) => {
         setTitle(e.target.value);
     }
@@ -150,14 +181,45 @@ const BoardWrite = () => {
       const uploadBoard = (e) => {
         e.preventDefault();
 
-        console.log(imageList);
+        if(isFetching) {
+            alert('작성중입니다.');
+            return;
+        }
+        setIsFetching(true);
+
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
 
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
+        formData.append("memberNo", memberNo);
+        formData.append("clubNo", clubNo);
         imageList.forEach(el => formData.append("imageList", el));
 
         console.log(formData);
+
+        fetch('http://localhost:8885/board/add', {
+            method: "POST",
+            body: formData
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.data);
+            }
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+            navigate(`/club/${clubNo}/commu/board/list`);
+        })
+        .catch(err => {
+            alert(err);
+            console.error(err);
+        })
+        .finally(() => {
+            setIsFetching(false);
+        })
     }
 
     //////////////////////////////////////////////////////////
@@ -206,7 +268,17 @@ const BoardWrite = () => {
                         </tr>
                     </tbody>
                 </Table>
+                {
+                    isFetching && 
+                    <StyledCustomModal>
+                        <div>
+                            <Spinner animation="border" />
+                            <h4>잠시만 기다려주세요.</h4>
+                        </div>
+                    </StyledCustomModal>
+                }
             </Form>
+            
         </StyledBoardWriteDiv>
     );
 };

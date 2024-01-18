@@ -5,14 +5,24 @@
 
 <mapper namespace="ScheduleMapper">
 
-    <select id="getScheduleByBoardNo" resultType="com.yeogi.app.notice.dto.NoticeListDto">
-        SELECT NO SCHEDULE_NO
-                , BOARD_NO
-                , TITLE
-                , START_TIME
-                , LOCATION
+    <select id="getScheduleByBoardNo" resultType="com.yeogi.app.notice.vo.ScheduleVo">
+        SELECT NO AS SCHEDULE_NO
+        , BOARD_NO
+        , CLUB_NO
+        , TITLE
+        , TO_CHAR(START_TIME, 'YYYY"년 "MM"월 "DD"일 "HH24"시 "MI"분"') START_TIME
+        , LOCATION
         FROM SCHEDULE
         WHERE BOARD_NO = #{boardNo}
     </select>
 
+    <insert id="addSchedule">
+        INSERT INTO SCHEDULE(NO, CLUB_NO, BOARD_NO, START_TIME, LOCATION, TITLE)
+        VALUES (SEQ_SCHEDULE_NO.NEXTVAL, #{clubNo}, #{boardNo}, TO_DATE(#{startTime}, 'YYYY-MM-DD HH24:MI'), #{location}, #{title})
+    </insert>
+
+    <delete id="deleteByBoardNo">
+        DELETE FROM SCHEDULE
+        WHERE BOARD_NO = #{boardNo}
+    </delete>
 </mapper>

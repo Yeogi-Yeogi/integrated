@@ -148,20 +148,14 @@
         FROM CLUB_IMAGE_FILE
         WHERE NO = #{no}
     </select>
-<!--    클럽 관리(소개글, 모임인원, 가입연령 변경) + 실행되는 쿼리마다 리턴값을 다르게해서 구분하고싶은데... 모르겠다.-->
+<!--    클럽 관리(소개글, 모임인원, 가입연령 변경).-->
     <update id="editClub">
-                UPDATE CLUB
-                SET
-                <if test="clubDescription != null">
-                    CLUB_DESCRIPTION = #{clubDescription}
-                </if>
-                <if test="ageLimit != null">
-                    AGE_LIMIT = #{ageLimit}
-                </if>
-                <if test="signupLimit != null">
-                    SIGNUP_LIMIT = #{signupLimit}
-                </if>
-                WHERE NO = #{clubNo}
+        UPDATE CLUB
+        SET
+        CLUB_DESCRIPTION = #{clubDescription}
+        ,AGE_LIMIT = #{ageLimit}
+        ,SIGNUP_LIMIT = #{signupLimit}
+        WHERE NO = #{clubNo}
     </update>
 <!--    클럽 관리(대표이미지 변경)-->
     <update id="updateFile">
@@ -214,5 +208,12 @@
     <delete id="quitClub">
 
     </delete>
+
+<!--    클럽 삭제-->
+    <update id="deleteClub">
+        UPDATE CLUB
+        SET DEL_YN = 'Y'
+        WHERE NO = #{clubNo}
+    </update>
 
 </mapper>

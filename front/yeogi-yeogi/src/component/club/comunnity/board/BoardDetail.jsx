@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import ReviewList from './common/ReviewList';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+
 
 
 const StyledNoticeDetailDiv = styled.div`
@@ -39,6 +40,7 @@ const StyledNoticeDetailDiv = styled.div`
                     height: 45px;
                     border-radius: 10px;
                 }
+
             }
 
             & > div:nth-child(2) {
@@ -47,7 +49,7 @@ const StyledNoticeDetailDiv = styled.div`
                 & > button {
                     text-decoration: none;
                     color: #3a3a3a;
-                    font-weight: 600;
+                    font-weight: 400;
 
                     &:active {
                         color: #6c1895;
@@ -55,7 +57,21 @@ const StyledNoticeDetailDiv = styled.div`
                 }
             }
         }
+
+        & > div.pagination-container {
+        display: flex;
+        justify-content: center;
+
+        & > button {
+            text-decoration: none;
+            color: #3a3a3a;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
     }
+    }
+
+    
 `;
 
 const ContentDiv = styled.div`
@@ -113,9 +129,18 @@ const BoardDetail = () => {
 
     const [vo, setVo] = useState();
     const {clubNo, boardNo} = useParams();
-
+    const [review, setReview] = useState(); //서버에서 받아오는 리뷰
+    const [content, setContent] = useState(); //내용 작성
+    const [pageNo, setPageNo] = useState(0);
+    const [isFetching, setIsFetching] = useState(false);
+    const navigate = useNavigate();
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = loginMember.no;
+    /**
+     * 게시글 데이터 가져오기
+     */
     useEffect(() => {
-        fetch(`http://localhost:8885/board/detail?memberNo=2&boardNo=${boardNo}&clubNo=${clubNo}`)
+        fetch(`http://localhost:8885/board/detail?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.json());
@@ -123,13 +148,29 @@ const BoardDetail = () => {
             return res.json();
         })
         .then(data => {
-            console.log(data);
+            // console.log(data);
             setVo(data);
         })
         .catch(err => {
             console.error(err);
         })
     }, [])
+
+    useEffect(() => {
+        console.log(`pageNo = ${pageNo}`);
+        fetch(`http://localhost:8885/review/list/${pageNo}?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
+        .then(res => {
+            console.log(res);
+            if(!res.ok) {
+                throw new Error(res.json());
+            }
+            return res.json();
+        })
+        .then(data => {
+            console.log(data);
+            setReview(data);
+        })
+    }, [pageNo])
 
     /**
      * 수정
@@ -143,10 +184,78 @@ const BoardDetail = () => {
      */
     const handleDelete = () => {
 
+        const data = {
+            memberNo: memberNo,
+            clubNo: clubNo,
+            boardNo: boardNo
+        }
+
+        fetch(`http://localhost:8885/board/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.data);
+            }
+
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+            navigate(`/club/${clubNo}/commu/board/list`);
+        })
+    }
+
+    const handleContent = (e) => {
+        setContent(e.target.value);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if(isFetching) {
+            alert('댓글 등록중입니다.');
+            return;
+        }
+
+        setIsFetching(true);
+        
+        const data = {
+            writerNo: memberNo ,
+            boardNo: boardNo,
+            clubNo: clubNo,
+            content: content
+        };
+
+        fetch(`http://localhost:8885/review/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.json());
+            }
+
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+            setContent('');
+            setPageNo(new Number(0));
+        })
+        .catch(err => {
+            alert(err);
+        })
+        .finally(() => {
+            setIsFetching(false);
+        })
     }
     return (
         <StyledNoticeDetailDiv>
@@ -157,10 +266,13 @@ const BoardDetail = () => {
                         <span>{vo?.memberName}</span>
                         <span>{vo?.enrollDate}</span>
                     </div>
-                    <div>
-                        <Button variant="link" onClick={handleUpdate}>수정</Button>
-                        <Button variant="link" onClick={handleDelete}>삭제</Button>
-                    </div>
+                    {
+                        vo?.mine &&
+                        <div>
+                            <Button variant="link" onClick={handleUpdate}>수정</Button>
+                            <Button variant="link" onClick={handleDelete}>삭제</Button>
+                        </div>
+                    }
                 </div>
                 <hr/>
                 <ContentDiv>
@@ -177,12 +289,24 @@ const BoardDetail = () => {
                 <hr/>
                 <ReviewDiv>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Control as="textarea" name='content' rows={3}/>
+                        <Form.Control value={content} as="textarea" name='content' rows={3} onChange={handleContent}/>
                         <Button variant='secondary' type="submit" >작성</Button>
                     </Form>
                 </ReviewDiv>
                 <hr />
-                <ReviewList data={vo?.reviews}/>
+                <ReviewList data={review?.list} setPageNo={setPageNo}/>
+                {
+                    <div className='pagination-container'>
+                        {
+                            pageNo > 0 &&
+                            <Button variant='link' onClick={() => {setPageNo(prev => prev <= 0 ? 0 : prev -1)}}>이전</Button>
+                        }
+                        {
+                            !review?.isLast &&
+                            <Button variant='link' onClick={() => {setPageNo(prev => prev + 1)}}>다음</Button>
+                        }
+                    </div>
+                }
             </div>
             
         </StyledNoticeDetailDiv>
