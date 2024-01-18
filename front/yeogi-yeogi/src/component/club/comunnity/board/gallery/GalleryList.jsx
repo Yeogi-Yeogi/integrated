@@ -46,11 +46,17 @@ const GalleryList = () => {
     const preventRef = useRef(true);
     const obsRef = useRef(null);
     const endRef = useRef(false);
-
+    const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = vo?.no;
     useEffect(() => {
-        const observer = new IntersectionObserver(obsHandler, {threshold : 0.5});
-        if(obsRef.current) observer.observe(obsRef.current);
-        return () => {observer.disconnect(); }
+        if(memberNo) {
+            const observer = new IntersectionObserver(obsHandler, {threshold : 0.5});
+            if(obsRef.current) observer.observe(obsRef.current);
+            return () => {observer.disconnect(); }
+        } else {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login');
+        }
     }, []);
 
     const obsHandler = (entries) => {
@@ -70,8 +76,7 @@ const GalleryList = () => {
         // console.log()
 
         try {
-            const vo = JSON.parse(sessionStorage.getItem("loginMember"));
-            const memberNo = vo.no;
+            
             const res = await fetch(`http://localhost:8885/gallery/list/${page}?memberNo=${memberNo}&clubNo=${clubNo}`);
             const data = await res.json();
 

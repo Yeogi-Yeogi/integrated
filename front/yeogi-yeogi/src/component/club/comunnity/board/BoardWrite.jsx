@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import PreviewImg from './PreviewImg';
@@ -119,6 +119,16 @@ const BoardWrite = () => {
     const {clubNo} = useParams();
     const navigate = useNavigate();
     const [isFetching, setIsFetching] = useState(false);
+    const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = vo?.no;
+
+    useEffect(() => {
+        if(!memberNo) {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login');
+        }
+    }, [])
+
     const handleTitle = (e) => {
         setTitle(e.target.value);
     }
@@ -186,9 +196,6 @@ const BoardWrite = () => {
             return;
         }
         setIsFetching(true);
-
-        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
-        const memberNo = vo.no;
 
         const formData = new FormData();
         formData.append("title", title);
