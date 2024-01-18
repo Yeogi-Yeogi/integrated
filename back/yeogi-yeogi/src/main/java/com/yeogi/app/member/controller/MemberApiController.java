@@ -45,7 +45,7 @@ public class MemberApiController {
     
     //아이디 중복 확인
     @PostMapping("idCheck")
-    public Map<String, Object> idCheck(MemberVo vo) throws Exception {
+    public Map<String, Object> idCheck(@RequestBody MemberVo vo) throws Exception {
     	MemberVo idCheck = service.idCheck(vo);
 //    	System.out.println(idCheck.getId());
     	Map<String, Object> map = new HashMap<String, Object>();
@@ -60,7 +60,7 @@ public class MemberApiController {
     
 	// 로그인
     @PostMapping("login")
-    public Map<String, Object> login(MemberVo vo) throws Exception {
+    public Map<String, Object> login(@RequestBody MemberVo vo) throws Exception {
         MemberVo loginMember = service.login(vo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg","good");
@@ -74,7 +74,7 @@ public class MemberApiController {
     
     // 회원 탈퇴-회원정보페이지에서 회원탈퇴버튼 누르면 실행(로그인이 된 사람만 회원탈퇴가 가능한 구조)
     @PostMapping("quit")
-    public Map<String,String> quit(MemberVo vo) throws Exception {
+    public Map<String,String> quit(@RequestBody MemberVo vo) throws Exception {
         int result = service.quit(vo);
         Map<String, String> map = new HashMap<String, String>();
         map.put("msg", "good");
@@ -87,7 +87,7 @@ public class MemberApiController {
 
     //회원정보조회
     @PostMapping("mySelect")
-    public Map<String, Object> mySelect(MemberVo vo) throws Exception {
+    public Map<String, Object> mySelect(@RequestBody MemberVo vo) throws Exception {
     	
     	MemberVo loginMember = service.mySelect(vo);
         Map<String, Object> map = new HashMap<String, Object>();
@@ -102,7 +102,7 @@ public class MemberApiController {
     
     //내 정보 수정하기 
     @PostMapping("edit")
-    public Map<String,String> edit(MemberVo vo) throws Exception {
+    public Map<String,String> edit(@RequestBody MemberVo vo) throws Exception {
         int result = service.edit(vo);
         Map<String, String> map = new HashMap<String, String>();
         map.put("msg", "good");
