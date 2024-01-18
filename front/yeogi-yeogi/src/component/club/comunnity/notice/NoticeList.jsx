@@ -99,7 +99,9 @@ const NoticeList = () => {
     };
     const getList = (pageNo) => {
         console.log(pageNo); //
-        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=3&clubNo=${clubNo}`)
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
+        fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=${memberNo}&clubNo=${clubNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.data);

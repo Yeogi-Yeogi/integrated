@@ -187,12 +187,13 @@ const BoardWrite = () => {
         }
         setIsFetching(true);
 
-        console.log(imageList);
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
 
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
-        formData.append("memberNo", "3");
+        formData.append("memberNo", memberNo);
         formData.append("clubNo", clubNo);
         imageList.forEach(el => formData.append("imageList", el));
 

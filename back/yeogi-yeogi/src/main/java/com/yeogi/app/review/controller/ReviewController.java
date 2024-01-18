@@ -1,10 +1,10 @@
 package com.yeogi.app.review.controller;
 
 import com.yeogi.app.review.dto.ReviewAddDto;
-import com.yeogi.app.review.dto.ReviewDetailDto;
+import com.yeogi.app.review.dto.ReviewValidDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
 import com.yeogi.app.review.service.ReviewService;
-import com.yeogi.app.util.exception.FailAddReviewException;
+import com.yeogi.app.util.exception.FailReviewException;
 
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -32,27 +32,43 @@ public class ReviewController{
      * @param dto
      * @return
      */
-    @GetMapping("/list")
-    public ResponseEntity<List<ReviewDetailDto>> getMoreReviews(ReviewReqDto dto) throws NotClubMemberException {
+    @GetMapping("/list/{offset}")
+    public ResponseEntity<Map<String, Object>> getMoreReviews(ReviewReqDto dto, @PathVariable String offset) throws NotClubMemberException {
         HttpHeaders headers = getHttpHeaders();
-        return new ResponseEntity<>(service.getReviews(dto), headers, HttpStatus.OK);
+        return new ResponseEntity<>(service.getReviews(dto, offset), headers, HttpStatus.OK);
     }
 
     /**
      * 리뷰 작성
      * @param review
      * @return
-     * @throws FailAddReviewException
+     * @throws FailReviewException
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addReview(@RequestBody ReviewAddDto review) throws FailAddReviewException, NotClubMemberException {
+    public ResponseEntity<String> addReview(@RequestBody ReviewAddDto review) throws FailReviewException, NotClubMemberException {
         log.info("review = {}", review);
         int result = service.addReview(review);
 
-        if(result != 1) throw new FailAddReviewException("리뷰 작성 실패");
+        if(result != 1) throw new FailReviewException("리뷰 작성 실패");
 
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>("작성되었습니다", headers, HttpStatus.OK);
+    }
+
+    /**
+     * 리뷰 삭제
+     * @param review
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteReview(@RequestBody ReviewValidDto review) throws NotClubMemberException, FailReviewException {
+        log.info("review = {}", review);
+        int result = service.deleteReviewByNo(review);
+
+        if(result != 1) {
+            throw new FailReviewException("리뷰 삭제 실패");
+        }
+        return new ResponseEntity<>("댓글을 삭제했습니다.", getHttpHeaders(), HttpStatus.OK);
     }
 
     private HttpHeaders getHttpHeaders() {

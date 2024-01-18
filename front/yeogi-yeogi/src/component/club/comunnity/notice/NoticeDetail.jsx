@@ -99,6 +99,14 @@ const ContentDiv = styled.div`
     & h4 {
         font-weight: 600;
     }
+
+    & > div.img-div {
+        width: 100%;
+        
+        & > img {
+            width: 100%;
+        }
+    }
 `;
 
 const ReviewDiv = styled.div`
@@ -113,7 +121,10 @@ const NoticeDetail = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=3&boardNo=${noticeNo}`)
+
+        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = vo.no;
+        fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=${memberNo}&boardNo=${noticeNo}`)
         .then(res => {
             if(!res.ok) {
                 throw new Error(res.data);
@@ -207,15 +218,14 @@ const NoticeDetail = () => {
                     }
                     <h4>{notice?.title}</h4>
                     <p>{notice?.content}</p>
-                    {/* <div>
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                        <img src={props.src} alt="" />
-                    </div> */}
+                    <div className='img-div'>
+                        {
+                            
+                            notice.list.map(el => 
+                                    <img src={el.fileUrl} key={el.boardImageNo}/>
+                            )
+                        }
+                    </div>
                 </ContentDiv>
                 <hr/>
                 <ReviewDiv>

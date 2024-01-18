@@ -20,14 +20,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/gallery")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class GalleryController {
 
     private final GalleryService service;
 
 
     @GetMapping("/list/{pageNo}")
-    public ResponseEntity<GalleryListDto> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException {
-        return new ResponseEntity<GalleryListDto>(service.getList(dto, pageNo), getHttpHeaders(), HttpStatus.OK);
+    public ResponseEntity<List<BoardListFileUrlDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException {
+        return new ResponseEntity<>(service.getList(dto, pageNo), getHttpHeaders(), HttpStatus.OK);
     }
 
     private HttpHeaders getHttpHeaders() {

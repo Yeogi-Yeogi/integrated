@@ -28,7 +28,7 @@
             AND B.NOTICE_YN = 'N'
         GROUP BY
             B.NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.PROFILE_IMG
-        ORDER BY 5 DESC
+        ORDER BY 5 DESC, 1 DESC
     </select>
 
     <select id="getFileUrlByBoardNo" parameterType="java.util.List" resultType="com.yeogi.app.board.dto.BoardListFileUrlDto">
@@ -121,7 +121,7 @@
         AND B.NOTICE_YN = 'Y'
         GROUP BY
         B.NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.PROFILE_IMG
-        ORDER BY 5 DESC
+        ORDER BY 5 DESC, 1 DESC
     </select>
 
     <delete id="deleteBoardByNo">
