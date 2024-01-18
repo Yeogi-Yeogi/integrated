@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -115,6 +115,27 @@ const MemberJoin = () => {
     })
     const navigate = useNavigate();
 
+
+    const [imgFile, setImgFile] = useState("");
+    const imgRef = useRef();
+    
+   
+
+    const handleChangeFile = () => {
+        if (!imgRef.current.files.length) {
+            // 파일 선택 취소했을때
+            return;
+        }
+      
+        const file = imgRef.current.files[0];
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onloadend = () => {
+            setImgFile(fileReader.result);
+        };
+    };
+
+
     const handleInputChange = (event) => {
         const{name, value} = event.target;
 
@@ -123,7 +144,6 @@ const MemberJoin = () => {
             [name] : value
         });
     }
-
     
     const handleMemberJoinSubmit = (event) => {
         event.preventDefault();
@@ -135,12 +155,25 @@ const MemberJoin = () => {
             isFetching = true;
         }
 
+        const formData = new FormData();
+
+        //각 입력 필드의 값을 FormData에 추가
+        formData.append('name',vo.name);
+        formData.append('id', vo.id);
+        formData.append('pwd', vo.pwd);
+        formData.append('nick', vo.nick);
+        formData.append('phone', vo.phone);
+        formData.append('email', vo.email);
+        formData.append('resiNum', vo.resiNum);
+        formData.append('profileImg', vo.profileImg);
+
+
         fetch("http://127.0.0.1:8885/member/join", {
         method:"post",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body: JSON.stringify(vo)
+        // headers:{
+        //     "Content-Type":"application/json"
+        // },
+        body: formData //JSON.stringify(vo)
         })
         .then( resp => {
             if(!resp.ok){
@@ -174,6 +207,22 @@ const MemberJoin = () => {
         <StyledMemberJoinDiv>
             <form onSubmit={handleMemberJoinSubmit} encType="multipart/form-data">
                 <table id="table-container">
+                    <tr>
+                        <td colSpan={3}>
+                            <div>
+                                <div>
+                                    <img
+                                        src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
+                                        alt="클럽 대표 이미지"
+                                        id='previewImgTag'
+                                        style={{width: "100%", height: "100%", borderRadius: "10px"}}
+                                    />
+                                </div>
+                                <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
+                                <label htmlFor="fileInput" >사진 선택</label>
+                            </div>
+                        </td>
+                    </tr>
                     <tr>
                         <td id="text">이름</td>
                         <td><input type="text" id='name' name="name" placeholder='이름을 입력하세요' onChange={handleInputChange}/></td>
