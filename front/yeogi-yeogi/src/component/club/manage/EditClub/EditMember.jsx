@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 const StyledEditMemberDiv = styled.div`
     height: 500px;
@@ -60,6 +60,13 @@ const StyledEditMemberDiv = styled.div`
 
 const EditMember = () => {
 
+    const navigate = useNavigate();
+    const loginMember = sessionStorage.getItem("loginMember");
+    
+    // if(loginMember === null){
+    //     navigate("/main");
+    // }
+
     let { clubNo } = useParams();
 
     const [clubMemberList, setClubMemberList] = useState([]);
@@ -83,6 +90,7 @@ const EditMember = () => {
 
     // 마스터,어드민 여부 판단해서 나올 메뉴 정하기, 회원 리스트 반복
     const generateRows = () => {
+
         const rows = [];
         for (let i = 1; i <= 30; i++) {
           rows.push(
@@ -154,18 +162,24 @@ const EditMember = () => {
                             clubMemberList.map((member) => 
                                 <tr key={member.memberNo}>
                                     <td>
-                                        {member.adminYn === 'Y' && <img src="/img/goldCrown.png" alt="z" />}
+                                        {member.memberNo === member.creatorNo && <img src="/img/goldCrown.png" alt="z" />}
+                                        {member.adminYn === 'Y' && member.memberNo !== member.creatorNo && <img src="/img/silverCrown.png" alt="z" /> }
                                     </td>
                                     <td>{member.nick}</td>
                                     <td>{member.name}</td>
                                     <td>{member.phone}</td>
                                     <td>{member.regDate}</td>
-                                    <td>
+                                    <td>                                       
                                         <DropdownButton id="dropdown-basic-button" title="">
-                                            <Dropdown.Item onClick={zz}>관리자 지정</Dropdown.Item>
-                                            <Dropdown.Item onClick={zz}>관리자 해제</Dropdown.Item>
-                                            <Dropdown.Item onClick={zzz}>추방</Dropdown.Item>
+                                            {loginMember && member.creatorNo && loginMember.no === member.creatorNo && (
+                                                <>
+                                                    <Dropdown.Item onClick={zz}>관리자 지정</Dropdown.Item>
+                                                    <Dropdown.Item onClick={zz}>관리자 해제</Dropdown.Item>
+                                                </>
+                                            )}
+                                            <Dropdown.Item onClick={zzz}>회원추방</Dropdown.Item>
                                         </DropdownButton>
+                                        
                                     </td>
                                 </tr>
                             )

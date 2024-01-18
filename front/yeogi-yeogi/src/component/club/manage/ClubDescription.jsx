@@ -127,6 +127,9 @@ const ClubDescription = () => {
     }, []);
 
 
+    const editClub = () => {
+        navigate("/club/" + clubNo + "/manage/editClub");
+    }
 
     return (
         <StyledClubDescriptionDiv>
@@ -152,9 +155,7 @@ const ClubDescription = () => {
                 </div>
                 <div>
                     {checkMember.adminYn === 'Y' ? (
-                        <button id='editClubBtn' type='button' onClick={() => {
-                            navigate("/club/" + clubNo + "/manage/editClub");
-                        }}>모임 관리하기</button>
+                        <button id='editClubBtn' type='button' onClick={editClub}>모임 관리하기</button>
                         ) : (
                             null
                         )
