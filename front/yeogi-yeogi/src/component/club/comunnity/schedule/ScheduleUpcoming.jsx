@@ -11,6 +11,11 @@ const StyledScheduleLisDiv = styled.div`
     margin-top: 3em;
     padding-left: 2em;
 `;
+
+const SpinnerContainerDiv = styled.div`
+    display: flex;
+    justify-content: center;
+`;
 const ScheduleUpcoming = () => {
 
      //데이터 받아오기
@@ -85,7 +90,9 @@ const ScheduleUpcoming = () => {
             }
             {
                 load &&
-                <Spinner animation="border" />
+                <SpinnerContainerDiv>
+                    <Spinner animation="border" />
+                </SpinnerContainerDiv>
             }
             <div ref={obsRef}></div>
         </StyledScheduleLisDiv>

@@ -11,6 +11,11 @@ const StyledSchedulePastDiv = styled.div`
     margin-top: 3em;
     padding-left: 2em;
 `;
+
+const SpinnerContainerDiv = styled.div`
+    display: flex;
+    justify-content: center;
+`;
 const SchedulePast = () => {
 
     ///데이터 받아오기
@@ -21,6 +26,7 @@ const SchedulePast = () => {
     const preventRef = useRef(true);
     const obsRef = useRef(null); //옵저버 element
     const endRef = useRef(false); //모든 게시글 리스트 가져왔는지
+    const [isEnd, setIsEnd] =useState(endRef.current);
     const {clubNo} = useParams();
     const navigate = useNavigate();
     const vo = JSON.parse(sessionStorage.getItem("loginMember"));
@@ -58,6 +64,7 @@ const SchedulePast = () => {
              console.log(data);
              if(data.length === 0) { //마지막 페이지일 경우
                  endRef.current = true;
+                 setIsEnd(endRef.current);
              }
  
              setDto(prev => [...prev, ...data.list]);
@@ -86,9 +93,17 @@ const SchedulePast = () => {
             }
             {
                 load &&
-                <Spinner animation="border" />
+                <SpinnerContainerDiv>
+                    <Spinner animation="border" />
+                </SpinnerContainerDiv>
             }
-            <div ref={obsRef}></div>
+            {
+                isEnd  === false?
+                <div ref={obsRef}></div>
+                :
+                <div>더 이상 게시글이 없습니다</div>
+
+            }
         </StyledSchedulePastDiv>
     );
 };

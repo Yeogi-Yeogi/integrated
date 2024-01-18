@@ -15,6 +15,11 @@ const StyledBoardListDiv = styled.div`
         height: 10em;
     }
 `;
+
+const SpinnerContainerDiv = styled.div`
+    display: flex;
+    justify-content: center;
+`;
 const BoardList = () => {
     const [page, setPage] = useState(-1); //페이징 번호
     const [load, setLoad] = useState(false); //==isFetching
@@ -77,7 +82,9 @@ const BoardList = () => {
             }
             {
                 load &&
-                <Spinner animation="border" />
+                <SpinnerContainerDiv>
+                    <Spinner animation="border" />
+                </SpinnerContainerDiv>
             }
             <div ref={obsRef}></div>
         </StyledBoardListDiv>
