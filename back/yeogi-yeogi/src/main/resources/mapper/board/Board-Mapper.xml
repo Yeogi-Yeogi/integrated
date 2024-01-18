@@ -27,7 +27,7 @@
             AND B.DEL_YN = 'N'
             AND B.NOTICE_YN = 'N'
         GROUP BY
-            B.NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.PROFILE_IMG
+            B.NO, B.TITLE, B.CONTENT, B.HIT, TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI'), M.NICK, M.PROFILE_IMG
         ORDER BY 5 DESC, 1 DESC
     </select>
 

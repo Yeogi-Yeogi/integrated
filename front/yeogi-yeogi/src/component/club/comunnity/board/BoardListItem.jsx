@@ -89,7 +89,7 @@ const BoardListItem = ({data}) => {
                 </div>
                 <ImageDiv src={data.imagePath}>
                     {
-                        data?.imageCount !== -1 && 
+                        data?.imageCount >0 && 
                         <div>
                             <span>+{data.imageCount}</span>
                         </div>

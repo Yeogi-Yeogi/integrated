@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledFooterDiv = styled.div`
-    background-color: lightgray;
+    padding: 3em;
+    color: white;
+    background-color: #3a3a3a;
     border-top: 1px solid black;
 
-    height: 200px;
+    height: auto;
     .container{
         display: grid;
         text-align: center;
