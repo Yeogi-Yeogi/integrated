@@ -32,7 +32,7 @@ public class MemberApiController {
     @PostMapping("join")
     public Map<String,String> join(@RequestBody MemberVo vo) throws Exception {
     	System.out.println(vo);
-        int result = service.join(vo);
+        int result = service.join(vo); 
         
         Map<String, String> map = new HashMap<String, String>();
         map.put("msg", "good");
@@ -42,10 +42,25 @@ public class MemberApiController {
 		System.out.println("return 직전 ~~~");
         return map;
     }
-
+    
+    //아이디 중복 확인
+    @PostMapping("idCheck")
+    public Map<String, Object> idCheck(MemberVo vo) throws Exception {
+    	MemberVo idCheck = service.idCheck(vo);
+//    	System.out.println(idCheck.getId());
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("msg","good");
+        map.put("idCheck", idCheck);
+        System.out.println("로그인: " + idCheck);
+        if(idCheck != null ) {
+        	map.put("msg", "bad");
+        }
+        return map;
+    }    
+    
 	// 로그인
     @PostMapping("login")
-    public Map<String, Object> login(@RequestBody MemberVo vo) throws Exception {
+    public Map<String, Object> login(MemberVo vo) throws Exception {
         MemberVo loginMember = service.login(vo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg","good");
@@ -96,11 +111,8 @@ public class MemberApiController {
 		}        
         return map;        
     }
-    
-    //
+        
 //    @PostMapping("memberLogin")
 //    public 
-    
-    
-    
+        
 }//class

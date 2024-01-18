@@ -13,6 +13,11 @@ public class MemberDao {
 		return sst.insert("MemberMapper.join", vo);		
 	}
 	
+	//아이디 중복 체크
+	public MemberVo idCheck(SqlSessionTemplate sst, MemberVo vo) {
+		return sst.selectOne("MemberMapper.idCheck", vo);
+	}
+	
 	// 로그인
 	public MemberVo login(SqlSessionTemplate sst, MemberVo vo) {
 		return sst.selectOne("MemberMapper.login" , vo);

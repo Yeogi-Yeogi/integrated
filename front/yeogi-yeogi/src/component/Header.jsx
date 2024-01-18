@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useMemberMemory } from './context/MemberContext';
 
 const StyledHeaderDiv = styled.div`
     display: grid;
@@ -43,6 +44,11 @@ const StyledHeaderDiv = styled.div`
 `;
 
 const Header = () => {
+
+    const {loginMember , setLoginMember}  = useMemberMemory();
+
+    console.log(loginMember);
+
     return (
         <StyledHeaderDiv>
             <div>

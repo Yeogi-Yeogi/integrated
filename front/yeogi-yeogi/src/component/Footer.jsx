@@ -3,17 +3,31 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledFooterDiv = styled.div`
+    background-color: lightgray;
     border-top: 1px solid black;
-    height: auto;
+
+    height: 200px;
+    .container{
+        display: grid;
+        text-align: center;
+    }
+
 `;
 
 const Footer = () => {
     return (
         <StyledFooterDiv>
-            footer
-            <Link to="/club/createClub"><button>클럽만들기 ㄱㄱ</button></Link>
-            <Link to="/club/1/commu/board"><button>클럽 ㄱㄱ</button></Link>
-            <Link to="/club/1/manage/editClub"><button>클럽정보수정 </button></Link>
+            <div class="container">
+                <div>
+                    <p>&copy; 2024 yeogi-yeogi Website. All rights reserved.</p>
+                    <p>서비스 이용약관</p>
+                    <p>개인정보처리방침</p>
+                </div>
+                <div>
+                    <p>대표이사:심원용</p>
+                    <p>사업자번호:129-86666</p>
+                </div>           
+            </div>           
         </StyledFooterDiv>
     );
 };

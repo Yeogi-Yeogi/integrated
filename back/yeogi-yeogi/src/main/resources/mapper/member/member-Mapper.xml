@@ -31,7 +31,13 @@
 		)
     </insert>
     
-    
+    <select id="idCheck" resultType="com.yeogi.app.member.vo.MemberVo">
+    	SELECT
+    		ID
+    	FROM MEMBER
+		WHERE ID = #{id}    
+    </select>
+        
     <select id="login" resultType="com.yeogi.app.member.vo.MemberVo">
 		SELECT
 		    NO

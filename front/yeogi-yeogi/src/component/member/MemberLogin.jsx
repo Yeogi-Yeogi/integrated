@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useMemberMemory } from '../context/MemberContext';
 
 const StyledMemberLoginDiv = styled.div`
     display: flex;
@@ -62,15 +63,6 @@ const StyledMemberLoginDiv = styled.div`
             }
         }
 
-        /* .custom-td {
-            height: 100px;
-            width: 100px;
-        }
-
-        .logo-td {
-            height: 100px;
-            width: 200px;
-        } */
 
     }
 
@@ -90,6 +82,8 @@ const StyledMemberLoginDiv = styled.div`
 const MemberLogin = () => {
 
     let isFetching = false;
+
+   const {loginMember , setLoginMember}  = useMemberMemory();
 
     //로그인 할 때 기본값 세팅
     const [vo,setVo] = useState({
@@ -135,6 +129,7 @@ const MemberLogin = () => {
         .then( data => {
             if(data.msg === "good"){
                 sessionStorage.setItem("loginMember", JSON.stringify(data.loginMember));
+                setLoginMember(data.loginMember);
                 alert("로그인 성공!");
                 navigate("/main");
             }else{
