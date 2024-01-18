@@ -1,5 +1,9 @@
 package com.yeogi.app.member.vo;
 
+import java.io.File;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -14,7 +18,7 @@ public class MemberVo {
 	private String quitYn;
 	private String enrollDate;
 	private String modifiedDate;
-	private String profileImg;
+	private String fullPath;
 	private String resiNum;
 	
 }

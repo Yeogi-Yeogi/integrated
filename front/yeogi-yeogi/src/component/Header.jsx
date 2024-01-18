@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useMemberMemory } from './context/MemberContext';
 
@@ -22,7 +22,8 @@ const StyledHeaderDiv = styled.div`
             font-weight: bold;
         }
     }
-    & > div:nth-child(2){
+
+    #loginBefore{
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -41,6 +42,47 @@ const StyledHeaderDiv = styled.div`
             font-weight: bold;
         }
     }
+
+
+    #loginAfter{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 300px;
+
+        & > a {
+            text-decoration: none;
+            color: black;
+        }
+        & > a:nth-child(1){
+            font-weight: bold;
+            margin-right: 50px;
+        }
+        & > a:nth-child(2){
+            font-weight: bold;
+        }
+    }
+
+    /* & > div:nth-child(2){
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 300px;
+
+        & > a {
+            text-decoration: none;
+            color: black;
+        }
+        & > a:nth-child(1){
+            font-weight: bold;
+            margin-right: 50px;
+        }
+        & > a:nth-child(2){
+            font-weight: bold;
+        }
+    } */
 `;
 
 const Header = () => {
@@ -49,20 +91,22 @@ const Header = () => {
 
     console.log(loginMember);
 
+    const { clubNo } = useParams();
+
     return (
         <StyledHeaderDiv>
             <div>
                 <img src="/img/logo.png" alt="여기여기로고" />
-                <span>여기여기(임시)</span>
+                <span><Link to={`/club/${clubNo}/commu/board/list`}>여기여기</Link></span>
             </div>
             <div>
                 {loginMember === null ? (
-                    <div>
+                    <div id="loginBefore">
                         <Link to="/member/login">로그인</Link>        
                         <Link to="/member/join">회원가입</Link>
                     </div>
                 ): (
-                    <div>
+                    <div id="loginAfter">
                         <Link to="/member/myselect">마이페이지</Link>        
                         <Link to="/member/logout">로그아웃</Link>
                     </div>
