@@ -38,10 +38,21 @@ public class ClubImageService {
      */
     public int uploadFile(ClubImageDto clubImageDto, MultipartFile file, SqlSessionTemplate sst, String type) throws IOException {
 //        try {
-        log.info("clubImageDto = {}", clubImageDto);
-        log.info("serviceFile = {}", file.getOriginalFilename());
-        String fileName = file.getOriginalFilename();
-        String customName= UUID.randomUUID()+ "_" + LocalDateTime.now() + "_" + fileName;
+//        log.info("clubImageDto = {}", clubImageDto);
+//        log.info("serviceFile = {}", file.getOriginalFilename());
+
+        String customName;
+
+        if(file == null){
+            String clubDefaultImage = "https://junho-practice.s3.ap-northeast-2.amazonaws.com/club-default-image.png";
+            String fileName = "defaultImage";
+            clubImageDto.setFileName(fileName);
+            clubImageDto.setFileUrl(clubDefaultImage);
+            return dao.uploadFile(clubImageDto, sst);
+        } else {
+            String fileName = file.getOriginalFilename();
+            customName= UUID.randomUUID()+ "_" + LocalDateTime.now() + "_" + fileName;
+        }
 
         String fileUrl = amazonS3Client.getUrl(bucket, customName).toString();
         clubImageDto.setFileName(customName);

@@ -93,4 +93,8 @@ public class ClubDao {
     public int deleteClub(SqlSessionTemplate sst, String clubNo) {
         return sst.update("ClubMapper.deleteClub", clubNo);
     }
+
+    public int getSeqNo(SqlSessionTemplate sst) {
+        return sst.selectOne("ClubMapper.getClubSeqNo");
+    }
 }

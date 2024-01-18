@@ -34,23 +34,33 @@ public class ClubService {
 
 
     public int createClub(MultipartFile file, CreateClubDto createClubDto, String type) throws IOException {
+
         int result = dao.createClub(createClubDto, sst);
 
+        int clubMasterResult = 0;
         // 글자수제한 관련
         if(result == 1){
             // 클럽에 insert 성공하면 클럽이미지에 insert
+
             ClubImageDto clubImageDto = new ClubImageDto();
             clubImageDto.setNo(createClubDto.getCreatorNo());
             int imgInsert = imgService.uploadFile(clubImageDto, file, sst, type);
             if(imgInsert == 1){
-
+                // ...?뭐하지
             }
             log.info("createClubDto = {}", createClubDto);
             log.info("result = {}", result);
+
+            clubMasterResult = dao.insertClubMaster(createClubDto, sst);
+        }
+
+        int seqNo = 0;
+        if(clubMasterResult == 1){
+            seqNo = dao.getSeqNo(sst);
         }
 
         // 클럽장 insert 후 결과 리턴
-        return dao.insertClubMaster(createClubDto, sst);
+        return seqNo;
     }
 
     public ClubVo getClubDescription(String clubNo) {
