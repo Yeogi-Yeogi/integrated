@@ -212,7 +212,7 @@ const BoardWrite = () => {
         })
         .then(res => {
             if(!res.ok) {
-                throw new Error(res.data);
+                throw new Error(res.json());
             }
             return res.text();
         })
@@ -221,7 +221,7 @@ const BoardWrite = () => {
             navigate(`/club/${clubNo}/commu/board/list`);
         })
         .catch(err => {
-            alert(err);
+            alert("게시글을 등록하지 못했습니다.");
             console.error(err);
         })
         .finally(() => {
