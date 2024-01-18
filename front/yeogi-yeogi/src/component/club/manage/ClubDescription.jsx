@@ -7,7 +7,6 @@ const StyledClubDescriptionDiv = styled.div`
     width: 1000px;
     height: 375px;
     margin-bottom: 70px;
-    /* border: 1px solid black; */
     display: grid;
     grid-template-columns: 350px 650px;
     box-sizing: content-box;
@@ -98,21 +97,24 @@ const ClubDescription = () => {
         "memberNo" : memberNo
     };
 
+    const [checkMember, setCheckMember] = useState({});
+
     console.log(checkMemberDto);
 
-    // useEffect(() => {
-    //     fetch("http://127.0.0.1:8885/club/", {
-    //         method: "POST",
-    //         headers : {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(checkMemberDto)
-    //     })
-    //     .then(resp => resp.json())
-    //     .then(data => {
-    //         console.log(JSON.parse(data));
-    //     })
-    // }, []);
+    useEffect(() => {
+        fetch("http://127.0.0.1:8885/club/checkMember", {
+            method: "POST",
+            headers : {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkMemberDto)
+        })
+        .then(resp => resp.json())
+        .then(checkMember => {
+            console.log("checkMember ", checkMember);
+            setCheckMember(checkMember);
+        })
+    }, []);
 
     useEffect(() => {
         fetch("http://127.0.0.1:8885/club/management/" + clubNo)
@@ -149,9 +151,14 @@ const ClubDescription = () => {
                     </span>
                 </div>
                 <div>
-                    <button id='editClubBtn' type='button' onClick={() => {
-                        navigate('');
-                    }}>모임 관리하기</button>
+                    {checkMember.adminYn === 'Y' ? (
+                        <button id='editClubBtn' type='button' onClick={() => {
+                            navigate("/club/" + clubNo + "/manage/editClub");
+                        }}>모임 관리하기</button>
+                        ) : (
+                            null
+                        )
+                    }
                 </div>
             </div>
         </StyledClubDescriptionDiv>
