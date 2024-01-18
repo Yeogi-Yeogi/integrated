@@ -175,8 +175,10 @@
             ,M.NAME
             ,M.PHONE
             ,M.EMAIL
+            ,C.CREATOR_NO
         FROM MEMBER_CLUB MC
         JOIN MEMBER M ON MC.MEMBER_NO = M.NO
+        JOIN CLUB C ON MC.CLUB_NO = C.NO
         WHERE MC.CLUB_NO = #{clubNo}
         ORDER BY ADMIN_YN DESC, REG_DATE
     </select>

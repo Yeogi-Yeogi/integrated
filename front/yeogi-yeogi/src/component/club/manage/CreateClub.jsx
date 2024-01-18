@@ -216,8 +216,7 @@ const CreateClub = () => {
                     text: '모임 생성 완료!', 
                     confirmButtonText: '확인'
                   });
-                // 성공시에 만든 클럽 페이지로 이동시키기...
-                navigate("");
+                navigate("/main");
             }
             // 실패시에는..?
         })
