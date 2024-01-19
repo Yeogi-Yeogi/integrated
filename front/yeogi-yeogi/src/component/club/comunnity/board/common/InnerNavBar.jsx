@@ -9,7 +9,7 @@ const StyledNavbar = styled(Navbar)`
   margin: auto;
   background-color: white;
   
-  width: 60%;
+  width: 80%;
 
   & > div { //container
     background-color: white;

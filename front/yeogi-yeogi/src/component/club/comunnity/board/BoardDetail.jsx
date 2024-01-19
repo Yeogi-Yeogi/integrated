@@ -204,7 +204,9 @@ const BoardDetail = () => {
      * 수정
      */
     const handleUpdate = () => {
-
+        if(vo) {
+            navigate(`/club/${clubNo}/commu/board/edit`, {state: {previous: vo}});
+        }
     }
 
     /**
