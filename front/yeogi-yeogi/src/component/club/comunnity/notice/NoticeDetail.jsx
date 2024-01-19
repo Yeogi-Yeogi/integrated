@@ -104,7 +104,10 @@ const ContentDiv = styled.div`
         width: 100%;
         background-color: #ffffff;
         & > img {
-            width: 100%;
+            width: 120px;
+            height: 120px;
+            margin: 0.3em;
+            margin-top: 1em;
         }
     }
 `;
@@ -113,11 +116,32 @@ const ReviewDiv = styled.div`
 
 `;
 
+const ModalDiv = styled.div`
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center vertically */
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #3a3a3ad3;
+    z-index: 999; /* Adjust z-index as needed */
+
+    & > img {
+        max-width: 100%;
+        max-height: 90%;
+    }
+`;
+
 const NoticeDetail = () => {
 
     const [notice, setNotice] = useState();
     const {clubNo, noticeNo} = useParams();
     const [isFetching, setIsFetching] = useState(false); 
+    const [selectedImage, setSelectedImage] = useState('');
+    const [show, setShow] = useState(false);
     const navigate = useNavigate();
     const vo = JSON.parse(sessionStorage.getItem("loginMember"));
     const memberNo = vo?.no;
@@ -186,59 +210,72 @@ const NoticeDetail = () => {
         })
     }
 
+    const showImage = (fileUrl) => {
+        setSelectedImage(fileUrl);
+        setShow(true);
+    }
+
     return (
-        <StyledNoticeDetailDiv>
-            <div>
+        <>
+            <StyledNoticeDetailDiv>
                 <div>
                     <div>
-                        <img src={notice?.memberProfile} alt="" />
-                        <span>{notice?.memberName}</span>
-                        <span>{notice?.enrollDate}</span>
-                        <span>조회수 {notice?.hit}</span>
-                    </div>
-                    {
-                        notice?.mine && 
                         <div>
-                            <Button variant="link">수정</Button>
-                            <Button variant="link" onClick={deleteNotice}>삭제</Button>
+                            <img src={notice?.memberProfile} alt="" />
+                            <span>{notice?.memberName}</span>
+                            <span>{notice?.enrollDate}</span>
+                            <span>조회수 {notice?.hit}</span>
                         </div>
-                    }
-                </div>
-                <hr/>
-                <ContentDiv>
-                    {
-                        notice?.schedule &&
-                        <div>
-                            <div>
-                                <span>{notice?.schedule.title}</span>
-                            </div>
-                            <div>
-                                <FontAwesomeIcon icon={icon({name: 'calendar-check', family: 'classic', style: 'regular'})} />
-                                <span>{notice?.schedule.startTime}</span>
-                                <br/>
-                                <FontAwesomeIcon icon={icon({name: 'location-dot', family: 'classic', style: 'solid'})} />
-                                <span>{notice?.schedule.location}</span>
-                            </div>
-                        </div>
-                    }
-                    <h4>{notice?.title}</h4>
-                    <p>{notice?.content}</p>
-                    <div className='img-div'>
                         {
-                            
-                            notice?.list.map(el => 
-                                    <img src={el.fileUrl} key={el.boardImageNo}/>
-                            )
+                            notice?.mine && 
+                            <div>
+                                <Button variant="link">수정</Button>
+                                <Button variant="link" onClick={deleteNotice}>삭제</Button>
+                            </div>
                         }
                     </div>
-                </ContentDiv>
-                <hr/>
-                <ReviewDiv>
+                    <hr/>
+                    <ContentDiv>
+                        {
+                            notice?.schedule &&
+                            <div>
+                                <div>
+                                    <span>{notice?.schedule.title}</span>
+                                </div>
+                                <div>
+                                    <FontAwesomeIcon icon={icon({name: 'calendar-check', family: 'classic', style: 'regular'})} />
+                                    <span>{notice?.schedule.startTime}</span>
+                                    <br/>
+                                    <FontAwesomeIcon icon={icon({name: 'location-dot', family: 'classic', style: 'solid'})} />
+                                    <span>{notice?.schedule.location}</span>
+                                </div>
+                            </div>
+                        }
+                        <h4>{notice?.title}</h4>
+                        <p>{notice?.content}</p>
+                        <div className='img-div'>
+                            {
+                                
+                                notice?.list.map(el => 
+                                        <img src={el.fileUrl} key={el.boardImageNo} onClick={() => showImage(el.fileUrl)}/>
+                                )
+                            }
+                        </div>
+                    </ContentDiv>
+                    <hr/>
+                    <ReviewDiv>
 
-                </ReviewDiv>
-            </div>
+                    </ReviewDiv>
+                </div>
 
-        </StyledNoticeDetailDiv>
+            </StyledNoticeDetailDiv>
+            {
+                show &&
+                <ModalDiv onClick={() => {setShow(false)}}>
+                        <img src={selectedImage} alt="" />
+                </ModalDiv>
+            }
+        </>
     );
 };
 
