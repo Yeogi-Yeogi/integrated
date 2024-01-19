@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
@@ -230,6 +230,7 @@ const CreateClub = () => {
     
     };
 
+    // 이름 중복 확인
     const handleNameCheck = (e) => {
         e.preventDefault();
         const name = document.querySelector('#name');
@@ -267,6 +268,22 @@ const CreateClub = () => {
             name.value = "";
         })
     };
+    const [clubCategory, setClubCategory] = useState();
+    useEffect(() => {
+            fetch("http://127.0.0.1:8885/club/getCategoryName")
+            .then(resp => resp.json())
+            .then(categoryList => {
+                console.log("categoryList", categoryList);
+
+                const options = categoryList.map(category => (
+                  <option key={category.categoryNo} value={category.categoryNo}>
+                    {category.categoryName}
+                  </option>
+                ))
+                setClubCategory(options);
+            })       
+
+    },[]);
 
     const signupLimit = [];
     for (let i = 5; i <= 20; i++) {
@@ -300,10 +317,11 @@ const CreateClub = () => {
                         <div>카테고리</div>
                         <select name="categoryNo" id="category" onChange={handleChangeInput}>
                             <option value="" disabled selected>카테고리 선택</option>
-                            <option value="1">1</option>
+                            {/* <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
-                            <option value="4">4</option>
+                            <option value="4">4</option> */}
+                             {clubCategory}
                         </select>
                     </div>
                     <div className='selelctBoxdiv'>
