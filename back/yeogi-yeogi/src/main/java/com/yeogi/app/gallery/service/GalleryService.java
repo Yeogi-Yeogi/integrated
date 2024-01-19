@@ -32,7 +32,7 @@ public class GalleryService {
      * @param pageNo
      * @return
      */
-    public List<BoardListFileUrlDto> getList(CheckDto dto, String pageNo) throws NotClubMemberException {
+    public List<GalleryListDto> getList(CheckDto dto, String pageNo) throws NotClubMemberException {
         CheckDto checkMember = checkMember(dto.getClubNo(), dto.getMemberNo());
         if(!checkMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
@@ -40,7 +40,8 @@ public class GalleryService {
         int galleryLimit = 12;
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo) * galleryLimit, galleryLimit);
 
-        List<BoardListFileUrlDto> imageList = repository.getImageListByClubNo(dto, template, rowBounds);
+        List<GalleryListDto> imageList = repository.getImageListByClubNo(dto, template, rowBounds);
+        imageList.stream().forEach(i -> i.setNotice(i.getNoticeYn().equals("Y")));
         return imageList;
     }
 

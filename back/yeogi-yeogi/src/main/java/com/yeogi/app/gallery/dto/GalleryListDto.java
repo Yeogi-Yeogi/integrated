@@ -1,10 +1,16 @@
 package com.yeogi.app.gallery.dto;
 
-import com.yeogi.app.board.dto.BoardListFileUrlDto;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GalleryListDto {
-    List<BoardListFileUrlDto> list;
-
+    private String boardImageNo;
+    private String boardNo;
+    private String fileUrl;
+    private String noticeYn;
+    private boolean isNotice;
 }

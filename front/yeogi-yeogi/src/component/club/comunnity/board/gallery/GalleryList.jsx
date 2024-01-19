@@ -85,6 +85,7 @@ const GalleryList = () => {
             }
 
             setList(prev => [...prev, ...data]);
+            console.log(data);
             preventRef.current = true;
         } catch (e) {
             console.error(e);
@@ -93,13 +94,21 @@ const GalleryList = () => {
         }
     }, [page]);
 
+    const loadBoardPage = (boardNo, notice) => {
+        if(notice) {
+            navigate(`/club/${clubNo}/commu/board/notice/detail/${boardNo}`)
+        } else {
+            navigate(`/club/${clubNo}/commu/board/detail/${boardNo}`)
+        }
+    }
+
     return (
         <>
             <StyledGalleryListDiv>
                 {/* 이미지 클릭시 해당 게시글로 이동 */}
                 {
                     list.map(el => 
-                        <img key={el?.boardImageNo} src={el?.fileUrl} alt="" onClick={() => {navigate(`/club/${clubNo}/commu/board/detail/${el?.boardNo}`)}}/>
+                        <img key={el?.boardImageNo} src={el?.fileUrl} alt="" onClick={() => {loadBoardPage(el.boardNo, el.notice)}}/>
                     )
                 }
             </StyledGalleryListDiv>

@@ -27,7 +27,7 @@ public class GalleryController {
 
 
     @GetMapping("/list/{pageNo}")
-    public ResponseEntity<List<BoardListFileUrlDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException {
+    public ResponseEntity<List<GalleryListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException {
         return new ResponseEntity<>(service.getList(dto, pageNo), getHttpHeaders(), HttpStatus.OK);
     }
 
