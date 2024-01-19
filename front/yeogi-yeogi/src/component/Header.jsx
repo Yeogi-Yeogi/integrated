@@ -8,7 +8,8 @@ const StyledHeaderDiv = styled.div`
     grid-template-columns: 1fr 1fr;
     border-bottom: 1px solid #e7e7e7;
     height: 100px;
-    & > div:nth-child(1){
+
+    #loginBeforeLogo{
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -22,6 +23,39 @@ const StyledHeaderDiv = styled.div`
             font-weight: bold;
         }
     }
+
+
+    #loginAfterLogo{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 300px;
+        & > img {
+            width: 100px;
+            height: 75px;
+        }
+        & > span {
+            font-size: 25px;
+            font-weight: bold;
+        }
+    }
+
+
+
+    /* & > div:nth-child(1){
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 300px;
+        & > img {
+            width: 100px;
+            height: 75px;
+        }
+        & > span {
+            font-size: 25px;
+            font-weight: bold;
+        }
+    } */
 
     #loginBefore{
         display: flex;
@@ -96,9 +130,19 @@ const Header = () => {
     return (
         <StyledHeaderDiv>
             <div>
-                <img src="/img/logo.png" alt="여기여기로고" />
-                <span><Link to={`/club/${clubNo}/commu/board/list`}>여기여기</Link></span>
-            </div>
+                {loginMember === null ? (
+                    <div id="loginBeforeLogo">
+                        <img src="/img/logo.png" alt="여기여기로고" />
+                        <span><Link to={`/`}>여기여기</Link></span>
+                    </div>
+                ): (
+                    <div id="loginAfterLogo">
+                        <img src="/img/logo.png" alt="여기여기로고" />
+                        <span><Link to={`/main`}>여기여기</Link></span>
+                    </div>
+                    )
+                }
+            </div>         
             <div>
                 {loginMember === null ? (
                     <div id="loginBefore">
