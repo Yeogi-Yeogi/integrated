@@ -5,6 +5,7 @@ import com.yeogi.app.club.dto.CreateClubDto;
 import com.yeogi.app.club.dto.EditClubDto;
 import com.yeogi.app.club.dto.EditClubMemberDto;
 import com.yeogi.app.club.service.ClubService;
+import com.yeogi.app.club.vo.ClubCategoryVo;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckClubMember;
@@ -171,6 +172,11 @@ public class ClubController {
     @PostMapping("checkMember")
     public CheckDto checkMember(@RequestBody CheckDto checkDto) throws NotClubMemberException {
         return service.checkMember(checkDto);
+    }
+
+    @GetMapping("getCategoryName")
+    public List<ClubCategoryVo> getCategoryName(){
+        return service.getCategoryName();
     }
 
 }

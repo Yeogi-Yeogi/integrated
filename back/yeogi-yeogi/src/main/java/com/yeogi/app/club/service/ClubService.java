@@ -2,6 +2,7 @@ package com.yeogi.app.club.service;
 
 import com.yeogi.app.club.dao.ClubDao;
 import com.yeogi.app.club.dto.*;
+import com.yeogi.app.club.vo.ClubCategoryVo;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckClubMember;
@@ -110,5 +111,9 @@ public class ClubService {
 
     public CheckDto checkMember(CheckDto checkDto) throws NotClubMemberException {
         return checkClubMember.isClubMember(checkDto, sst);
+    }
+
+    public List<ClubCategoryVo> getCategoryName() {
+        return dao.getCategoryName(sst);
     }
 }

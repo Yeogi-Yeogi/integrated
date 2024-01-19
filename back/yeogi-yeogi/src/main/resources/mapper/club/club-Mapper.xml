@@ -105,6 +105,11 @@
     <select id="getClubSeqNo" resultType="java.lang.Integer">
         SELECT SEQ_CLUB_NO.CURRVAL FROM DUAL
     </select>
+
+<!--    클럽 카테고리 받아오기 -->
+    <select id="getCategoryName" resultType="com.yeogi.app.club.vo.ClubCategoryVo">
+        SELECT * FROM CLUB_CATEGORY
+    </select>
 <!--  클럽 소개(상세조회 / 클럽가입화면 )  -->
     <select id="clubDescription" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT

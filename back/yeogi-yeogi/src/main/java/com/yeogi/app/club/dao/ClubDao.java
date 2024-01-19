@@ -1,6 +1,7 @@
 package com.yeogi.app.club.dao;
 
 import com.yeogi.app.club.dto.*;
+import com.yeogi.app.club.vo.ClubCategoryVo;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckDto;
@@ -96,5 +97,9 @@ public class ClubDao {
 
     public int getSeqNo(SqlSessionTemplate sst) {
         return sst.selectOne("ClubMapper.getClubSeqNo");
+    }
+
+    public List<ClubCategoryVo> getCategoryName(SqlSessionTemplate sst) {
+        return sst.selectList("ClubMapper.getCategoryName");
     }
 }
