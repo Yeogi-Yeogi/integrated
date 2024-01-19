@@ -317,11 +317,7 @@ const CreateClub = () => {
                         <div>카테고리</div>
                         <select name="categoryNo" id="category" onChange={handleChangeInput}>
                             <option value="" disabled selected>카테고리 선택</option>
-                            {/* <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option> */}
-                             {clubCategory}
+                                {clubCategory}
                         </select>
                     </div>
                     <div className='selelctBoxdiv'>
