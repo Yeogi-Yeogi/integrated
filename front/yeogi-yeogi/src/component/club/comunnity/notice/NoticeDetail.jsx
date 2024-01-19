@@ -119,26 +119,31 @@ const NoticeDetail = () => {
     const {clubNo, noticeNo} = useParams();
     const [isFetching, setIsFetching] = useState(false); 
     const navigate = useNavigate();
+    const vo = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = vo?.no;
 
     useEffect(() => {
 
-        const vo = JSON.parse(sessionStorage.getItem("loginMember"));
-        const memberNo = vo.no;
-        fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=${memberNo}&boardNo=${noticeNo}`)
-        .then(res => {
-            if(!res.ok) {
-                throw new Error(res.data);
-            }
-
-            return res.json();
-        })
-        .then(data => {
-            console.log(data);
-            setNotice(data);
-        })
-        .catch(err => {
-            console.error(err);
-        })
+        if(memberNo) {
+            fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=${memberNo}&boardNo=${noticeNo}`)
+            .then(res => {
+                if(!res.ok) {
+                    throw new Error(res.data);
+                }
+    
+                return res.json();
+            })
+            .then(data => {
+                console.log(data);
+                setNotice(data);
+            })
+            .catch(err => {
+                console.error(err);
+            })
+        } else {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login');
+        }
     },[])
 
     const deleteNotice = () => {
@@ -150,7 +155,7 @@ const NoticeDetail = () => {
 
         setIsFetching(true);
         const data = {
-            memberNo: "3",
+            memberNo: memberNo,
             clubNo: clubNo,
             boardNo: noticeNo
         }

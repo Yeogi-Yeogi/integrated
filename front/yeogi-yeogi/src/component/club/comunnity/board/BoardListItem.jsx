@@ -85,7 +85,7 @@ const BoardListItem = ({data}) => {
                 <div>
                     <h2>{data.title}</h2>
                     <p>{data.content}</p>
-                    <div>댓글 {data.hit}</div>
+                    <div>댓글 {data.reviewCount}</div>
                 </div>
                 <ImageDiv src={data.imagePath}>
                     {
