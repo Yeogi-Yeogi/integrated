@@ -13,7 +13,7 @@
             B.HIT,
             TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE,
             M.NICK MEMBER_NAME,
-            M.PROFILE_IMG MEMBER_PROFILE,
+            M.FULL_PATH MEMBER_PROFILE,
             COUNT(BI.FILE_URL)-1 AS IMAGE_COUNT,
             COUNT(R.NO) AS REVIEW_COUNT
         FROM
@@ -27,7 +27,7 @@
             AND B.DEL_YN = 'N'
             AND B.NOTICE_YN = 'N'
         GROUP BY
-            B.NO, B.TITLE, B.CONTENT, B.HIT, TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI'), M.NICK, M.PROFILE_IMG
+            B.NO, B.TITLE, B.CONTENT, B.HIT, TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI'), M.NICK, M.FULL_PATH
         ORDER BY 5 DESC, 1 DESC
     </select>
 
@@ -59,7 +59,7 @@
                 B.HIT,
                 TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE,
                 M.NICK MEMBER_NAME,
-                M.PROFILE_IMG MEMBER_PROFILE,
+                M.FULL_PATH MEMBER_PROFILE,
                 COUNT(R.NO) AS REVIEW_COUNT
         FROM BOARD B
         INNER JOIN CLUB C ON B.CLUB_NO = C.NO
@@ -69,7 +69,7 @@
             C.NO = #{clubNo}
             AND B.NO = #{boardNo}
         GROUP BY
-            B.NO, B.MEMBER_NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.PROFILE_IMG
+            B.NO, B.MEMBER_NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.FULL_PATH
     </select>
 
     <select id="getImagesByBoardNo" resultType="com.yeogi.app.board.dto.BoardListFileUrlDto">
@@ -120,7 +120,7 @@
         AND B.DEL_YN = 'N'
         AND B.NOTICE_YN = 'Y'
         GROUP BY
-        B.NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.PROFILE_IMG
+        B.NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.FULL_PATH
         ORDER BY 5 DESC, 1 DESC
     </select>
 
@@ -142,7 +142,7 @@
     <select id="getNoticeOne" resultType="com.yeogi.app.notice.dto.NoticeDetailDto">
         SELECT
             B.NO BOARD_NO
-            , M.PROFILE_IMG MEMBER_PROFILE
+            , M.FULL_PATH MEMBER_PROFILE
             , M.NICK MEMBER_NAME
             , B.MEMBER_NO
             , TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE

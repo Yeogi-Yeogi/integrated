@@ -9,7 +9,7 @@
         SELECT
             R.NO REVIEW_NO
             , M.NICK MEMBER_NICK
-            , M.PROFILE_IMG MEMBER_PROFILE
+            , M.FULL_PATH MEMBER_PROFILE
             ,TO_CHAR(R.ENROLL_DATE, 'YYYY. MM. DD. HH24:MI') ENROLL_DATE
             , R.CONTENT
         FROM REVIEW R
