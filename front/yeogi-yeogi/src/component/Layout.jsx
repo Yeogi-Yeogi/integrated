@@ -7,7 +7,6 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import ClubLayout from './club/ClubLayout';
 import MemberLayout from './member/MemberLayout';
 import CreateClub from './club/manage/CreateClub';
-import MainLogin from './MainLogin';
 
 const StyledLayOutDiv = styled.div`
     width: 100%;
@@ -25,7 +24,6 @@ const Layout = () => {
             <Header />
             <Routes>
                 <Route path='/' element={<Main/>}/>
-                <Route path='/main' element={<MainLogin/>}/>
                 <Route path='/member/*' element={<MemberLayout/>}/>
                 <Route path='/club/:clubNo/*' element={<ClubLayout/>}/>
                 <Route path='/club/createClub' element={<CreateClub/>}/>

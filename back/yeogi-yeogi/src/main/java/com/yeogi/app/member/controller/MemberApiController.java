@@ -59,14 +59,9 @@ public class MemberApiController {
 	 * @throws Exception
 	 */	 
 	private String saveFile(MultipartFile profileImg) throws Exception {
-		
-		// 저장할 경로 설정
-		String path = "C:\\dev\\profileImg\\";
-		
-		// 업로드된 파일의 원래 이름 획득
+		String path = "C:\\dev\\final\\back\\yeogi-yeogi\\src\\main\\resources\\img\\profileImg\\";
 		String originName = profileImg.getOriginalFilename();
-		
-		//원래는 "path + changeName(랜덤값) + 확장자" 로 해야함// 저장할 파일의 전체 경로 설정
+		//원래는 "path + changeName(랜덤값) + 확장자" 로 해야함
 		File target = new File(path + originName);	
 
 		//파일 바이트바코드 읽어서 타겟에 저장
