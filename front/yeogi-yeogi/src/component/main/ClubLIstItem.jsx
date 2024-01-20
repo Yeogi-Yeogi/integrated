@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import JoinClub from '../club/manage/JoinClub';
 
 const StyledClubListItemDiv = styled.div`
     display: grid;
@@ -58,18 +59,24 @@ const StyledClubListItemDiv = styled.div`
 `;
 
 const ClubListItem = ({club}) => {
+    
+    const [isOpen, setOpen] = useState(false);
+    
+    const handleClickClub = () => {
+      setOpen(true);
+    };
+    
     return (
-        <StyledClubListItemDiv>
+        <StyledClubListItemDiv onClick={handleClickClub}>
             <div>
                 <img src={club.fileUrl} alt="" />
             </div>
             <div>
                 <span>{club.name}</span>
-                <div>
-                {club.clubDescription}
-                </div>
+                <div>{club.clubDescription}</div>
                 <span>회원수 {club.memberCount}</span>
             </div>
+            <JoinClub isOpen={isOpen} />
         </StyledClubListItemDiv>
     );
 };

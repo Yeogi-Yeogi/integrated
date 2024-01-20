@@ -5,7 +5,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ClubListItem from './ClubListItem';
 import { useState } from 'react';
+import JoinClub from '../club/manage/JoinClub';
+import ReactModal from 'react-modal';
 
+ReactModal.setAppElement('#root');
 const StyledCarouselDiv = styled(Slider)`
   display: flex;
   align-items: center;
@@ -49,14 +52,14 @@ const Arrow = ({ onClick, direction }) => (
 
 const MainClubList = () => {
 
-  const [clubData, setClubData] = useState([]);
+  const [clubList, setClubList] = useState([]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:8885/club/clubList")
     .then(resp => resp.json())
     .then( data => {
       console.log(data);
-      setClubData(data);
+      setClubList(data);
     });
   }, []);
 
@@ -69,10 +72,11 @@ const MainClubList = () => {
       prevArrow: <Arrow direction="prev" />,
       nextArrow: <Arrow direction="next" />,
   };
+
     return (
         <StyledCarouselDiv {...settings}>
-          {clubData.map((club) => (
-            <ClubListItem key={club.no} club={club} />
+          {clubList.map((club) => (
+            <ClubListItem key={club.no} club={club}/>
           ))}
         </StyledCarouselDiv>  
       );
