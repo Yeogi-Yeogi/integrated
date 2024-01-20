@@ -130,17 +130,17 @@ const Header = () => {
                 }
             </div>         
             <div>
-                {loginMember === null ? (
+                {loginMember === null ? 
                     <div id="loginBefore">
                         <Link to="/member/login">로그인</Link>        
                         <Link to="/member/join">회원가입</Link>
                     </div>
-                ): (
+                : 
                     <div id="loginAfter">
                         <Link to="/member/myselect">마이페이지</Link>        
                         <Link to="/member/logout">로그아웃</Link>
                     </div>
-                    )
+                    
                 }
             </div>        
         </StyledHeaderDiv>
