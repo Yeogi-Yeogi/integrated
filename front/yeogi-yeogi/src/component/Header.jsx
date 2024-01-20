@@ -8,6 +8,15 @@ const StyledHeaderDiv = styled.div`
     grid-template-columns: 1fr 1fr;
     border-bottom: 1px solid #e7e7e7;
     height: 100px;
+    align-items: center;
+    & > div:first-child a {
+        text-decoration : none;
+        color: #3a3a3a;
+    }
+    & span{
+        font-family: 'yg-jalnan';
+    }
+
 
     #loginBeforeLogo{
         display: flex;
@@ -39,23 +48,6 @@ const StyledHeaderDiv = styled.div`
             font-weight: bold;
         }
     }
-
-
-
-    /* & > div:nth-child(1){
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-left: 300px;
-        & > img {
-            width: 100px;
-            height: 75px;
-        }
-        & > span {
-            font-size: 25px;
-            font-weight: bold;
-        }
-    } */
 
     #loginBefore{
         display: flex;
@@ -98,25 +90,15 @@ const StyledHeaderDiv = styled.div`
         }
     }
 
-    /* & > div:nth-child(2){
+        & > div:nth-child(2){
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
         margin-right: 300px;
+        width: 100%;
+        }
 
-        & > a {
-            text-decoration: none;
-            color: black;
-        }
-        & > a:nth-child(1){
-            font-weight: bold;
-            margin-right: 50px;
-        }
-        & > a:nth-child(2){
-            font-weight: bold;
-        }
-    } */
 `;
 
 const Header = () => {
@@ -131,16 +113,20 @@ const Header = () => {
         <StyledHeaderDiv>
             <div>
                 {loginMember === null ? (
-                    <div id="loginBeforeLogo">
-                        <img src="/img/logo.png" alt="여기여기로고" />
-                        <span><Link to={`/`}>여기여기</Link></span>
-                    </div>
+                    <Link to={`/`}>
+                        <div id="loginBeforeLogo">
+                            <img src="/img/logo.png" alt="여기여기로고" />
+                            <span>여기여기</span>
+                        </div>
+                    </Link>
                 ): (
-                    <div id="loginAfterLogo">
-                        <img src="/img/logo.png" alt="여기여기로고" />
-                        <span><Link to={`/main`}>여기여기</Link></span>
-                    </div>
-                    )
+                    <Link to={`/main`}>
+                        <div id="loginAfterLogo">
+                            <img src="/img/logo.png" alt="여기여기로고" />
+                            <span>여기여기 or 여기? 여기! 뭘로하지..</span>
+                        </div>
+                    </Link>
+                )
                 }
             </div>         
             <div>

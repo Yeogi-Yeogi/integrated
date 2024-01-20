@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import JoinClub from './JoinClub';
-import EditMain from './EditClub/EditMain';
-import EditClub from './EditClub/EditClub';
 import styled from 'styled-components';
 import EditMember from './EditClub/EditMember';
 import ClubDescription from './ClubDescription';
 import EditClubInfo from './EditClub/EditClubInfo';
+import MainSearch from '../../main/SearchBar';
+import MainClubList from '../../main/MainClubList';
+import ClubLIstItem from '../../main/ClubLIstItem';
 
 const StyledManageLayoutDiv = styled.div`
     display: flex;
@@ -23,7 +23,10 @@ const ManageLayout = () => {
             <Routes>
                 <Route path='/editClub' element={<EditClubInfo/>}></Route>
                 <Route path='/editClub2' element={<ClubDescription/>}></Route>
+                <Route path='/test' element={<MainSearch/>}></Route>
             </Routes>
+            {/* <ClubLIstItem/> */}
+            <MainClubList/>  
             <EditMember/>
         </StyledManageLayoutDiv>
     );

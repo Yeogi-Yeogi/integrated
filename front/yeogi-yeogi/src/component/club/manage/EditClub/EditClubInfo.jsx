@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 
@@ -139,6 +139,7 @@ const StyledEditClubInfoDiv = styled.div`
 
 const EditClubInfo = () => {
 
+    const navigate = useNavigate();
     // 화면 정보 불러오기
     let { clubNo } = useParams();
     const [clubInfo, setClubInfo] = useState({});
@@ -262,6 +263,9 @@ const EditClubInfo = () => {
         .then(resp => resp.text())
         .then(data => {
             console.log(data);
+            if(data === 1){
+                navigate(`/main`);
+            }
         })
         .catch(error => {
             console.error("Error : ", error);
@@ -313,7 +317,7 @@ const EditClubInfo = () => {
                     </div>
                     <div>
                         <input type="submit" value="변경완료"/>
-                        <button type='button'>취소</button>
+                        <button type='button' onClick={() => { navigate(`/club/${clubNo}/commu/board/list`);}}>취소</button>
                     </div>
                 </div>  
             </form>
