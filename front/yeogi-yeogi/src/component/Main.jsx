@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import SearchBar from './main/SearchBar';
+import MainClubList from './main/MainClubList';
 
 const StyledMainDiv = styled.div`
-    /* background-color: #8a8aaf; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const Main = () => {
     return (
         <StyledMainDiv>
-            main            
+            <SearchBar/>
+            <MainClubList/>            
         </StyledMainDiv>
     );
 };

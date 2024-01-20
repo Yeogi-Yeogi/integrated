@@ -1,18 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledClubLIstItemDiv = styled.div`
+const StyledClubListItemDiv = styled.div`
+    display: inline-block;
     width: 200px;
     height: 250px;
-    background-color: #999999;
+    background: #F5F6F8;
 `;
 
-const ClubLIstItem = () => {
+const ClubListItem = () => {
     return (
-        <StyledClubLIstItemDiv>
-            나는 아이템
-        </StyledClubLIstItemDiv>
+        <StyledClubListItemDiv>
+            <h3>나는 아이템</h3>
+        </StyledClubListItemDiv>
     );
 };
 
-export default ClubLIstItem;
+export default ClubListItem;
