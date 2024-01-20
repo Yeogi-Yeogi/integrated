@@ -29,8 +29,8 @@ public class ClubService {
     private final ClubImageService imgService;
     private final CheckClubMember checkClubMember;
 
-    public List<ClubVo> getClubList(ClubSearchDto clubSearchDto) {
-        return dao.getClubList(clubSearchDto, sst);
+    public List<ClubVo> searchClub(ClubSearchDto clubSearchDto) {
+        return dao.searchClub(clubSearchDto, sst);
     }
 
 

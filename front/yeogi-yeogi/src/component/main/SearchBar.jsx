@@ -28,7 +28,7 @@ const StyledSearchBarDiv = styled.div`
                 font-weight: bold;
             }
             & > div.input-container {
-                position: relative; /* 부모 요소에 position: relative 추가 */
+                position: relative; 
             }
             & input[type="text"] {
                 width: 300px;

@@ -38,10 +38,17 @@ public class ClubController {
     @GetMapping("searchClub")
     public List<ClubVo> searchClub(ClubSearchDto clubSearchDto){
         log.info("clubSearchDto = {}", clubSearchDto);
-        List<ClubVo> searchClubList = service.getClubList(clubSearchDto);
+        List<ClubVo> searchClubList = service.searchClub(clubSearchDto);
         log.info("clubList = {}", searchClubList);
 
         return searchClubList;
+    }
+
+    /**
+     * 클럽 리스트 불러오깅
+     */
+    @GetMapping("clubList")
+    public void getClubList(){
     }
 
     /**
@@ -164,16 +171,32 @@ public class ClubController {
         return result;
     }
 
+
+    /**
+     * 클럽 삭제
+     * @param clubNo
+     * @return
+     */
     @PostMapping("deleteClub")
     public int deleteClub(@RequestBody String clubNo){
         return service.deleteClub(clubNo);
     }
 
+    /**
+     * 클럽 회원정보 체크 ( creator, admin, .. )
+     * @param checkDto
+     * @return
+     * @throws NotClubMemberException
+     */
     @PostMapping("checkMember")
     public CheckDto checkMember(@RequestBody CheckDto checkDto) throws NotClubMemberException {
         return service.checkMember(checkDto);
     }
 
+    /**
+     * 카테고리명 불러오기 (클럽생성)
+     * @return
+     */
     @GetMapping("getCategoryName")
     public List<ClubCategoryVo> getCategoryName(){
         return service.getCategoryName();

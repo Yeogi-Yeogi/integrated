@@ -6,7 +6,7 @@ import ClubDescription from './ClubDescription';
 import EditClubInfo from './EditClub/EditClubInfo';
 import MainSearch from '../../main/SearchBar';
 import MainClubList from '../../main/MainClubList';
-import ClubLIstItem from '../../main/ClubLIstItem';
+import ClubLIstItem from '../../main/ClubListItem';
 
 const StyledManageLayoutDiv = styled.div`
     display: flex;

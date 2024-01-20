@@ -27,7 +27,7 @@ public class ClubDao {
 
 
 
-    public List<ClubVo> getClubList(ClubSearchDto clubSearchDto, SqlSessionTemplate sst) {
+    public List<ClubVo> searchClub(ClubSearchDto clubSearchDto, SqlSessionTemplate sst) {
         return sst.selectList("ClubMapper.searchClub", clubSearchDto);
     }
 

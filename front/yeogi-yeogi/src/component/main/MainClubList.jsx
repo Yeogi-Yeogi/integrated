@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Slider from "react-slick";
 import styled from 'styled-components';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import ClubListItem from './ClubListItem';
+import { useState } from 'react';
 
 const StyledCarouselDiv = styled(Slider)`
+  display: flex;
+  align-items: center;
   width: 1000px;
   height: 400px;
   & > div {
@@ -14,15 +18,10 @@ const StyledCarouselDiv = styled(Slider)`
     outline: none;
     width: 250px;
     height: 300px;
-    background-color: red;
+    /* background-color: red; */
     /* display: grid; */
     padding: 30px;
-    & > div > div {
-        display: inline-block;
-        width: 200px;
-        height: 250px;
-        background: yellow;
-    }
+
   }
 `;
 
@@ -39,40 +38,44 @@ const Arrow = ({ onClick, direction }) => (
         right: direction === 'next' ? '-50px' : 'auto' 
         }}>
 
-      {direction === 'prev' ? <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px"}}/> : <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px"}}/>}
+      {direction === 'prev' ? <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px", transform: "rotate(90deg)"}}/> : <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px", transform: "rotate(-90deg)"}}/>}
     </div>
   );
 
 const MainClubList = () => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 400,
-        slidesToShow: 4,  // 한 번에 보여질 슬라이드 개수
-        slidesToScroll: 1,
-        prevArrow: <Arrow direction="prev" />,
-        nextArrow: <Arrow direction="next" />,
-      };
+
+  const [clubData, setClubData] = useState([]);
+
+  useEffect(() => {
+    fetch("")
+  }, []);
+
+  const settings = {
+      // dots: true,
+      infinite: true,
+      speed: 400,
+      slidesToShow: 4,  
+      slidesToScroll: 1,
+      prevArrow: <Arrow direction="prev" />,
+      nextArrow: <Arrow direction="next" />,
+  };
     return (
         <StyledCarouselDiv {...settings}>
-          <div>
-            <h3>슬라이드 1</h3>
-          </div>
-          <div>
-            <h3>슬라이드 2</h3>
-          </div>
-          <div>
-            <h3>슬라이드 3</h3>
-          </div>
-          <div>
-            <h3>슬라이드 4</h3>
-          </div>
-          <div>
-            <h3>슬라이드 5</h3>
-          </div>
-          <div>
-            <h3>슬라이드 6</h3>
-          </div>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
+          <ClubListItem/>
         </StyledCarouselDiv>  
       );
     
