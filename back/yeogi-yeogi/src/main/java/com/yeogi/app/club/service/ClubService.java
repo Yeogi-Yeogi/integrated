@@ -116,4 +116,8 @@ public class ClubService {
     public List<ClubCategoryVo> getCategoryName() {
         return dao.getCategoryName(sst);
     }
+
+    public List<ClubVo> getClubList() {
+        return dao.getClubList(sst);
+    }
 }

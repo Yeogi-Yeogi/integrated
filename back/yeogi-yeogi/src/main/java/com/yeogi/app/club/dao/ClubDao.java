@@ -102,4 +102,8 @@ public class ClubDao {
     public List<ClubCategoryVo> getCategoryName(SqlSessionTemplate sst) {
         return sst.selectList("ClubMapper.getCategoryName");
     }
+
+    public List<ClubVo> getClubList(SqlSessionTemplate sst) {
+        return sst.selectList("ClubMapper.getClubList");
+    }
 }

@@ -18,10 +18,14 @@ const StyledCarouselDiv = styled(Slider)`
     outline: none;
     width: 250px;
     height: 300px;
-    /* background-color: red; */
-    /* display: grid; */
     padding: 30px;
 
+  }
+  .arrow > img {
+    filter: brightness(250%);
+  }
+  .arrow > img:hover {
+    filter: brightness(70%) saturate(120%);
   }
 `;
 
@@ -35,9 +39,10 @@ const Arrow = ({ onClick, direction }) => (
         cursor: 'pointer',
         zIndex: 1,
         left: direction === 'prev' ? '-50px' : 'auto',
-        right: direction === 'next' ? '-50px' : 'auto' 
-        }}>
-
+        right: direction === 'next' ? '-50px' : 'auto',  
+        }}
+        className="arrow"
+      >
       {direction === 'prev' ? <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px", transform: "rotate(90deg)"}}/> : <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px", transform: "rotate(-90deg)"}}/>}
     </div>
   );
@@ -47,7 +52,12 @@ const MainClubList = () => {
   const [clubData, setClubData] = useState([]);
 
   useEffect(() => {
-    fetch("")
+    fetch("http://127.0.0.1:8885/club/clubList")
+    .then(resp => resp.json())
+    .then( data => {
+      console.log(data);
+      setClubData(data);
+    });
   }, []);
 
   const settings = {
@@ -61,21 +71,9 @@ const MainClubList = () => {
   };
     return (
         <StyledCarouselDiv {...settings}>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
-          <ClubListItem/>
+          {clubData.map((club) => (
+            <ClubListItem key={club.no} club={club} />
+          ))}
         </StyledCarouselDiv>  
       );
     

@@ -48,7 +48,8 @@ public class ClubController {
      * 클럽 리스트 불러오깅
      */
     @GetMapping("clubList")
-    public void getClubList(){
+    public List<ClubVo> getClubList(){
+        return service.getClubList();
     }
 
     /**
