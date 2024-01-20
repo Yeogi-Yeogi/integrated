@@ -5,11 +5,12 @@
 
 <mapper namespace="GalleryMapper">
 
-   <select id="getImageListByClubNo" resultType="com.yeogi.app.board.dto.BoardListFileUrlDto">
+   <select id="getImageListByClubNo" resultType="com.yeogi.app.gallery.dto.GalleryListDto">
        SELECT
            BI.NO BOARD_IMAGE_NO
            , BI.BOARD_NO
            , BI.FILE_URL
+           , B.NOTICE_YN
        FROM BOARD_IMAGE_FILE BI
        INNER JOIN BOARD B
        ON BI.BOARD_NO = B.NO

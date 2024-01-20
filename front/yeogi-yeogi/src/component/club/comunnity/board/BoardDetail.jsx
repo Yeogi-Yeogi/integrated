@@ -125,6 +125,25 @@ const ReviewDiv = styled.div`
      
 `;
 
+const ModalDiv = styled.div`
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center vertically */
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #3a3a3ad3;
+    z-index: 999; /* Adjust z-index as needed */
+
+    & > img {
+        max-width: 100%;
+        max-height: 90%;
+    }
+`;
+
 const BoardDetail = () => {
 
     const [vo, setVo] = useState();
@@ -133,6 +152,8 @@ const BoardDetail = () => {
     const [content, setContent] = useState(); //내용 작성
     const [pageNo, setPageNo] = useState(0);
     const [isFetching, setIsFetching] = useState(false);
+    const [selectedImage, setSelectedImage] = useState('');
+    const [show, setShow] = useState(false);
     const navigate = useNavigate();
     const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
     const memberNo = loginMember?.no;
@@ -183,7 +204,9 @@ const BoardDetail = () => {
      * 수정
      */
     const handleUpdate = () => {
-
+        if(vo) {
+            navigate(`/club/${clubNo}/commu/board/edit`, {state: {previous: vo}});
+        }
     }
 
     /**
@@ -269,59 +292,73 @@ const BoardDetail = () => {
             setIsFetching(false);
         })
     }
+
+    const showImage = (fileUrl) => {
+        setSelectedImage(fileUrl);
+        setShow(true);
+    }
     return (
-        <StyledNoticeDetailDiv>
-            <div>
+        <>
+
+            <StyledNoticeDetailDiv>
                 <div>
                     <div>
-                        <img src={`${vo?.memberProfile}`} alt="" />
-                        <span>{vo?.memberName}</span>
-                        <span>{vo?.enrollDate}</span>
-                    </div>
-                    {
-                        vo?.mine &&
                         <div>
-                            <Button variant="link" onClick={handleUpdate}>수정</Button>
-                            <Button variant="link" onClick={handleDelete}>삭제</Button>
+                            <img src={`${vo?.memberProfile}`} alt="" />
+                            <span>{vo?.memberName}</span>
+                            <span>{vo?.enrollDate}</span>
+                        </div>
+                        {
+                            vo?.mine &&
+                            <div>
+                                <Button variant="link" onClick={handleUpdate}>수정</Button>
+                                <Button variant="link" onClick={handleDelete}>삭제</Button>
+                            </div>
+                        }
+                    </div>
+                    <hr/>
+                    <ContentDiv>
+                        <h4>{vo?.title}</h4>
+                        <p>{vo?.content}</p>
+                        <div>
+                            {
+                                vo?.images.map(el => 
+                                    <img src={el.fileUrl} alt="" key={el.boardImageNo} onClick={() => {showImage(el.fileUrl)}}/>
+                                )
+                            }
+                        </div>
+                    </ContentDiv>
+                    <hr/>
+                    <ReviewDiv>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Control value={content} as="textarea" name='content' rows={3} onChange={handleContent}/>
+                            <Button variant='secondary' type="submit" >작성</Button>
+                        </Form>
+                    </ReviewDiv>
+                    <hr />
+                    <ReviewList data={review?.list} setPageNo={setPageNo}/>
+                    {
+                        <div className='pagination-container'>
+                            {
+                                pageNo > 0 &&
+                                <Button variant='link' onClick={() => {setPageNo(prev => prev <= 0 ? 0 : prev -1)}}>이전</Button>
+                            }
+                            {
+                                !review?.isLast &&
+                                <Button variant='link' onClick={() => {setPageNo(prev => prev + 1)}}>다음</Button>
+                            }
                         </div>
                     }
                 </div>
-                <hr/>
-                <ContentDiv>
-                    <h4>{vo?.title}</h4>
-                    <p>{vo?.content}</p>
-                    <div>
-                        {
-                            vo?.images.map(el => 
-                                <img src={el.fileUrl} alt="" key={el.boardImageNo}/>
-                            )
-                        }
-                    </div>
-                </ContentDiv>
-                <hr/>
-                <ReviewDiv>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Control value={content} as="textarea" name='content' rows={3} onChange={handleContent}/>
-                        <Button variant='secondary' type="submit" >작성</Button>
-                    </Form>
-                </ReviewDiv>
-                <hr />
-                <ReviewList data={review?.list} setPageNo={setPageNo}/>
-                {
-                    <div className='pagination-container'>
-                        {
-                            pageNo > 0 &&
-                            <Button variant='link' onClick={() => {setPageNo(prev => prev <= 0 ? 0 : prev -1)}}>이전</Button>
-                        }
-                        {
-                            !review?.isLast &&
-                            <Button variant='link' onClick={() => {setPageNo(prev => prev + 1)}}>다음</Button>
-                        }
-                    </div>
-                }
-            </div>
-            
-        </StyledNoticeDetailDiv>
+                
+            </StyledNoticeDetailDiv>
+            {
+                show &&
+                <ModalDiv onClick={() => {setShow(false)}}>
+                        <img src={selectedImage} alt="" />
+                </ModalDiv>
+            }
+        </>
     );
 };
 

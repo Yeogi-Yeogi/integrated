@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import styled from 'styled-components';
+import PreviewImg from './PreviewImg';
 import { v4 as uuidv4 } from 'uuid';
-import PreviewImg from '../board/PreviewImg';
-import ScheduleDateTimePicker from './ScheduleDateTimePicker';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const StyledNoticeWriteDiv = styled.div`
+const StyledBoardEditDiv = styled.div`
     width: 100%;
     height: 100%;
     margin: auto;
@@ -25,22 +24,13 @@ const StyledNoticeWriteDiv = styled.div`
             }
         }
 
-        & td > input[type=text] {
+        & input {
 
             &:focus {
                 border-color: #6c1895;
                 box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
             }
         }
-
-        & td > div > input[type=text]:first-child {
-
-            &:focus {
-                border-color: #6c1895;
-                box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
-            }
-        }
-
 
         & tr > td:first-child {
             width: 10%;
@@ -49,32 +39,6 @@ const StyledNoticeWriteDiv = styled.div`
         & span {
             color: #999999;
             font-weight: 600;
-        }
-    }
-`;
-  
-const StyledSwitch = styled(Form.Switch)`
-
-    margin-bottom: 1em;
-    & > .form-check-label {
-        color: #999999;
-    }
-
-    & #custom-switch {
-        
-
-        &:focus {
-            --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%27-4 -4 8 8%27%3e%3ccircle r=%273%27 fill=%27%236c1895%27/%3e%3c/svg%3e");
-            border-color: #6C1895;
-            box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
-        }
-
-        &:checked {
-            background-color: #6C1895; // 체크된 상태의 배경색
-            border-color: #6C1895;
-            --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%27-4 -4 8 8%27%3e%3ccircle r=%273%27 fill=%27%23ffffff%27/%3e%3c/svg%3e");
-            box-shadow: 0 0 0 0.25rem rgba(108, 24, 149,.25);
-
         }
     }
 `;
@@ -102,12 +66,18 @@ const ImageInputDiv = styled.div`
 `;
 
 const StyledButton = styled(Button)`
+    margin-left: 1em;
     background-color: #6c1895;
     border-color: #6c1895;
     font-weight: 600;
     width: 8em;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 
     &:hover {
+        background-color: #5d1582;
+    }
+
+    &:active {
         background-color: #5d1582;
     }
 `;
@@ -139,26 +109,40 @@ const StyledCustomModal = styled.div`
         }
     }
 `;
-const NoticeWrite = () => {
+const BoardEdit = () => {
 
     const uploadImage = useRef(null);   //이미지 미리 보여주는 div
     const imgTd = useRef(null); //사진 올리는 td
     const [imageList, setImageList] = useState([]); //서버 전달용 파일 객체
     const [imageUrl, setImageUrl] = useState([]); //미리보기용 url
+    const [deletedImage, setDeleted] = useState([]); //삭제할 파일
     const [title, setTitle] = useState();
-    const [scheduleTitle, setScheduleTitle] = useState();
-    const [scheduleDate , setScheduleDate] = useState(); //일정 시간
-    const [scheduleLocation, setScheduleLocation] = useState();
-    const [show ,setShow] = useState(false); //일정 생성 여부
     const [content, setContent] = useState();
     const {clubNo} = useParams();
-    const [isFetching , setIsFetching] = useState(false);
     const navigate = useNavigate();
+    const [isFetching, setIsFetching] = useState(false);
+    const location = useLocation();
+    const previous = location.state.previous;
     const vo = JSON.parse(sessionStorage.getItem("loginMember"));
     const memberNo = vo?.no;
 
-    useEffect(() => {
+    //초기화 
+    const resetPrevious = () => {
+        setTitle(previous.title);
+        setContent(previous.content);
+        setImageUrl([...previous.images.map(el => el.fileUrl)]);
+        setImageList([]);
+        setDeleted([]);
+    }
 
+    useEffect(() => {
+        if(!memberNo) {
+            alert('로그인한 회원만 이용가능합니다');
+            navigate('/member/login'); 
+        } else {
+            console.log(`전달받은 previous:`, previous);
+            resetPrevious();
+        }
     }, [])
 
     const handleTitle = (e) => {
@@ -169,17 +153,9 @@ const NoticeWrite = () => {
         setContent(e.target.value);
     }
 
-    const handleScheduleTitle = (e) => {
-        setScheduleTitle(e.target.value);
-    }
-
-    const handleScheduleLocation = (e) => {
-        setScheduleLocation(e.target.value);
-    }
-
     const changeImage = () => {
-        if(imageList.length === 3) {
-            alert('이미지는 최대 3장까지 업로드 가능합니다.');
+        if(imageList.length === 10) {
+            alert('이미지는 최대 10장까지 업로드 가능합니다.');
             return;
         }
 
@@ -210,102 +186,98 @@ const NoticeWrite = () => {
             };
             reader.readAsDataURL(image);
         }
+
+
     }
 
     // 선택한 미리보기 사진 삭제하는 함수
     const deleteImage = (index) => {
-        // 이미지 리스트에서 해당 인덱스에 해당하는 이미지 제거
-        const updatedImageList = [...imageList];
-        updatedImageList.splice(index, 1);
-        setImageList(updatedImageList);
-      
-        // 이미지 URL도 갱신
-        const updatedImageUrl = [...imageUrl];
-        updatedImageUrl.splice(index, 1);
-        setImageUrl(updatedImageUrl);
+        const wantToDelete = imageUrl[index]; //삭제하려는 이미지
+        console.log(`삭제하려는 이미지`, wantToDelete);
+
+        if(wantToDelete.startsWith("https://")) {
+            const insert = previous.images.filter(i => i.fileUrl === wantToDelete);
+            console.log(`insert: `, insert);
+            setDeleted(prev => [...prev, ...insert]);
+        } else {
+            // 이미지 리스트에서 해당 인덱스에 해당하는 이미지 제거
+            const updatedImageList = [...imageList];
+            updatedImageList.splice(index, 1);
+            setImageList(updatedImageList);
+          
+            // setDeleted(prev => [...prev, ...])
+            // 이미지 URL도 갱신
+            const updatedImageUrl = [...imageUrl];
+            updatedImageUrl.splice(index, 1);
+            setImageUrl(updatedImageUrl);
+        }
       };
+
 
       const uploadBoard = (e) => {
         e.preventDefault();
 
         if(isFetching) {
-            alert("등록중입니다.")
+            alert('작성중입니다.');
             return;
         }
-
         setIsFetching(true);
-
-
 
         const formData = new FormData();
         formData.append("title", title);
+        console.log(`title`, title);
         formData.append("content", content);
-        formData.append("clubNo", clubNo);
+        console.log(`content`, content);
         formData.append("memberNo", memberNo);
-        formData.append("noticeYn", "Y");
-        if(show) {
-            formData.append("scheduleTitle", scheduleTitle);
-            formData.append("scheduleDate", scheduleDate);
-            formData.append("scheduleLocation", scheduleLocation);
-        }
+        console.log(`memberNo`, memberNo);
+        formData.append("clubNo", clubNo);
+        console.log(`clubNo`, clubNo);
+        //기존 파일
         imageList.forEach(el => formData.append("imageList", el));
+        console.log(`imageList`, imageList);
+        
+        deletedImage.forEach(el => formData.append("deleted", el));
+        console.log(`deletedImage`, deletedImage);
 
-        fetch(`http://localhost:8885/notice/add`, {
-            method: "POST",
-            body: formData
-        })
-        .then(res => {
-            if(!res.ok) {
-                throw new Error(res.data);
-            }
-            return res.text();
-        })
-        .then(data => {
-            alert(data);
-            navigate(`/club/${clubNo}/commu/board/notice/list`);
-        })
-        .catch(err => {
-            console.error(err);
-        })
-        .finally(() => {
-            setIsFetching(false);
-        })
+        console.log(formData);
+
+        // fetch('http://localhost:8885/board/add', {
+        //     method: "POST",
+        //     body: formData
+        // })
+        // .then(res => {
+        //     if(!res.ok) {
+        //         throw new Error(res.json());
+        //     }
+        //     return res.text();
+        // })
+        // .then(data => {
+        //     alert(data);
+        //     navigate(`/club/${clubNo}/commu/board/list`);
+        // })
+        // .catch(err => {
+        //     alert("게시글을 등록하지 못했습니다.");
+        //     console.error(err);
+        // })
+        // .finally(() => {
+        //     setIsFetching(false);
+        // })
     }
-
-    
 
     //////////////////////////////////////////////////////////
     return (
-        <StyledNoticeWriteDiv>
+        <StyledBoardEditDiv>
             <h4><strong>게시글 작성하기</strong></h4>
             <Form onSubmit={uploadBoard}>
                 <Table borderless>
                     <tbody>
                         <tr>
                             <td>제목</td>
-                            <td><Form.Control type="text" name='title' onInput={handleTitle} placeholder="제목을 입력하세요" /></td>
+                            <td><Form.Control type="text" name='title' value={title} onInput={handleTitle} placeholder="제목을 입력하세요" /></td>
                         </tr>
                         <tr>
                             <td>내용</td>
-                            <td><Form.Control as="textarea" name='content' rows={10} onInput={handleContent}/></td>
-                        </tr>
-                        <tr>
-                            <td>일정</td>
-                            <td>
-                                <StyledSwitch // prettier-ignore
-                                    type="switch"
-                                    id="custom-switch"
-                                    label="일정 등록하기"
-                                    onClick={() => setShow(!show)}
-                                />
-                                {show && (
-                                            <div>
-                                                <Form.Control type="text" name='scheduleTitle' onInput={handleScheduleTitle} placeholder="제목을 입력하세요" />
-                                                <ScheduleDateTimePicker setScheduleDate={setScheduleDate}/>
-                                                <Form.Control type="text" name='scheduleLocation' onInput={handleScheduleLocation} placeholder="장소를 입력하세요" />
-                                            </div>
-                                        )}
-                            </td>
+                            <td><Form.Control as="textarea" name='content' value={content} rows={10} onInput={handleContent}/></td>
                         </tr>
                         <tr>
                             <td>사진</td>
@@ -330,11 +302,11 @@ const NoticeWrite = () => {
                         </tr>
                         <tr>
                             <td></td>
-                            <td><span>사진은 최대 3장까지 업로드 가능합니다.</span></td>
+                            <td><span>사진은 최대 10장까지 업로드 가능합니다.</span></td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td ref={imgTd} style={{ textAlign: 'right' }}><StyledButton type="submit" >작성하기</StyledButton></td>
+                            <td ref={imgTd} style={{ textAlign: 'right' }}><Button variant='danger' style={{ width: '8em', fontWeight: 600 }} onClick={resetPrevious}>리셋</Button><StyledButton type="submit" >작성하기</StyledButton></td>
                         </tr>
                     </tbody>
                 </Table>
@@ -348,8 +320,9 @@ const NoticeWrite = () => {
                     </StyledCustomModal>
                 }
             </Form>
-        </StyledNoticeWriteDiv>
+            
+        </StyledBoardEditDiv>
     );
 };
 
-export default NoticeWrite;
+export default BoardEdit;

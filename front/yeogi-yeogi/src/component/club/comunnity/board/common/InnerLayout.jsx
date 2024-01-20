@@ -8,8 +8,11 @@ import GalleryLayout from '../gallery/GalleryLayout';
 import ClubDescription from '../../../manage/ClubDescription';
 
 const StyledInnerLayout = styled.div`
+
     margin-bottom: 3em;
-    
+    margin: auto;
+    padding: 1em;
+    width: 80%;
 `;
 const InnerLayout = () => {
     return (

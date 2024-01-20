@@ -6,6 +6,7 @@ import BoardSideBar from './common/BoardSideBar';
 import BoardWrite from './BoardWrite';
 import NoticeLayout from '../notice/NoticeLayout';
 import BoardDetail from './BoardDetail';
+import BoardEdit from './BoardEdit';
 
 
 const StyledBoardLayout = styled.div`
@@ -31,6 +32,7 @@ const BoardLayout = () => {
                     <Route path='/notice/*' element={<NoticeLayout />} />
                     <Route path='/write' element={<BoardWrite />} />
                     <Route path='/detail/:boardNo' element={<BoardDetail />} />
+                    <Route path='/edit' element={<BoardEdit />} />
                 </Routes>
             </div>
         </StyledBoardLayout>
