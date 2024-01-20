@@ -21,7 +21,7 @@ public class MemberService {
 	//회원가입
 	public int join(MemberVo vo) {
 		
-		String str = vo.getFullPath().replace("C:\\dev\\final\\back\\yeogi-yeogi\\src\\main\\resources", "http://127.0.0.1:8885");
+        String str = vo.getFullPath().replace("C:\\dev\\profileImg\\", "C:\\dev\\profileImg\\");
 		vo.setFullPath(str);
 		
 		return dao.join(sst, vo);
