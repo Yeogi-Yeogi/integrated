@@ -66,6 +66,10 @@ const ClubListItem = ({club}) => {
       setOpen(true);
     };
     
+    const closeModal = () => {
+        setOpen(false);
+    };
+
     return (
         <StyledClubListItemDiv onClick={handleClickClub}>
             <div>
@@ -76,7 +80,7 @@ const ClubListItem = ({club}) => {
                 <div>{club.clubDescription}</div>
                 <span>회원수 {club.memberCount}</span>
             </div>
-            <JoinClub isOpen={isOpen} />
+            <JoinClub isOpen={isOpen} closeModal={closeModal} club={club} />
         </StyledClubListItemDiv>
     );
 };
