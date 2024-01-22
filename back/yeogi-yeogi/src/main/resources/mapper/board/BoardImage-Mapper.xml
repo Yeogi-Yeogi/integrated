@@ -20,8 +20,29 @@
             WHERE BOARD_NO = #{boardNo}
         </select>
 
-    <delete id="deleteByBoardNo">
-        DELETE FROM BOARD_IMAGE_FILE
-        WHERE BOARD_NO = #{boardNo}
-    </delete>
+        <delete id="deleteByBoardNo">
+            DELETE FROM BOARD_IMAGE_FILE
+            WHERE BOARD_NO = #{boardNo}
+        </delete>
+
+        <select id="getBoardImageVoByNo" parameterType="java.util.List" resultType="com.yeogi.app.board.vo.BoardImageFileVo">
+            SELECT
+                 NO
+                , BOARD_NO
+                , FILE_URL
+                , FILE_NAME
+            FROM BOARD_IMAGE_FILE
+            WHERE NO IN
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </select>
+
+        <delete id="deleteByNo" parameterType="java.util.List">
+            DELETE FROM BOARD_IMAGE_FILE
+            WHERE NO IN
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </delete>
     </mapper>

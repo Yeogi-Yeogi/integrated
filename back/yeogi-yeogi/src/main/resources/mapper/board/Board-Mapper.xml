@@ -164,4 +164,24 @@
         WHERE NO = #{boardNo}
         AND MEMBER_NO = #{memberNo}
     </update>
+
+    <select id="getBoardNo" resultType="String">
+        SELECT NO
+        FROM BOARD
+        WHERE MEMBER_NO = #{memberNo} AND CLUB_NO = #{clubNo} AND NO = #{boardNo}
+    </select>
+
+    <update id="updateBoard" parameterType="com.yeogi.app.board.dto.BoardUpdateDto">
+        UPDATE BOARD
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            MODIFY_DATE = LOCALTIMESTAMP
+        </set>
+        WHERE NO = #{boardNo}
+    </update>
 </mapper>

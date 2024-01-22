@@ -197,6 +197,7 @@ const BoardWrite = () => {
         }
         setIsFetching(true);
 
+
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);

@@ -83,6 +83,17 @@ public class BoardController {
         return new ResponseEntity<>("삭제 완료되었습니다.", getHttpHeaders(), HttpStatus.OK);
     }
 
+    @PatchMapping("/update")
+    public ResponseEntity<String> updateBoard(BoardUpdateDto dto) throws NotClubMemberException {
+        log.info("update = {}, 삭제하려는 사진 = {}, 추가하려는 사진 = {}", dto, dto.getDeleted(), dto.getImageList());
+        int result = service.updateBoard(dto);
+
+        if(result == 0) {
+            throw new IllegalStateException("삭제 실패");
+        }
+        return new ResponseEntity<>("게시글을 수정하였습니다", getHttpHeaders(), HttpStatus.OK);
+    }
+
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

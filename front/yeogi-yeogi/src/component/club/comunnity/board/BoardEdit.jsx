@@ -196,26 +196,32 @@ const BoardEdit = () => {
         console.log(`삭제하려는 이미지`, wantToDelete);
 
         if(wantToDelete.startsWith("https://")) {
-            const insert = previous.images.filter(i => i.fileUrl === wantToDelete);
+            //기존 사진 삭제할 경우
+            const insert = previous.images.filter(i => i.fileUrl === wantToDelete).map(i => i.boardImageNo);
             console.log(`insert: `, insert);
             setDeleted(prev => [...prev, ...insert]);
+
         } else {
-            // 이미지 리스트에서 해당 인덱스에 해당하는 이미지 제거
+            // 서버 저장용 배열에서 해당 인덱스에 해당하는 이미지 제거
             const updatedImageList = [...imageList];
-            updatedImageList.splice(index, 1);
+            updatedImageList.splice(index-imageUrl.length, 1);
             setImageList(updatedImageList);
-          
-            // setDeleted(prev => [...prev, ...])
+        }
+
+                    // setDeleted(prev => [...prev, ...])
             // 이미지 URL도 갱신
             const updatedImageUrl = [...imageUrl];
             updatedImageUrl.splice(index, 1);
             setImageUrl(updatedImageUrl);
-        }
       };
 
 
       const uploadBoard = (e) => {
         e.preventDefault();
+        if(title === previous.title && content === previous.content && deletedImage.length === 0 && imageList.length === 0) {
+            alert('기존의 게시글 내용과 일치합니다.');
+            return;
+        }
 
         if(isFetching) {
             alert('작성중입니다.');
@@ -223,45 +229,49 @@ const BoardEdit = () => {
         }
         setIsFetching(true);
 
+
         const formData = new FormData();
-        formData.append("title", title);
-        console.log(`title`, title);
-        formData.append("content", content);
-        console.log(`content`, content);
+        if(title !== previous.title) {
+            formData.append("title", title);
+        }
+        if(content !== previous.content) {
+            formData.append("content", content);
+        }
+        formData.append("boardNo", previous.boardNo);
         formData.append("memberNo", memberNo);
         console.log(`memberNo`, memberNo);
         formData.append("clubNo", clubNo);
         console.log(`clubNo`, clubNo);
         //기존 파일
         imageList.forEach(el => formData.append("imageList", el));
-        console.log(`imageList`, imageList);
+        console.log(`새로 저장할 imageList`, imageList);
         
         deletedImage.forEach(el => formData.append("deleted", el));
-        console.log(`deletedImage`, deletedImage);
+        console.log(`기존 사진에서 삭제할 파일 deletedImage`, deletedImage);
 
         console.log(formData);
 
-        // fetch('http://localhost:8885/board/add', {
-        //     method: "POST",
-        //     body: formData
-        // })
-        // .then(res => {
-        //     if(!res.ok) {
-        //         throw new Error(res.json());
-        //     }
-        //     return res.text();
-        // })
-        // .then(data => {
-        //     alert(data);
-        //     navigate(`/club/${clubNo}/commu/board/list`);
-        // })
-        // .catch(err => {
-        //     alert("게시글을 등록하지 못했습니다.");
-        //     console.error(err);
-        // })
-        // .finally(() => {
-        //     setIsFetching(false);
-        // })
+        fetch('http://localhost:8885/board/update', {
+            method: "PATCH",
+            body: formData
+        })
+        .then(res => {
+            if(!res.ok) {
+                throw new Error(res.json());
+            }
+            return res.text();
+        })
+        .then(data => {
+            alert(data);
+            navigate(`/club/${clubNo}/commu/board/detail/${previous.boardNo}`);
+        })
+        .catch(err => {
+            alert("게시글을 등록하지 못했습니다.");
+            console.error(err);
+        })
+        .finally(() => {
+            setIsFetching(false);
+        })
     }
 
     //////////////////////////////////////////////////////////

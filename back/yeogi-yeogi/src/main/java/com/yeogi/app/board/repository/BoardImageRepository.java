@@ -32,4 +32,25 @@ public class BoardImageRepository {
     public int deleteByBoardNo(String boardNo, SqlSessionTemplate template) {
         return template.delete("BoardImageMapper.deleteByBoardNo", boardNo);
     }
+
+    /**
+     * 번호에 해당하는 사진 리스트 가져오기
+     * @param deleted
+     * @param template
+     * @return
+     */
+    public List<BoardImageFileVo> getBoardImageVoByNo(List<String> deleted, SqlSessionTemplate template) {
+        return template.selectList("BoardImageMapper.getBoardImageVoByNo", deleted);
+    }
+
+    /**
+     * 번호에 해당하는 사진 삭제
+     *
+     * @param deleted
+     * @param template
+     * @return
+     */
+    public int deleteByNo(List<String> deleted, SqlSessionTemplate template) {
+        return template.delete("BoardImageMapper.deleteByNo", deleted);
+    }
 }

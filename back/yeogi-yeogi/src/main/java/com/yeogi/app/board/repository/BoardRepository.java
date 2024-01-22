@@ -138,4 +138,24 @@ public class BoardRepository {
     public int deleteBoard(BoardDetailValidDto dto, SqlSessionTemplate template) {
         return template.update("BoardMapper.deleteBoard", dto);
     }
+
+    /**
+     * 본인이 작성한 건지에 대한 유효성 검사
+     * @param dto
+     * @param template
+     * @return
+     */
+    public String getBoardNo(BoardUpdateDto dto, SqlSessionTemplate template) {
+        return template.selectOne("BoardMapper.getBoardNo", dto);
+    }
+
+    /**
+     * 게시글 수정
+     * @param dto
+     * @param template
+     * @return
+     */
+    public int updateBoard(BoardUpdateDto dto, SqlSessionTemplate template) {
+        return template.update("BoardMapper.updateBoard", dto);
+    }
 }
