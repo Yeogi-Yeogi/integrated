@@ -3,7 +3,7 @@ package com.yeogi.app.board.controller;
 import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.service.BoardService;
 import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.ErrorResult;
+import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.NoResultException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class BoardController {
      * @return
      */
     @GetMapping("/list/{pageNo}")
-    public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException {
+    public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException, DeletedClubException {
         HttpHeaders headers = getHttpHeaders();
         log.info("check = {}", dto);
         return new ResponseEntity<>(service.getBoardListByClubNo(dto, pageNo), headers, HttpStatus.OK);

@@ -24,6 +24,7 @@
         LEFT OUTER JOIN BOARD_IMAGE_FILE BI ON B.NO = BI.BOARD_NO
         WHERE
             C.NO = #{clubNo}
+            AND C.DEL_YN = 'N'
             AND B.DEL_YN = 'N'
             AND B.NOTICE_YN = 'N'
         GROUP BY

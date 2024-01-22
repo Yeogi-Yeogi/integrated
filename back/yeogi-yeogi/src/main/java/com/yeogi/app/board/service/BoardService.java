@@ -5,6 +5,7 @@ import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +43,17 @@ public class BoardService {
      * @param pageNo
      * @return
      */
-    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException {
+    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException, DeletedClubException {
 
         CheckDto clubMember = checkMember.isClubMember(dto, template);
         if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
+
+        if(checkMember.isDeleted(clubMember.getClubNo(), template)) {
+            throw new DeletedClubException("삭제된 클럽입니다.");
+        }
+
 
         int boardLimit = 5;
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*boardLimit, boardLimit);
