@@ -88,4 +88,15 @@
 		   AND QUIT_YN = 'N'		
 	</update>
 	
+	<select id="selectMyClub" resultType="com.yeogi.app.member.vo.MemberVo">
+		SELECT CC.CATEGORY_NAME, M.NICK, M.NAME, C.NAME, C.CLUB_DESCRIPTION, C.ENROLL_DATE
+		FROM CLUB C
+		JOIN MEMBER_CLUB MC ON MC.CLUB_NO = C.NO
+		JOIN MEMBER M ON M.NO = C.CREATOR_NO
+		JOIN CLUB_CATEGORY CC ON CC.CATEGORY_NO = C.CATEGORY_NO
+		WHERE C.DEL_YN = 'N'
+		AND M.NO = #{no}
+		ORDER BY C.ENROLL_DATE DESC;
+	</select>
+	
 </mapper>
