@@ -1,5 +1,7 @@
 package com.yeogi.app.member.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -42,16 +44,19 @@ public class MemberService {
 		return dao.quit(sst, vo);
 	}
 	
-	//내 정보 조회-이름, 아이디, 비밀번호, 닉네임, 전화번호, 이메일, 가입일자, 수정일자, 프로필이미지, 주민등록번호
+	//내 정보 조회-이름, 아이디, 비밀번호, 닉네임, 전화번호, 이메일, 가입일자, 수정일자, 프로필이미지, 주민등록번호//내 정보 수정(회원 정보 조회-이름, 아이디, 주민등록번호 조회)-필요없음
 	public MemberVo mySelect(MemberVo vo) {
 		return dao.mySelect(sst,vo);
 	}
 	
-	//내 정보 수정(회원 정보 조회-이름, 아이디, 주민등록번호 조회)
-	
-	//내 정보 수정
+	//내 정보 수정(update)
 	public int edit(MemberVo vo) {
 		return dao.edit(sst,vo);
+	}
+	
+	//메인화면- 로그인후 가입한 모임 조회하기
+	public List<MemberVo> selectMyClub(MemberVo vo) {
+		return dao.selectMyClub(sst,vo);
 	}
 
 }

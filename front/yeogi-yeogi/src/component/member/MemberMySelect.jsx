@@ -50,7 +50,7 @@ const MemberMySelect = () => {
     //     event.preventDefault();
 
     //     if(isFetching){
-    //         alert('회원가입이 이미 진행');
+    //         alert('내 정보 조회 이미 진행');
     //         return;
     //     }else{
     //         isFetching = true;
@@ -65,23 +65,23 @@ const MemberMySelect = () => {
     //     })
     //     .then( resp => {
     //         if(!resp.ok){
-    //             // throw new error("회원가입 fetch 실패...");
+    //             // throw new error("내 정보 조회 fetch 실패...");
     //         }
     //         return resp.json();
     //     })
     //     .then( data => {
     //         if(data.msg === "good"){
                 
-    //             alert("회원가입 성공!");
+    //             alert("내 정보 조회 성공!");
     //             navigate("/");
     //         }else{
-    //             alert("회원가입 실패..");
+    //             alert("내 정보 조회 실패..");
     //             navigate("/failpage");
     //         }
     //     })
     //     .catch((e) => {
     //         console.log(e);
-    //         alert("회원가입 실패");
+    //         alert("내 정보 조회 실패");
     //     })
     //     .finally( () => {
     //         isFetching = false;

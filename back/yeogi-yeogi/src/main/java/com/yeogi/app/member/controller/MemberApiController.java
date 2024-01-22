@@ -1,14 +1,22 @@
 package com.yeogi.app.member.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,7 +127,7 @@ public class MemberApiController {
 
     //회원정보조회
     @PostMapping("mySelect")
-    public Map<String, Object> mySelect(@RequestBody MemberVo vo) throws Exception {
+    public Map<String, Object> mySelect(@RequestBody MemberVo vo, @PathVariable Long no) throws Exception {
     	
     	MemberVo loginMember = service.mySelect(vo);
         Map<String, Object> map = new HashMap<String, Object>();
@@ -130,6 +138,19 @@ public class MemberApiController {
         	map.put("msg", "bad");
         }
         return map;  
+    }
+    
+    //클라이언트로 이미지파일을 전달
+    @GetMapping("display/{no}")
+    public ResponseEntity display(@PathVariable String no) throws IOException {        
+        File f = new File(no);
+        Path filePath = f.toPath();
+        byte[] data = Files.readAllBytes(filePath);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/jpg"))
+                .body(data)
+                ;
     }
     
     //내 정보 수정하기 
@@ -143,8 +164,16 @@ public class MemberApiController {
 		}        
         return map;        
     }
-        
-//    @PostMapping("memberLogin")
-//    public 
+    
+    //메인화면- 로그인후 가입한 모임 조회하기        
+    @PostMapping("selectMyClub")
+    public List<MemberVo> selectMyClub(@RequestBody MemberVo vo){
+    	List<MemberVo> voList = service.selectMyClub(vo);
+//    	MemberVo memberVo = new MemberVo();
+//    	voList.add(memberVo);
+    	System.out.println(voList);
+		return voList;
+    }
+
         
 }//class

@@ -1,5 +1,7 @@
 package com.yeogi.app.member.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +38,11 @@ public class MemberDao {
 	//내 정보 수정
 	public int edit(SqlSessionTemplate sst, MemberVo vo) {
 		return sst.update("MemberMapper.edit" , vo);
+	}
+
+	//메인화면- 로그인후 가입한 모임 조회하기
+	public List<MemberVo> selectMyClub(SqlSessionTemplate sst, MemberVo vo) {
+		return sst.selectList("MemberMapper.selectMyClub", vo);
 	}
 
 }
