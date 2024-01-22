@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import JoinClub from '../club/manage/JoinClub';
+import { useNavigate } from 'react-router-dom';
 
 const StyledClubListItemDiv = styled.div`
     display: grid;
@@ -61,9 +62,9 @@ const StyledClubListItemDiv = styled.div`
 const ClubListItem = ({club}) => {
     
     const [isOpen, setOpen] = useState(false);
-    
+
     const handleClickClub = () => {
-      setOpen(true);
+        setOpen(true);
     };
     
     const closeModal = () => {
@@ -71,17 +72,19 @@ const ClubListItem = ({club}) => {
     };
 
     return (
-        <StyledClubListItemDiv onClick={handleClickClub}>
-            <div>
-                <img src={club.fileUrl} alt="" />
-            </div>
-            <div>
-                <span>{club.name}</span>
-                <div>{club.clubDescription}</div>
-                <span>회원수 {club.memberCount}</span>
-            </div>
-            <JoinClub isOpen={isOpen} closeModal={closeModal} club={club} />
-        </StyledClubListItemDiv>
+        <>
+            <StyledClubListItemDiv onClick={handleClickClub}>
+                <div>
+                    <img src={club.fileUrl} alt="" />
+                </div>
+                <div>
+                    <span>{club.name}</span>
+                    <div>{club.clubDescription}</div>
+                    <span>회원수 {club.memberCount}</span>
+                </div>
+            </StyledClubListItemDiv>
+            <JoinClub isOpen={isOpen} closeModal={closeModal} club={club}/>
+        </>
     );
 };
 

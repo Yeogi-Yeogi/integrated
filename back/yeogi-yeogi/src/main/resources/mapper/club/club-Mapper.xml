@@ -230,5 +230,10 @@
         SET DEL_YN = 'Y'
         WHERE NO = #{clubNo}
     </update>
-
+<!--    삭제된 클럽인지 확인-->
+    <select id="isDeleted" resultType="String">
+        SELECT DEL_YN
+        FROM CLUB
+        WHERE NO = #{clubNo}
+    </select>
 </mapper>
