@@ -74,6 +74,11 @@ const StyledJoinModal = styled(ReactModal)`
                 color: #5F5757;
                 font-size: 0.9rem;
             }
+            & > h3 {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
         }
     }
     & > div:nth-child(3){
@@ -130,10 +135,10 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                 </div>
                 <div>
                     <h3>{club.name}</h3>
-                    <span>모임장 : 낙천킹</span>
-                    <span>인원 : 1/50</span>
-                    <span>가입연령 : 20세 이상</span>
-                    <span>개설일 : 2023년 12월 25일</span>
+                    <span>모임장 : {club.nick}</span>
+                    <span>인원 : {club.memberCount} / {club.signupLimit}</span>
+                    <span>가입연령 : {club.ageLimit}세 이상</span>
+                    <span>개설일 : {club.enrollDate}</span>
                     <div style={{fontStyle:"italic"}}>카테고리 보여주는곳</div>
                 </div>
             </div>

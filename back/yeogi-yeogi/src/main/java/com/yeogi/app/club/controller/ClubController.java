@@ -45,7 +45,7 @@ public class ClubController {
     }
 
     /**
-     * 클럽 리스트 불러오깅
+     * 클럽 리스트 불러오기
      */
     @GetMapping("clubList")
     public List<ClubVo> getClubList(){
