@@ -18,4 +18,6 @@ public class CheckDto {
         this.clubNo = clubNo;
         this.memberNo = memberNo;
     }
+
+
 }

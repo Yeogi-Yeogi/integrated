@@ -25,8 +25,6 @@ const ManageLayout = () => {
                 <Route path='/editClub2' element={<ClubDescription/>}></Route>
                 <Route path='/test' element={<MainSearch/>}></Route>
             </Routes>
-            {/* <ClubLIstItem/> */}
-            <MainClubList/>  
             <EditMember/>
         </StyledManageLayoutDiv>
     );

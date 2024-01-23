@@ -2,20 +2,24 @@ package com.yeogi.app.club.service;
 
 import com.yeogi.app.club.dao.ClubDao;
 import com.yeogi.app.club.dto.*;
+import com.yeogi.app.club.vo.CheckClubLimitVo;
 import com.yeogi.app.club.vo.ClubCategoryVo;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -69,7 +73,23 @@ public class ClubService {
     }
 
     public int joinClub(JoinClubDto dto) {
-        return dao.joinClub(sst, dto);
+        CheckClubLimitVo limit = dao.checkLimit(sst, dto);
+        log.info("limit : {}", limit);
+        // 클럽 가입 연령 체크 가입연령 안되면 2 리턴
+        if(limit.getAge() < limit.getAgeLimit()){
+            return 2;
+            // 모임 가입 인원이 제한보다 큰 경우 3 리턴
+        }  else if (limit.getMembers() >= limit.getMemberLimit()) {
+            return 3;
+        } else {
+            try {
+                int result = dao.joinClub(sst, dto);
+                return result;
+            } catch (DataIntegrityViolationException e) {
+                // 중복 가입 시도시 4 리턴
+                return 4;
+            }
+        }
     }
 
     public int editClub(EditClubDto editClubDto, MultipartFile file) throws IOException {
@@ -109,7 +129,7 @@ public class ClubService {
         return dao.deleteClub(sst, clubNo);
     }
 
-    public CheckDto checkMember(CheckDto checkDto) throws NotClubMemberException {
+    public CheckDto checkMember(CheckDto checkDto) throws NotClubMemberException, DeletedClubException {
         return checkClubMember.isClubMember(checkDto, sst);
     }
 
