@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import MemberJoin from './MemberJoin';
 import MemberLogin from './MemberLogin';
 import MemberEdit from './MemberEdit';
-import MemberLogout from './MemberLogout';
 import MemberQuit from './MemberQuit';
 import MemberMySelect from './MemberMySelect';
 
