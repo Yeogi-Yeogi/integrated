@@ -6,7 +6,6 @@ import com.yeogi.app.notice.repository.ScheduleRepository;
 import com.yeogi.app.notice.vo.ScheduleVo;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class ScheduleService {
     private final SqlSessionTemplate template;
 
 
-    public ScheduleListDto getListByClubNo(CheckDto dto, String isExpected, int offset) throws NotClubMemberException {
+    public ScheduleListDto getListByClubNo(CheckDto dto, String isExpected, int offset) throws RuntimeException {
 
         CheckDto clubMember = checkMember.isClubMember(dto, template);
 

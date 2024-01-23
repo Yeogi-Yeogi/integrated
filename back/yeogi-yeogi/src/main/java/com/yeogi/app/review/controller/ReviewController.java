@@ -28,7 +28,6 @@ public class ReviewController{
 
     /**
      * 렌더링 이후 리뷰 가져오는 경로
-     * boardNo 가져와야 된다.
      * @param dto
      * @return
      */
@@ -49,10 +48,10 @@ public class ReviewController{
         log.info("review = {}", review);
         int result = service.addReview(review);
 
-        if(result != 1) throw new FailReviewException("리뷰 작성 실패");
+        if(result != 1) throw new FailReviewException("댓글 작성 실패");
 
         HttpHeaders headers = getHttpHeaders();
-        return new ResponseEntity<>("작성되었습니다", headers, HttpStatus.OK);
+        return new ResponseEntity<>("댓글을 등록하였습니다.", headers, HttpStatus.OK);
     }
 
     /**
@@ -66,7 +65,7 @@ public class ReviewController{
         int result = service.deleteReviewByNo(review);
 
         if(result != 1) {
-            throw new FailReviewException("리뷰 삭제 실패");
+            throw new FailReviewException("댓글 삭제 실패");
         }
         return new ResponseEntity<>("댓글을 삭제했습니다.", getHttpHeaders(), HttpStatus.OK);
     }

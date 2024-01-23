@@ -5,7 +5,6 @@ import com.yeogi.app.notice.dto.NoticeAddDto;
 import com.yeogi.app.notice.dto.NoticeDetailDto;
 import com.yeogi.app.notice.service.NoticeService;
 import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.NotAdminException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,7 @@ public class NoticeController {
      * @throws NotClubMemberException
      */
     @GetMapping("/list/{pageNo}")
-    public ResponseEntity<Map<String,Object>> getNoticeList(CheckDto checkDto, @PathVariable String pageNo) throws NotClubMemberException {
+    public ResponseEntity<Map<String,Object>> getNoticeList(CheckDto checkDto, @PathVariable String pageNo) throws RuntimeException {
         log.info("dto = {}", checkDto);
         HttpHeaders headers = getHttpHeaders();
         Map<String, Object> result = service.getNoticeList(checkDto, pageNo);
@@ -48,13 +47,19 @@ public class NoticeController {
      * @throws NotClubMemberException
      */
     @GetMapping("/detail")
-    public ResponseEntity<NoticeDetailDto> getDetail(@ModelAttribute BoardDetailValidDto dto) throws NotClubMemberException {
+    public ResponseEntity<NoticeDetailDto> getDetail(@ModelAttribute BoardDetailValidDto dto) throws RuntimeException {
         log.info("valid = {}", dto);
         return new ResponseEntity<>(service.getOne(dto), getHttpHeaders(), HttpStatus.OK);
     }
 
+    /**
+     * 공지사항 추가
+     * @param notice
+     * @return
+     * @throws RuntimeException
+     */
     @PostMapping("/add")
-    public ResponseEntity<String> addNotice(NoticeAddDto notice) throws NotClubMemberException, NotAdminException {
+    public ResponseEntity<String> addNotice(NoticeAddDto notice) throws RuntimeException {
         log.info("notice = {}", notice);
         int result = service.addNotice(notice);
 
@@ -65,7 +70,7 @@ public class NoticeController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws NotClubMemberException, NotAdminException {
+    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws RuntimeException {
         log.info("dto = {}", dto);
 
         int result = service.deleteNotice(dto);

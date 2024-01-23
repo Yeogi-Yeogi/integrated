@@ -4,7 +4,6 @@ import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class BoardService {
      * @param pageNo
      * @return
      */
-    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException, DeletedClubException {
+    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws RuntimeException {
 
         CheckDto clubMember = checkMember.isClubMember(dto, template);
         if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
@@ -85,7 +84,7 @@ public class BoardService {
      * @param valid
      * @return
      */
-    public BoardDetailDto getOneByBoardNo(BoardDetailValidDto valid) throws NotClubMemberException {
+    public BoardDetailDto getOneByBoardNo(BoardDetailValidDto valid) throws RuntimeException {
 
         CheckDto clubMember = checkValid(valid.getClubNo(), valid.getMemberNo());
 
@@ -113,7 +112,7 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int addBoard(BoardAddDto dto) throws NotClubMemberException {
+    public int addBoard(BoardAddDto dto) throws RuntimeException {
 
         CheckDto clubMember = checkValid(dto.getClubNo(), dto.getMemberNo());
 
@@ -142,19 +141,19 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int deleteBoard(BoardDetailValidDto dto) throws NotClubMemberException {
+    public int deleteBoard(BoardDetailValidDto dto) throws RuntimeException {
         CheckDto clubMember = checkValid(dto.getClubNo(), dto.getMemberNo());
 
         int result = boardRepository.deleteBoard(dto, template);
 
         if(result != 1) {
-            throw new IllegalStateException("게시글 삭제는 본인이 작성한것만 가능합니다.");
+            throw new IllegalStateException("게시글 삭제는 본인이 작성한 것만 가능합니다.");
         }
 
         return result;
     }
 
-    private CheckDto checkValid(String clubNo, String memberNo) throws NotClubMemberException {
+    private CheckDto checkValid(String clubNo, String memberNo) throws RuntimeException {
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(clubNo, memberNo), template);
         if(!(memberNo != null && clubMember.getMemberNo().equals(memberNo))) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
@@ -167,7 +166,7 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int updateBoard(BoardUpdateDto dto) throws NotClubMemberException {
+    public int updateBoard(BoardUpdateDto dto) throws RuntimeException {
         checkValid(dto.getClubNo(), dto.getMemberNo());
 
         //해당 게시글을 자신이 쓴건지?

@@ -32,7 +32,7 @@ public class BoardController {
      * @return
      */
     @GetMapping("/list/{pageNo}")
-    public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws NotClubMemberException, DeletedClubException {
+    public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws RuntimeException {
         HttpHeaders headers = getHttpHeaders();
         log.info("check = {}", dto);
         return new ResponseEntity<>(service.getBoardListByClubNo(dto, pageNo), headers, HttpStatus.OK);
@@ -44,7 +44,7 @@ public class BoardController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addBoard(BoardAddDto dto) throws NotClubMemberException {
+    public ResponseEntity<String> addBoard(BoardAddDto dto) throws RuntimeException {
         log.info("boardAddDto = {}", dto);
         int result = service.addBoard(dto); //import한 사진 개수 만큼
 
@@ -59,7 +59,7 @@ public class BoardController {
      * @return
      */
     @GetMapping("/detail")
-    public ResponseEntity<BoardDetailDto> getOneByBoardNo(@ModelAttribute BoardDetailValidDto valid) throws NotClubMemberException {
+    public ResponseEntity<BoardDetailDto> getOneByBoardNo(@ModelAttribute BoardDetailValidDto valid) throws RuntimeException {
         log.info("valid = {}", valid);
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(service.getOneByBoardNo(valid), headers, HttpStatus.OK);
@@ -72,7 +72,7 @@ public class BoardController {
      * @return
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws NotClubMemberException {
+    public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws RuntimeException {
         log.info("deleteDto = {} ", dto);
         int result = service.deleteBoard(dto);
 
@@ -83,7 +83,7 @@ public class BoardController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<String> updateBoard(BoardUpdateDto dto) throws NotClubMemberException {
+    public ResponseEntity<String> updateBoard(BoardUpdateDto dto) throws RuntimeException {
         log.info("update = {}, 삭제하려는 사진 = {}, 추가하려는 사진 = {}", dto, dto.getDeleted(), dto.getImageList());
         int result = service.updateBoard(dto);
 
