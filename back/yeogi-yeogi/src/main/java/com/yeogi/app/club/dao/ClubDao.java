@@ -26,7 +26,7 @@ public class ClubDao {
     }
 
     public String isDeleted(String clubNo, SqlSessionTemplate template) {
-        return template.selectOne("clubMapper.isDeleted", clubNo);
+        return template.selectOne("ClubMapper.isDeleted", clubNo);
     }
 
     public List<ClubVo> searchClub(ClubSearchDto clubSearchDto, SqlSessionTemplate sst) {
@@ -107,5 +107,9 @@ public class ClubDao {
 
     public List<ClubVo> getClubList(SqlSessionTemplate sst) {
         return sst.selectList("ClubMapper.getClubList");
+    }
+
+    public int checkAge(SqlSessionTemplate sst, JoinClubDto dto) {
+        return sst.select("ClubMapper.checkAge", dto);
     }
 }
