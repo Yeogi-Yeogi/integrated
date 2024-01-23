@@ -79,14 +79,21 @@
 <!--    클럽 리스트 불러오기(메인에서 사용할거..)-->
     <select id="getClubList" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT C.NO
-        ,C.NAME
-        ,C.CLUB_DESCRIPTION
-        ,CI.FILE_URL
-        , (SELECT COUNT(MEMBER_NO)
-            FROM MEMBER_CLUB
-            WHERE CLUB_NO = C.NO) AS MEMBER_COUNT
+            ,C.NAME
+            ,M.NICK
+            ,C.SIGNUP_LIMIT
+            ,C.AGE_LIMIT
+            ,TO_CHAR(C.ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE
+            ,CC.CATEGORY_NAME
+            ,C.CLUB_DESCRIPTION
+            ,CI.FILE_URL
+            , (SELECT COUNT(MEMBER_NO)
+                FROM MEMBER_CLUB
+                WHERE CLUB_NO = C.NO) AS MEMBER_COUNT
         FROM CLUB C
-        JOIN CLUB_IMAGE_FILE CI ON C.NO = CI.NO
+            JOIN CLUB_IMAGE_FILE CI ON C.NO = CI.NO
+            JOIN MEMBER M ON C.CREATOR_NO = M.NO
+            JOIN CLUB_CATEGORY CC ON C.CATEGORY_NO = CC.CATEGORY_NO
         WHERE C.DEL_YN = 'N'
     </select>
 <!--    클럽 생성( 클럽명 중복 확인 ) -->
@@ -230,5 +237,10 @@
         SET DEL_YN = 'Y'
         WHERE NO = #{clubNo}
     </update>
-
+<!--    삭제된 클럽인지 확인-->
+    <select id="isDeleted" resultType="String">
+        SELECT DEL_YN
+        FROM CLUB
+        WHERE NO = #{clubNo}
+    </select>
 </mapper>

@@ -36,16 +36,16 @@ const StyledCarouselDiv = styled(Slider)`
 const Arrow = ({ onClick, direction }) => (
 
     <div onClick={onClick} style={{ 
-        position: 'absolute',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        cursor: 'pointer',
-        zIndex: 1,
-        left: direction === 'prev' ? '-50px' : 'auto',
-        right: direction === 'next' ? '-50px' : 'auto',  
-        }}
-        className="arrow"
-      >
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      cursor: 'pointer',
+      zIndex: 1,
+      left: direction === 'prev' ? '-50px' : 'auto',
+      right: direction === 'next' ? '-50px' : 'auto',  
+      }}
+      className="arrow"
+    >
       {direction === 'prev' ? <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px", transform: "rotate(90deg)"}}/> : <img src="/img/arrow-icon.png" style={{width:"50px", height:"50px", transform: "rotate(-90deg)"}}/>}
     </div>
   );

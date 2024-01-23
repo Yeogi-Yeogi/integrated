@@ -1,9 +1,6 @@
 package com.yeogi.app.club.controller;
 
-import com.yeogi.app.club.dto.ClubSearchDto;
-import com.yeogi.app.club.dto.CreateClubDto;
-import com.yeogi.app.club.dto.EditClubDto;
-import com.yeogi.app.club.dto.EditClubMemberDto;
+import com.yeogi.app.club.dto.*;
 import com.yeogi.app.club.service.ClubService;
 import com.yeogi.app.club.vo.ClubCategoryVo;
 import com.yeogi.app.club.vo.ClubMemberVo;
@@ -45,7 +42,7 @@ public class ClubController {
     }
 
     /**
-     * 클럽 리스트 불러오깅
+     * 클럽 리스트 불러오기
      */
     @GetMapping("clubList")
     public List<ClubVo> getClubList(){
@@ -99,15 +96,16 @@ public class ClubController {
         return service.getClubDescription(clubNo);
     }
 
+
     /**
      * 클럽 가입
-     * @param vo
+     * @param dto
      * @return
      */
     @PostMapping("joinClub")
-    public int joinClub(ClubVo vo){
-        // 회원 넘버 받아와서 처리할 dto 만들기,,
-        int result = service.joinClub(vo);
+    public int joinClub(@RequestBody JoinClubDto dto){
+        log.info("dto = {}", dto);
+        int result = service.joinClub(dto);
 
         return result;
     }
