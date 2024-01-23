@@ -11,6 +11,7 @@
     import com.yeogi.app.notice.repository.ScheduleRepository;
     import com.yeogi.app.notice.vo.ScheduleVo;
     import com.yeogi.app.util.check.CheckDto;
+    import com.yeogi.app.util.exception.DeletedClubException;
     import com.yeogi.app.util.exception.NotAdminException;
     import com.yeogi.app.util.exception.NotClubMemberException;
     import com.yeogi.app.util.check.CheckClubMember;
@@ -104,6 +105,7 @@
          */
         public int addNotice(NoticeAddDto notice) throws NotClubMemberException, NotAdminException {
             CheckDto clubMember = checkMember(notice.getClubNo(), notice.getMemberNo());
+
             if(!clubMember.getAdminYn().equals("Y")) {
                 throw new NotAdminException("관리자만 이용 가능합니다");
             }

@@ -6,6 +6,7 @@ import com.yeogi.app.notice.repository.ScheduleRepository;
 import com.yeogi.app.notice.vo.ScheduleVo;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class ScheduleService {
     public ScheduleListDto getListByClubNo(CheckDto dto, String isExpected, int offset) throws NotClubMemberException {
 
         CheckDto clubMember = checkMember.isClubMember(dto, template);
+
         if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
