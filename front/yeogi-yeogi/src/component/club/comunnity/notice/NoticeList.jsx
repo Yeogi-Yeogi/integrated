@@ -130,9 +130,17 @@ const NoticeList = () => {
                 }
                 setItems([...newItem]);
             })
-            .catch(err => {
-                alert(err.message);
-
+            .catch(e => {
+                const message = e.message;
+                alert(message);
+                switch(message) {
+                    case "회원 전용 서비스입니다. 로그인하세요.":
+                        navigate('/member/login');
+                        break;
+                    default:
+                        navigate(`/main`);
+                        break;
+                }
             })
         } else {
             alert('로그인한 회원만 이용가능합니다');
@@ -154,7 +162,7 @@ const NoticeList = () => {
     }
 
     const navigateWriteNotice = () => {
-        navigate(`/club/${clubNo}/commu/board/notice/write`)
+        navigate(`/club/${clubNo}/commu/board/notice/write`, {state: {isAdmin: isAdmin}});
     }
 
 

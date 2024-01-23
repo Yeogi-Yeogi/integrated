@@ -73,7 +73,7 @@ const ScheduleUpcoming = () => {
              setIsAdmin(data.admin);
              preventRef.current = true;
          } catch (e) {
-             console.log(e);
+             alert(e.message);
          } finally {
              setLoad(false);
          }

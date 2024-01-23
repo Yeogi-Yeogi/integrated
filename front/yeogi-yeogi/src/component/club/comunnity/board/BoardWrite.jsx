@@ -222,9 +222,19 @@ const BoardWrite = () => {
             alert(data);
             navigate(`/club/${clubNo}/commu/board/list`);
         })
-        .catch(err => {
-            alert("게시글을 등록하지 못했습니다.");
-            console.error(err);
+        .catch(e => {
+            const message = e.message;
+            alert(message);
+            switch(message) {
+                case "회원 전용 서비스입니다. 로그인하세요.":
+                    navigate('/member/login');
+                    break;
+                case "작성 실패":
+                    break;
+                default:
+                    navigate("/main");
+                    break;
+            }
         })
         .finally(() => {
             setIsFetching(false);
