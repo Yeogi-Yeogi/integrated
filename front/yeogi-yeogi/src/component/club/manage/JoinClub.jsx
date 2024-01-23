@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ReactModal from 'react-modal';
+import { json, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const modalStyles = {
     overlay: {
@@ -55,6 +57,7 @@ const StyledJoinModal = styled(ReactModal)`
         align-items: center;
         grid-template-columns: 1.5fr 2fr;
         & > div:first-child{
+            margin-left: 15px;
             width: 100%;
             height: 100%;
             display: flex;
@@ -63,7 +66,7 @@ const StyledJoinModal = styled(ReactModal)`
             & > img {
                 width: 90%;
                 height: 90%;
-                border: 1px solid black;
+                border: 1px solid #d8d8d8;
                 border-radius: 15px;
             }
         }
@@ -114,9 +117,50 @@ const StyledJoinModal = styled(ReactModal)`
   `;
 
 const JoinClub = ({ isOpen, closeModal, club}) => {
+    
+    const navigate = useNavigate();
+    
+    const signupClub = (clubNo) => {
+        const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+        const memberNo = loginMember.no;
 
-    const signupClub = () => {
-        alert("가입하기ㅋㅋ");
+        const join = {
+            "clubNo" : clubNo,
+            "memberNo" : memberNo
+        }
+        console.log(memberNo);
+        console.log(join)
+        fetch("http://127.0.0.1:8885/club/joinClub", {
+            method : "POST",
+            headers: {
+                "Content-Type": `application/json`, 
+            },
+            body : JSON.stringify(join),
+        })
+        .then(resp => resp.text())
+        .then(data => {
+            // console.log("data ::: ", data);
+            if(data === "1"){
+                isOpen = false;
+                Swal.fire({
+                    icon: 'success',                  
+                    title: club.name + 'ㅋㅋ',
+                    text : '가입이 완료되었습니다',
+                    confirmButtonText: '확인'
+                });
+                navigate("/club/"+ clubNo +"/commu/board");
+            } else {
+                Swal.fire({
+                    icon: 'error',                  
+                    text: '모임 가입이 실ㄹ패,,?', 
+                    confirmButtonText: '확인'
+                }); 
+            }
+        })
+        .catch(error => {
+            console.error("Error : ", error);
+        });
+    
     };
     return (
         <StyledJoinModal 
@@ -148,7 +192,7 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                 </div>
             </div>
             <div>
-                <button type='button' onClick={signupClub}>가입하기</button>
+                <button type='button' onClick={() => signupClub(club.no)}>가입하기</button>
             </div>
         </StyledJoinModal>
     );

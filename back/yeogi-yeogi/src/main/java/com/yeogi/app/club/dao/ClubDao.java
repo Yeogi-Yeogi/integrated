@@ -45,8 +45,8 @@ public class ClubDao {
         return sst.selectOne("ClubMapper.clubDescription", clubNo);
     }
 
-    public int joinClub(SqlSessionTemplate sst, ClubVo vo) {
-        return sst.insert("ClubMapper.joinClub", vo);
+    public int joinClub(SqlSessionTemplate sst, JoinClubDto dto) {
+        return sst.insert("ClubMapper.joinClub", dto);
     }
 
     public int editClub(SqlSessionTemplate sst, EditClubDto editClubDto) {

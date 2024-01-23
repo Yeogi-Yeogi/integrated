@@ -68,8 +68,8 @@ public class ClubService {
         return dao.getClubDescription(sst, clubNo);
     }
 
-    public int joinClub(ClubVo vo) {
-        return dao.joinClub(sst, vo);
+    public int joinClub(JoinClubDto dto) {
+        return dao.joinClub(sst, dto);
     }
 
     public int editClub(EditClubDto editClubDto, MultipartFile file) throws IOException {
