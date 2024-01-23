@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.yeogi.app.board.dto.BoardListFileUrlDto;
 import com.yeogi.app.board.repository.BoardImageRepository;
 import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.board.vo.BoardImageFileVo;
@@ -122,6 +121,19 @@ public class BoardImageService {
         List<BoardImageFileVo> imageList = getListByBoardNo(boardNo);
         imageList.stream().forEach(e -> deleteServerImage(e.getFileName()));
         int result = imageRepository.deleteByBoardNo(boardNo, template);
+        return result;
+    }
+
+    /**
+     * 해당 번호에 해당하는 사진 객체를 받아온 후 지우기
+     * @return
+     */
+    public int deleteImagesByNo(List<String> deleted) {
+
+        List<BoardImageFileVo> deleteList = imageRepository.getBoardImageVoByNo(deleted, template);
+        deleteList.stream().forEach(i -> deleteServerImage(i.getFileName()));
+
+        int result = imageRepository.deleteByNo(deleted, template);
         return result;
     }
 }

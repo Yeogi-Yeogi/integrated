@@ -238,8 +238,7 @@ const NoticeWrite = () => {
 
 
         const formData = new FormData();
-        formData.append("title", title);
-        formData.append("content", content);
+        formData.append("content", content === undefined ? '내용이 없습니다.' : content);
         formData.append("clubNo", clubNo);
         formData.append("memberNo", memberNo);
         formData.append("noticeYn", "Y");
@@ -247,6 +246,10 @@ const NoticeWrite = () => {
             formData.append("scheduleTitle", scheduleTitle);
             formData.append("scheduleDate", scheduleDate);
             formData.append("scheduleLocation", scheduleLocation);
+            formData.append("title", title === undefined ? '일정 등록' : title);
+        } else {
+            formData.append("title", title === undefined ? '공지 등록' : title);
+
         }
         imageList.forEach(el => formData.append("imageList", el));
 

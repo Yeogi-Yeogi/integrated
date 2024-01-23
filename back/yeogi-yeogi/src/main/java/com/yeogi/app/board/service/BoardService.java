@@ -5,6 +5,7 @@ import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +43,17 @@ public class BoardService {
      * @param pageNo
      * @return
      */
-    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException {
+    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException, DeletedClubException {
 
         CheckDto clubMember = checkMember.isClubMember(dto, template);
         if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
+
+        if(checkMember.isDeleted(clubMember.getClubNo(), template)) {
+            throw new DeletedClubException("삭제된 클럽입니다.");
+        }
+
 
         int boardLimit = 5;
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*boardLimit, boardLimit);
@@ -162,6 +168,47 @@ public class BoardService {
             throw new IllegalStateException("게시글 삭제는 본인이 작성한것만 가능합니다.");
         }
 
+        return result;
+    }
+
+    /**
+     * 게시글 수정
+     * @param dto
+     * @return
+     */
+    public int updateBoard(BoardUpdateDto dto) throws NotClubMemberException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
+        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        }
+
+        //해당 게시글을 자신이 쓴건지?
+        String findNo = boardRepository.getBoardNo(dto, template);
+
+        if(!(findNo != null && dto.getBoardNo().equals(findNo))) {
+            throw new IllegalStateException("자신이 작성한 게시글만 수정 가능합니다");
+        }
+        int result = 0;
+        //게시글 수정
+        if(!(dto.getTitle() == null && dto.getContent() == null)) {
+            result = boardRepository.updateBoard(dto, template);
+        }
+        log.info("게시글 제목 내용 수정 결과 = {}", result);
+        if(!(dto.getTitle() == null && dto.getContent() ==null) && result != 1) {
+            throw new IllegalStateException("게시글 수정 실패");
+        }
+
+        if (dto.getDeleted() != null) {
+            result = boardImageService.deleteImagesByNo(dto.getDeleted());
+        }
+
+        if(result != dto.getDeleted().size()) {
+            throw new NoResultException("삭제 실패");
+        }
+
+        if(dto.getImageList() != null) {
+            result = boardImageService.addImages(dto.getImageList(), dto.getBoardNo());
+        }
         return result;
     }
 }

@@ -1,6 +1,5 @@
 package com.yeogi.app.util.check;
 
-import com.yeogi.app.board.dto.CheckIsMemberDto;
 import com.yeogi.app.club.dao.ClubDao;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +26,16 @@ public class CheckClubMember {
         }
         return clubRepository.checkIsClubMember(dto, template);
 
+    }
+
+    /**
+     * 클럽이 삭제됐는 지 여부 체크
+     *
+     * @param clubNo
+     * @param template
+     * @return
+     */
+    public boolean isDeleted(String clubNo, SqlSessionTemplate template) {
+        return clubRepository.isDeleted(clubNo, template).equals("Y");
     }
 }

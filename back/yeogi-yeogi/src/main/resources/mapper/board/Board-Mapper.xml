@@ -24,6 +24,7 @@
         LEFT OUTER JOIN BOARD_IMAGE_FILE BI ON B.NO = BI.BOARD_NO
         WHERE
             C.NO = #{clubNo}
+            AND C.DEL_YN = 'N'
             AND B.DEL_YN = 'N'
             AND B.NOTICE_YN = 'N'
         GROUP BY
@@ -163,5 +164,25 @@
             SET DEL_YN = 'Y'
         WHERE NO = #{boardNo}
         AND MEMBER_NO = #{memberNo}
+    </update>
+
+    <select id="getBoardNo" resultType="String">
+        SELECT NO
+        FROM BOARD
+        WHERE MEMBER_NO = #{memberNo} AND CLUB_NO = #{clubNo} AND NO = #{boardNo}
+    </select>
+
+    <update id="updateBoard" parameterType="com.yeogi.app.board.dto.BoardUpdateDto">
+        UPDATE BOARD
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            MODIFY_DATE = LOCALTIMESTAMP
+        </set>
+        WHERE NO = #{boardNo}
     </update>
 </mapper>
