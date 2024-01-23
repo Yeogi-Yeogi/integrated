@@ -123,6 +123,15 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
     const signupClub = (clubNo) => {
         
         const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+        if(loginMember === null){
+            Swal.fire({
+                icon: 'info',                  
+                title: '로그인 후 진행하실 수 있습니다.',
+                confirmButtonText: '확인'
+            });
+            navigate("/member/login");
+            return;
+        }
         const memberNo = loginMember.no;
         const join = {
             "clubNo" : clubNo,
