@@ -164,6 +164,15 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                         confirmButtonText: '확인'
                     }); 
                 }
+                if(data === "4"){
+                    Swal.fire({
+                        icon: 'info',       
+                        title: '이미 가입한 클럽 입니다.',           
+                        // text: 'ㅋㅋ', 
+                        confirmButtonText: '확인'
+                    }); 
+                    navigate("/club/"+ clubNo +"/commu/board");
+                }
             }
         })
         .catch(error => {

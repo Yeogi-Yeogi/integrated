@@ -13,11 +13,13 @@ import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -71,19 +73,23 @@ public class ClubService {
     }
 
     public int joinClub(JoinClubDto dto) {
-        int result = 0;
         CheckClubLimitVo limit = dao.checkLimit(sst, dto);
         log.info("limit : {}", limit);
         // 클럽 가입 연령 체크 가입연령 안되면 2 리턴
         if(limit.getAge() < limit.getAgeLimit()){
-            result = 2;
+            return 2;
             // 모임 가입 인원이 제한보다 큰 경우 3 리턴
         }  else if (limit.getMembers() >= limit.getMemberLimit()) {
-            result = 3;
+            return 3;
         } else {
-            result = dao.joinClub(sst, dto);
+            try {
+                int result = dao.joinClub(sst, dto);
+                return result;
+            } catch (DataIntegrityViolationException e) {
+                // 중복 가입 시도시 4 리턴
+                return 4;
+            }
         }
-        return result;
     }
 
     public int editClub(EditClubDto editClubDto, MultipartFile file) throws IOException {
