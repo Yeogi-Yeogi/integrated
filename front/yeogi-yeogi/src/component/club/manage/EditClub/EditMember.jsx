@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const StyledEditMemberDiv = styled.div`
     height: 500px;
@@ -65,6 +66,7 @@ const EditMember = () => {
     
     // if(loginMember === null){
     //     navigate("/main");
+    //     return;
     // }
 
     let { clubNo } = useParams();
@@ -84,42 +86,89 @@ const EditMember = () => {
 
     useEffect(() => {
         loadMemberList();
-    
     }, []); 
 
 
-    // 마스터,어드민 여부 판단해서 나올 메뉴 정하기, 회원 리스트 반복
-    const generateRows = () => {
+    // 짭 더미데이터
+    // const generateRows = () => {
 
-        const rows = [];
-        for (let i = 1; i <= 30; i++) {
-          rows.push(
-            <tr key={i}>
-                <td>
-                </td>
-                <td>닉네임{i}</td>
-                <td>심우너용</td>
-                <td>010-1234-5678</td>
-                <td>2001.01.01</td>
-                <td>
-                    <DropdownButton id="dropdown-basic-button" title="">
-                        <Dropdown.Item onClick={zz}>관리자 지정</Dropdown.Item>
-                        <Dropdown.Item onClick={zz}>관리자 해제</Dropdown.Item>
-                        <Dropdown.Item onClick={zzz}>추방</Dropdown.Item>
-                    </DropdownButton>
-                </td>
-            </tr>
-          );
+    //     const rows = [];
+    //     for (let i = 1; i <= 30; i++) {
+    //       rows.push(
+    //         <tr key={i}>
+    //             <td>
+    //             </td>
+    //             <td>닉네임{i}</td>
+    //             <td>심우너용</td>
+    //             <td>010-1234-5678</td>
+    //             <td>2001.01.01</td>
+    //             <td>
+    //                 <DropdownButton id="dropdown-basic-button" title="">
+    //                     <Dropdown.Item onClick={zz}>관리자 지정</Dropdown.Item>
+    //                     <Dropdown.Item onClick={zz}>관리자 해제</Dropdown.Item>
+    //                     <Dropdown.Item onClick={zzz}>추방</Dropdown.Item>
+    //                 </DropdownButton>
+    //             </td>
+    //         </tr>
+    //       );
+    //     }
+    //     return rows;
+    // };
+
+    const editClubMemberConfirm = (editType, member) => {
+        let editText = '';
+
+        switch (editType) {
+          case 'adminY':
+            editText = '관리자로 지정';
+            break;
+          case 'adminN':
+            editText = '관리자 해제';
+            break;
+          case 'deleteMember':
+            editText = '회원 추방';
+            break;
         }
-        return rows;
+
+        Swal.fire({
+            text: member.nick + '님을 ' + editText + ' 하시겠습니까?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', 
+            cancelButtonColor: '#d33', 
+            confirmButtonText: '확인',
+            cancelButtonText: '취소', 
+         }).then(result => {
+            if (result.isConfirmed) { 
+                editMember(editType, member);
+            }
+         });
     };
 
-    const zz = () => {
-        alert("zz");
+    const editMember = (editType, member) => {
+        const editClubMemberDto = {
+            "no" : clubNo,
+            "memberNo" : member.memberNo,
+            "editType" : editType,
+        };
+
+        fetch("http://127.0.0.1:8885/club/editClubMember", {
+            method: "POST",
+            headers : {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editClubMemberDto)
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            console.log("data ::: ", data);
+            // if(data === '1'){
+                loadMemberList();
+            // }
+        })   
     }
-    const zzz = () => {
-        alert("zzz");
-    }
+
+
     return (
         <StyledEditMemberDiv>
             <div>
@@ -171,16 +220,15 @@ const EditMember = () => {
                                     <td>{member.regDate}</td>
                                     <td>          
                                         {member.memberNo !== member.creatorNo &&                              
-                                        <DropdownButton id="dropdown-basic-button" title="">
-                                            {loginMember && member.creatorNo && loginMember.no === member.creatorNo && (
-                                                <>
-                                                    <Dropdown.Item onClick={zz}>관리자 지정</Dropdown.Item>
-                                                    <Dropdown.Item onClick={zz}>관리자 해제</Dropdown.Item>
-                                                </>
-                                            )}
-                                            
-                                            <Dropdown.Item onClick={zzz}>회원추방</Dropdown.Item>                                       
-                                        </DropdownButton>
+                                            <DropdownButton  title="">
+                                                {(loginMember && !member.creatorNo  && member.adminYn === 'N') ? (
+                                                    <Dropdown.Item onClick={() => editClubMemberConfirm('adminY', member)}>관리자 지정</Dropdown.Item>
+                                                ) : null}
+                                                {(loginMember && !member.creatorNo && member.adminYn === 'Y') ? (
+                                                    <Dropdown.Item onClick={() => editClubMemberConfirm('adminN', member)}>관리자 해제</Dropdown.Item>
+                                                ) : null}
+                                                <Dropdown.Item onClick={() => editClubMemberConfirm('deleteMember', member)}>회원추방</Dropdown.Item>                                       
+                                            </DropdownButton>
                                         }
                                     </td>
                                 </tr>

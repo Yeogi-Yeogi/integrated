@@ -220,29 +220,36 @@
             ,M.NAME
             ,M.PHONE
             ,M.EMAIL
-            ,C.CREATOR_NO
+            ,CASE WHEN C.CREATOR_NO = MC.MEMBER_NO THEN C.CREATOR_NO END AS CREATOR_NO
         FROM MEMBER_CLUB MC
         JOIN MEMBER M ON MC.MEMBER_NO = M.NO
         JOIN CLUB C ON MC.CLUB_NO = C.NO
         WHERE MC.CLUB_NO = #{clubNo}
-        ORDER BY ADMIN_YN DESC, REG_DATE
+        ORDER BY
+            CASE WHEN C.CREATOR_NO = MC.MEMBER_NO THEN 0 ELSE 1 END,
+            ADMIN_YN DESC,
+            REG_DATE
     </select>
 <!--    클럽 관리(관리자 지정 및 해제, 회원 추방)-->
     <update id="editClubMember">
         <choose>
             <when test="editType != null and editType.contains('admin') ">
                 UPDATE MEMBER_CLUB
-                <if test="adminN">
+                <if test="editType == 'adminN'">
                     SET ADMIN_YN = 'N'
+                    WHERE MEMBER_NO = #{memberNo}
+                        AND CLUB_NO = #{no}
                 </if>
-                <if test="adminY">
+                <if test="editType == 'adminY'">
                     SET ADMIN_YN = 'Y'
+                    WHERE MEMBER_NO = #{memberNo}
+                        AND CLUB_NO = #{no}
                 </if>
             </when>
             <when test="editType.equals('deleteMember')">
                 DELETE FROM MEMBER_CLUB
                 WHERE MEMBER_NO = #{memberNo}
-                    AND CLUB_NO = #{clubNo}
+                    AND CLUB_NO = #{no}
             </when>
             <otherwise>
                 DELETE FROM CLUB

@@ -151,7 +151,8 @@ public class ClubController {
      * @return
      */
     @PostMapping("editClubMember")
-    public int editClubMember(EditClubMemberDto editClubMemberDto){
+    public int editClubMember(@RequestBody EditClubMemberDto editClubMemberDto){
+        log.info("EditClubMemberDto : {}", editClubMemberDto);
         return service.editClubMember(editClubMemberDto);
     }
 
