@@ -137,8 +137,7 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
             "clubNo" : clubNo,
             "memberNo" : memberNo
         }
-        console.log(memberNo);
-        console.log(join)
+
         fetch("http://127.0.0.1:8885/club/joinClub", {
             method : "POST",
             headers: {
@@ -177,7 +176,6 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                     Swal.fire({
                         icon: 'info',       
                         title: '이미 가입한 클럽 입니다.',           
-                        // text: 'ㅋㅋ', 
                         confirmButtonText: '확인'
                     }); 
                     navigate("/club/"+ clubNo +"/commu/board");

@@ -169,7 +169,8 @@ const EditMember = () => {
                                     <td>{member.name}</td>
                                     <td>{member.phone}</td>
                                     <td>{member.regDate}</td>
-                                    <td>                                       
+                                    <td>          
+                                        {member.memberNo !== member.creatorNo &&                              
                                         <DropdownButton id="dropdown-basic-button" title="">
                                             {loginMember && member.creatorNo && loginMember.no === member.creatorNo && (
                                                 <>
@@ -177,14 +178,15 @@ const EditMember = () => {
                                                     <Dropdown.Item onClick={zz}>관리자 해제</Dropdown.Item>
                                                 </>
                                             )}
-                                            <Dropdown.Item onClick={zzz}>회원추방</Dropdown.Item>
+                                            
+                                            <Dropdown.Item onClick={zzz}>회원추방</Dropdown.Item>                                       
                                         </DropdownButton>
-                                        
+                                        }
                                     </td>
                                 </tr>
                             )
                         }
-                        {generateRows()}
+                        {/* {generateRows()} */}
                     </tbody>
                 </table>
             </div>

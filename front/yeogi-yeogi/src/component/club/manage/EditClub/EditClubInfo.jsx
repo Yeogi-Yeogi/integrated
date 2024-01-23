@@ -182,7 +182,7 @@ const EditClubInfo = () => {
     // 모임인원, 나이제한 글자 넣기,,,(임시)
     const signupLimit = [];
     for (let i = 5; i <= 20; i++) {
-        signupLimit.push(<option key={i} value={i}>{i}</option>);
+        signupLimit.push(<option key={i} value={i}>{i} 명</option>);
     }
 
     const ageLimit = [];
