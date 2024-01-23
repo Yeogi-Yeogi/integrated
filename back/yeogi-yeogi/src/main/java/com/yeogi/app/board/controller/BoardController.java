@@ -3,8 +3,6 @@ package com.yeogi.app.board.controller;
 import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.service.BoardService;
 import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.DeletedClubException;
-import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -44,8 +42,8 @@ public class BoardController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addBoard(BoardAddDto dto) throws RuntimeException {
-        log.info("boardAddDto = {}", dto);
+    public ResponseEntity<String> addBoard(BoardUploadDto dto) throws RuntimeException {
+        log.info("boardUploadDto = {}", dto);
         int result = service.addBoard(dto); //import한 사진 개수 만큼
 
         HttpHeaders headers = getHttpHeaders();
@@ -83,7 +81,7 @@ public class BoardController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<String> updateBoard(BoardUpdateDto dto) throws RuntimeException {
+    public ResponseEntity<String> updateBoard(BoardUploadDto dto) throws RuntimeException {
         log.info("update = {}, 삭제하려는 사진 = {}, 추가하려는 사진 = {}", dto, dto.getDeleted(), dto.getImageList());
         int result = service.updateBoard(dto);
 
