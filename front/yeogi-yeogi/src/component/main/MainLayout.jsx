@@ -4,6 +4,8 @@ import MainProduce from './MainProduce';
 import SelectMyClub from './SelectMyClub';
 import SearchBar from './SearchBar';
 import MainClubList from './MainClubList';
+import { useMemberMemory } from '../context/MemberContext';
+import Slide from './Slide';
 
 
 const StyledMainLayoutDiv = styled.div`
@@ -14,14 +16,32 @@ const StyledMainLayoutDiv = styled.div`
 `;
 
 const MainLayout = () => {
-    return (
-        <StyledMainLayoutDiv>
-            <MainProduce/>
-            <SelectMyClub/>
-            <SearchBar/>
-            <MainClubList/>                   
-        </StyledMainLayoutDiv>
-    );
+
+    const {loginMember , setLoginMember}  = useMemberMemory();
+
+    //sessionStorage에서 loginMember값을 가져온다
+    const storedLoginMember = sessionStorage.getItem('loginMember');
+
+    //loginMember 값이 null인지에따라 SelectMyClub컴포넌트의 렌더링 유무를 정함
+    if(storedLoginMember === null){
+        return (
+            <StyledMainLayoutDiv>
+                <MainProduce/>
+                <Slide/>
+                <SearchBar/>
+                <MainClubList/>                   
+            </StyledMainLayoutDiv>
+        );
+    }else{
+        return (
+            <StyledMainLayoutDiv>
+                <MainProduce/>
+                <SelectMyClub/>
+                <SearchBar/>
+                <MainClubList/>                   
+            </StyledMainLayoutDiv>
+        );
+    }
 };
 
 export default MainLayout;

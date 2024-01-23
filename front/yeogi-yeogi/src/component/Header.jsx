@@ -105,12 +105,18 @@ const Header = () => {
 
     const navigate = useNavigate();
 
+    const {loginMember , setLoginMember}  = useMemberMemory();
+
+    console.log(loginMember);
+
     const handleLogout = () => {
         // 로그아웃 시 필요한 작업을 수행
         // 예: 세션 정보 삭제, 로그인 상태 초기화 등
     
         // 세션 정보 삭제 예제
         sessionStorage.removeItem('loginMember');
+
+        setLoginMember(null);
 
         alert("로그아웃 성공");
     
@@ -120,10 +126,6 @@ const Header = () => {
         // 로그아웃 후 리다이렉션 등 추가 작업 수행
         navigate('/');
     }
-
-    const {loginMember , setLoginMember}  = useMemberMemory();
-
-    console.log(loginMember);
 
     const { clubNo } = useParams();
 

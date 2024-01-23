@@ -8,6 +8,7 @@ import MemberLayout from './member/MemberLayout';
 import CreateClub from './club/manage/CreateClub';
 import MainLayout from './main/MainLayout';
 
+
 const StyledLayOutDiv = styled.div`
     width: 100%;
     height: 100vh;
