@@ -35,7 +35,7 @@ public class ReviewService {
      * @return
      * @throws NotClubMemberException
      */
-    public Map<String, Object> getReviews(ReviewReqDto dto, String offset) throws NotClubMemberException {
+    public Map<String, Object> getReviews(ReviewReqDto dto, String offset) throws RuntimeException {
 
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
         if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
@@ -67,7 +67,7 @@ public class ReviewService {
      * @return
      * @throws FailReviewException
      */
-    public int addReview(ReviewAddDto review) throws FailReviewException, NotClubMemberException {
+    public int addReview(ReviewAddDto review) throws RuntimeException {
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(review.getClubNo(), review.getWriterNo()), template);
         if(!clubMember.getMemberNo().equals(review.getWriterNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
@@ -80,7 +80,7 @@ public class ReviewService {
      * @param review
      * @return
      */
-    public int deleteReviewByNo(ReviewValidDto review) throws NotClubMemberException, FailReviewException {
+    public int deleteReviewByNo(ReviewValidDto review) throws RuntimeException {
         CheckDto clubMember = checkMember.isClubMember(new CheckDto(review.getClubNo(), review.getWriterNo()), template);
 
         if(!clubMember.getMemberNo().equals(review.getWriterNo())) {
@@ -90,7 +90,7 @@ public class ReviewService {
         String findReviewNo = repository.getNoByWriterNo(review, template);
 
         if(!(findReviewNo != null && findReviewNo.equals(review.getReviewNo()))) {
-            throw new FailReviewException("자신이 작성한 것만 삭제가 가능합니다.");
+            throw new FailReviewException("자신이 작성한 댓글만 삭제가 가능합니다.");
         }
         log.info("지울 리뷰 번호 = {} , DB에서 가져온 리뷰 번호 = {}", review.getReviewNo(), findReviewNo);
         int result = repository.deleteByNo(findReviewNo, template);

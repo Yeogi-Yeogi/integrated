@@ -78,6 +78,10 @@ const GalleryList = () => {
         try {
             
             const res = await fetch(`http://localhost:8885/gallery/list/${page}?memberNo=${memberNo}&clubNo=${clubNo}`);
+            if(!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData?.message);
+            }
             const data = await res.json();
 
             if(data.length === 0) {
@@ -88,7 +92,16 @@ const GalleryList = () => {
             console.log(data);
             preventRef.current = true;
         } catch (e) {
-            console.error(e);
+            const message = e.message;
+            alert(message);
+            switch(message) {
+                case "회원 전용 서비스입니다. 로그인하세요.":
+                    navigate('/member/login');
+                    break;
+                default:
+                    navigate(`/main`);
+                    break;
+            }
         } finally {
             setLoad(false);
         }

@@ -1,10 +1,10 @@
 package com.yeogi.app.gallery.service;
 
-import com.yeogi.app.board.dto.BoardListFileUrlDto;
 import com.yeogi.app.gallery.dto.GalleryListDto;
 import com.yeogi.app.gallery.repository.GalleryRepository;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +34,8 @@ public class GalleryService {
      */
     public List<GalleryListDto> getList(CheckDto dto, String pageNo) throws NotClubMemberException {
         CheckDto checkMember = checkMember(dto.getClubNo(), dto.getMemberNo());
+
+
         if(!checkMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }

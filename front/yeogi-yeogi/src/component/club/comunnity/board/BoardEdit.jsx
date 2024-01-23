@@ -239,25 +239,20 @@ const BoardEdit = () => {
         }
         formData.append("boardNo", previous.boardNo);
         formData.append("memberNo", memberNo);
-        console.log(`memberNo`, memberNo);
         formData.append("clubNo", clubNo);
-        console.log(`clubNo`, clubNo);
         //기존 파일
         imageList.forEach(el => formData.append("imageList", el));
-        console.log(`새로 저장할 imageList`, imageList);
-        
         deletedImage.forEach(el => formData.append("deleted", el));
-        console.log(`기존 사진에서 삭제할 파일 deletedImage`, deletedImage);
 
-        console.log(formData);
 
         fetch('http://localhost:8885/board/update', {
             method: "PATCH",
             body: formData
         })
-        .then(res => {
+        .then(async res => {
             if(!res.ok) {
-                throw new Error(res.json());
+                const errorData = await res.json();
+                throw new Error(errorData.message);
             }
             return res.text();
         })
@@ -265,9 +260,21 @@ const BoardEdit = () => {
             alert(data);
             navigate(`/club/${clubNo}/commu/board/detail/${previous.boardNo}`);
         })
-        .catch(err => {
-            alert("게시글을 등록하지 못했습니다.");
-            console.error(err);
+        .catch(e => {
+            const message = e.message;
+            alert(message);
+            switch(message) {
+                case "회원 전용 서비스입니다. 로그인하세요.":
+                    navigate('/member/login');
+                    break;
+                case "모임에 가입한 회원만 이용 가능합니다":
+                case "삭제된 클럽입니다":
+                    navigate(`/main`);
+                    break;
+                default:
+                    navigate(`/club/${clubNo}/commu/board/detail/${previous.boardNo}`);
+                    break;
+            }
         })
         .finally(() => {
             setIsFetching(false);

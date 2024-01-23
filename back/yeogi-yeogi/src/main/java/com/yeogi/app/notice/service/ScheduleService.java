@@ -27,9 +27,10 @@ public class ScheduleService {
     private final SqlSessionTemplate template;
 
 
-    public ScheduleListDto getListByClubNo(CheckDto dto, String isExpected, int offset) throws NotClubMemberException {
+    public ScheduleListDto getListByClubNo(CheckDto dto, String isExpected, int offset) throws RuntimeException {
 
         CheckDto clubMember = checkMember.isClubMember(dto, template);
+
         if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }

@@ -2,10 +2,8 @@ package com.yeogi.app.board.service;
 
 import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.repository.BoardRepository;
-import com.yeogi.app.review.repository.ReviewRepository;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +27,6 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    private final ReviewRepository reviewRepository;
-
     private final CheckClubMember checkMember;
 
     private final BoardImageService boardImageService;
@@ -43,17 +39,12 @@ public class BoardService {
      * @param pageNo
      * @return
      */
-    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws NotClubMemberException, DeletedClubException {
+    public List<BoardListDto> getBoardListByClubNo(CheckDto dto, String pageNo) throws RuntimeException {
 
         CheckDto clubMember = checkMember.isClubMember(dto, template);
         if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
             throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
         }
-
-        if(checkMember.isDeleted(clubMember.getClubNo(), template)) {
-            throw new DeletedClubException("삭제된 클럽입니다.");
-        }
-
 
         int boardLimit = 5;
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*boardLimit, boardLimit);
@@ -93,12 +84,9 @@ public class BoardService {
      * @param valid
      * @return
      */
-    public BoardDetailDto getOneByBoardNo(BoardDetailValidDto valid) throws NotClubMemberException {
+    public BoardDetailDto getOneByBoardNo(BoardDetailValidDto valid) throws RuntimeException {
 
-        CheckDto clubMember = checkMember.isClubMember(new CheckDto(valid.getClubNo(), valid.getMemberNo()), template);
-        if(!(valid.getMemberNo() != null && clubMember.getMemberNo().equals(valid.getMemberNo()))) {
-            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
-        }
+        CheckDto clubMember = checkValid(valid.getClubNo(), valid.getMemberNo());
 
         //게시글 가져오기
         BoardDetailDto findBoard =  boardRepository.getBoardByBoardNo(valid, template);
@@ -124,12 +112,9 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int addBoard(BoardAddDto dto) throws NotClubMemberException {
+    public int addBoard(BoardAddDto dto) throws RuntimeException {
 
-        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
-        if(!clubMember.getMemberNo().equals(dto.getMemberNo())) {
-            throw new NotClubMemberException("회원만 작성 가능합니다.");
-        }
+        CheckDto clubMember = checkValid(dto.getClubNo(), dto.getMemberNo());
 
         int result = boardRepository.addBoard(dto, template);
 
@@ -156,19 +141,24 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int deleteBoard(BoardDetailValidDto dto) throws NotClubMemberException {
-        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
-        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
-            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
-        }
+    public int deleteBoard(BoardDetailValidDto dto) throws RuntimeException {
+        CheckDto clubMember = checkValid(dto.getClubNo(), dto.getMemberNo());
 
         int result = boardRepository.deleteBoard(dto, template);
 
         if(result != 1) {
-            throw new IllegalStateException("게시글 삭제는 본인이 작성한것만 가능합니다.");
+            throw new IllegalStateException("게시글 삭제는 본인이 작성한 것만 가능합니다.");
         }
 
         return result;
+    }
+
+    private CheckDto checkValid(String clubNo, String memberNo) throws RuntimeException {
+        CheckDto clubMember = checkMember.isClubMember(new CheckDto(clubNo, memberNo), template);
+        if(!(memberNo != null && clubMember.getMemberNo().equals(memberNo))) {
+            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
+        }
+        return clubMember;
     }
 
     /**
@@ -176,11 +166,8 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int updateBoard(BoardUpdateDto dto) throws NotClubMemberException {
-        CheckDto clubMember = checkMember.isClubMember(new CheckDto(dto.getClubNo(), dto.getMemberNo()), template);
-        if(!(dto.getMemberNo() != null && clubMember.getMemberNo().equals(dto.getMemberNo()))) {
-            throw new NotClubMemberException("모임에 가입한 회원만 이용 가능합니다");
-        }
+    public int updateBoard(BoardUpdateDto dto) throws RuntimeException {
+        checkValid(dto.getClubNo(), dto.getMemberNo());
 
         //해당 게시글을 자신이 쓴건지?
         String findNo = boardRepository.getBoardNo(dto, template);

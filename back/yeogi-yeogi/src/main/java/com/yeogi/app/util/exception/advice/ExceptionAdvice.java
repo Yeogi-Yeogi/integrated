@@ -27,7 +27,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         log.info("e = {}", e.getCause());
         ErrorResult response = new ErrorResult();
         response.setCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage("모임에 가입한 사람만 가능합니다.");
+        response.setMessage(e.getMessage());
 
         return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
     }
@@ -85,7 +85,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         response.setCode(HttpStatus.BAD_REQUEST.value());
         response.setMessage(e.getMessage());
 
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, null, HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -98,8 +98,8 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         e.printStackTrace();
         ErrorResult response = new ErrorResult();
         response.setCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage(e.getLocalizedMessage());
+        response.setMessage(e.getMessage());
 
-        return new ResponseEntity<>(response, null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, null, HttpStatus.NOT_FOUND);
     }
 }

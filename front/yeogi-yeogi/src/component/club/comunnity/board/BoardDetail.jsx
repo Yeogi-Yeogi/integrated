@@ -163,9 +163,10 @@ const BoardDetail = () => {
     useEffect(() => {
         if(memberNo) {
             fetch(`http://localhost:8885/board/detail?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
-            .then(res => {
+            .then(async res => {
                 if(!res.ok) {
-                    throw new Error(res.json());
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
                 }
                 return res.json();
             })
@@ -173,8 +174,20 @@ const BoardDetail = () => {
                 // console.log(data);
                 setVo(data);
             })
-            .catch(err => {
-                console.error(err);
+            .catch(e => {
+                const message = e.message;
+                alert(message);
+                switch(message) {
+                    case "회원 전용 서비스입니다. 로그인하세요.":
+                        navigate('/member/login');
+                        break;
+                    case "게시글이 존재하지 않습니다":
+                        navigate(`/club/${clubNo}/commu/board/list`);
+                        break;
+                    default:
+                        navigate("/main");
+                        break;
+                }
             })
         } else {
             alert('로그인한 회원만 이용가능합니다');
@@ -182,20 +195,28 @@ const BoardDetail = () => {
         }
     }, [])
 
+    /**
+     * 리뷰 가져오는 api 수행
+     */
     useEffect(() => {
         if(memberNo) {
             console.log(`pageNo = ${pageNo}`);
             fetch(`http://localhost:8885/review/list/${pageNo}?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
-            .then(res => {
-                console.log(res);
+            .then(async res => {
                 if(!res.ok) {
-                    throw new Error(res.json());
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
                 }
                 return res.json();
             })
             .then(data => {
                 console.log(data);
                 setReview(data);
+            })
+            .catch(e => {
+                const message = e.message;
+                alert(message);
+                navigate(`/club/${clubNo}/commu/board/list`);
             })
         }
     }, [pageNo])
@@ -210,7 +231,7 @@ const BoardDetail = () => {
     }
 
     /**
-     * 삭제
+     * 댓글 삭제
      */
     const handleDelete = () => {
 
@@ -228,16 +249,31 @@ const BoardDetail = () => {
                 },
                 body: JSON.stringify(data)
             })
-            .then(res => {
+            .then(async res => {
                 if(!res.ok) {
-                    throw new Error(res.data);
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
                 }
-    
-                return res.text();
+                return res.json();
             })
             .then(data => {
                 alert(data);
                 navigate(`/club/${clubNo}/commu/board/list`);
+            })
+            .catch(e => {
+                const message = e.message;
+                alert(message);
+                switch(message) {
+                    case "리뷰 삭제 실패":
+                    case "자신이 작성한 댓글만 삭제가 가능합니다.":
+                        break;
+                    case "회원 전용 서비스입니다. 로그인하세요.":
+                        navigate('/member/login');
+                        break;
+                    default:
+                        navigate("/main");
+                        break;
+                }
             })
         } else {
             alert('로그인한 회원만 이용가능합니다');
@@ -249,6 +285,11 @@ const BoardDetail = () => {
         setContent(e.target.value);
     }
 
+    /**
+     * 댓글 작성
+     * @param {} e 
+     * @returns 
+     */
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -273,11 +314,11 @@ const BoardDetail = () => {
             },
             body: JSON.stringify(data)
         })
-        .then(res => {
+        .then(async res => {
             if(!res.ok) {
-                throw new Error(res.json());
+                const errorData = await res.json();
+                throw new Error(errorData.message);
             }
-
             return res.text();
         })
         .then(data => {
@@ -285,8 +326,19 @@ const BoardDetail = () => {
             setContent('');
             setPageNo(new Number(0));
         })
-        .catch(err => {
-            alert(err);
+        .catch(e => {
+            const message = e.message;
+            alert(message);
+            switch(message) {
+                case "회원 전용 서비스입니다. 로그인하세요.":
+                    navigate('/member/login');
+                    break;
+                case "댓글 작성 실패":
+                    break;
+                default:
+                    navigate("/main");
+                    break;
+            }
         })
         .finally(() => {
             setIsFetching(false);

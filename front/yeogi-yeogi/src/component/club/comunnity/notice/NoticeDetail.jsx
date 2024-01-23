@@ -146,15 +146,17 @@ const NoticeDetail = () => {
     const vo = JSON.parse(sessionStorage.getItem("loginMember"));
     const memberNo = vo?.no;
 
+    /**
+     * 상세 조회
+     */
     useEffect(() => {
-
         if(memberNo) {
             fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=${memberNo}&boardNo=${noticeNo}`)
-            .then(res => {
+            .then(async res => {
                 if(!res.ok) {
-                    throw new Error(res.data);
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
                 }
-    
                 return res.json();
             })
             .then(data => {
@@ -162,7 +164,7 @@ const NoticeDetail = () => {
                 setNotice(data);
             })
             .catch(err => {
-                console.error(err);
+                alert(err.mssage);
             })
         } else {
             alert('로그인한 회원만 이용가능합니다');
@@ -170,6 +172,10 @@ const NoticeDetail = () => {
         }
     },[])
 
+    /**
+     * 리뷰 삭제
+     * @returns 
+     */
     const deleteNotice = () => {
 
         if(isFetching) {
@@ -191,9 +197,10 @@ const NoticeDetail = () => {
             },
             body: JSON.stringify(data)
         })
-        .then(res => {
+        .then(async res => {
             if(!res.ok) {
-                throw new Error(res.text());
+                const errorData = await res.json();
+                throw new Error(errorData.message);
             }
 
             return res.text();
@@ -202,8 +209,20 @@ const NoticeDetail = () => {
             alert(data);
             navigate(`/club/${clubNo}/commu/board/notice/list`);
         })
-        .catch(err => {
-            alert(err);
+        .catch(e => {
+            const message = e.message;
+            alert(message);
+            switch(message) {
+                case "회원 전용 서비스입니다. 로그인하세요.":
+                    navigate('/member/login');
+                    break;
+                case "관리자만 이용 가능합니다":
+                    navigate(`/club/${clubNo}/commu/board/notice/list`);
+                    break;
+                default:
+                    navigate(`/main`);
+                    break;
+            }
         })
         .finally(() => {
             setIsFetching(false);

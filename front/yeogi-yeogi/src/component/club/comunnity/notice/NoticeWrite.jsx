@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import PreviewImg from '../board/PreviewImg';
 import ScheduleDateTimePicker from './ScheduleDateTimePicker';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const StyledNoticeWriteDiv = styled.div`
     width: 100%;
@@ -154,11 +154,17 @@ const NoticeWrite = () => {
     const {clubNo} = useParams();
     const [isFetching , setIsFetching] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const isAdmin = location.state?.isAdmin;
     const vo = JSON.parse(sessionStorage.getItem("loginMember"));
     const memberNo = vo?.no;
 
     useEffect(() => {
-
+        if(!isAdmin) {
+            alert('관리자만 이용 가능합니다');
+            navigate(`/club/${clubNo}/commu/board/notice/list`);
+            return;
+        }
     }, [])
 
     const handleTitle = (e) => {
@@ -257,9 +263,10 @@ const NoticeWrite = () => {
             method: "POST",
             body: formData
         })
-        .then(res => {
+        .then(async res => {
             if(!res.ok) {
-                throw new Error(res.data);
+                const errorData = await res.json();
+                throw new Error(errorData.message);
             }
             return res.text();
         })
@@ -267,8 +274,22 @@ const NoticeWrite = () => {
             alert(data);
             navigate(`/club/${clubNo}/commu/board/notice/list`);
         })
-        .catch(err => {
-            console.error(err);
+        .catch(e => {
+            const message = e.message;
+            alert(message);
+            switch(message) {
+                case "회원 전용 서비스입니다. 로그인하세요.":
+                    navigate('/member/login');
+                    break;
+                case "관리자만 이용 가능합니다":
+                    navigate(`/club/${clubNo}/commu/board/notice/list`);
+                    break;
+                case "공지사항 작성에 실패하셨습니다.":
+                    break;
+                default:
+                    navigate(`/main`);
+                    break;
+            }
         })
         .finally(() => {
             setIsFetching(false);
