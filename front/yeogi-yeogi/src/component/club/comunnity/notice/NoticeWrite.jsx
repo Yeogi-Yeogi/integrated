@@ -162,7 +162,8 @@ const NoticeWrite = () => {
     useEffect(() => {
         if(!isAdmin) {
             alert('관리자만 이용 가능합니다');
-            navigate(`/club/${clubNo}/commu/board/notice/list`)
+            navigate(`/club/${clubNo}/commu/board/notice/list`);
+            return;
         }
     }, [])
 

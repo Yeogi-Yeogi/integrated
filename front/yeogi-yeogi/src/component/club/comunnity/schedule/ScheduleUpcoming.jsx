@@ -73,7 +73,16 @@ const ScheduleUpcoming = () => {
              setIsAdmin(data.admin);
              preventRef.current = true;
          } catch (e) {
-             alert(e.message);
+            const message = e.message;
+            alert(message);
+            switch(message) {
+                case "회원 전용 서비스입니다. 로그인하세요.":
+                    navigate('/member/login');
+                    break;
+                default:
+                    navigate("/main");
+                    break;
+            }
          } finally {
              setLoad(false);
          }
