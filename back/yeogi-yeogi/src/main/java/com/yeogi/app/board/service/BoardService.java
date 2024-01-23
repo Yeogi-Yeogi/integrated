@@ -112,7 +112,7 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int addBoard(BoardAddDto dto) throws RuntimeException {
+    public int addBoard(BoardUploadDto dto) throws RuntimeException {
 
         CheckDto clubMember = checkValid(dto.getClubNo(), dto.getMemberNo());
 
@@ -166,7 +166,7 @@ public class BoardService {
      * @param dto
      * @return
      */
-    public int updateBoard(BoardUpdateDto dto) throws RuntimeException {
+    public int updateBoard(BoardUploadDto dto) throws RuntimeException {
         checkValid(dto.getClubNo(), dto.getMemberNo());
 
         //해당 게시글을 자신이 쓴건지?

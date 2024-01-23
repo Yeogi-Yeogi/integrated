@@ -61,7 +61,7 @@ public class BoardRepository {
      * @param template
      * @return
      */
-    public int addBoard(BoardAddDto dto, SqlSessionTemplate template) {
+    public int addBoard(BoardUploadDto dto, SqlSessionTemplate template) {
         return template.insert("BoardMapper.addBoard", dto);
     }
 
@@ -145,7 +145,7 @@ public class BoardRepository {
      * @param template
      * @return
      */
-    public String getBoardNo(BoardUpdateDto dto, SqlSessionTemplate template) {
+    public String getBoardNo(BoardUploadDto dto, SqlSessionTemplate template) {
         return template.selectOne("BoardMapper.getBoardNo", dto);
     }
 
@@ -155,7 +155,7 @@ public class BoardRepository {
      * @param template
      * @return
      */
-    public int updateBoard(BoardUpdateDto dto, SqlSessionTemplate template) {
+    public int updateBoard(BoardUploadDto dto, SqlSessionTemplate template) {
         return template.update("BoardMapper.updateBoard", dto);
     }
 }
