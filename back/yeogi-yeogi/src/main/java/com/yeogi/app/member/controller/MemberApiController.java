@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yeogi.app.member.service.MemberService;
 import com.yeogi.app.member.vo.MemberVo;
+import com.yeogi.app.member.vo.selectMyClubVo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -167,13 +168,24 @@ public class MemberApiController {
     
     //메인화면- 로그인후 가입한 모임 조회하기        
     @PostMapping("selectMyClub")
-    public List<MemberVo> selectMyClub(@RequestBody MemberVo vo){
-    	List<MemberVo> voList = service.selectMyClub(vo);
-//    	MemberVo memberVo = new MemberVo();
-//    	voList.add(memberVo);
-    	System.out.println(voList);
-		return voList;
+    public Map<String, Object> selectMyClub(selectMyClubVo vo){
+    	List<selectMyClubVo> voList = service.selectMyClub(vo);
+    	Map<String, Object> map = new HashMap<String, Object>();
+        map.put("msg","good");
+        map.put("voList", voList);
+        System.out.println("로그인: " + voList);
+        
+        if(voList == null ) {
+        	map.put("msg", "bad");
+        }
+        return map;        
+    	
+////    	MemberVo memberVo = new MemberVo();
+////    	voList.add(memberVo);
+//    	System.out.println(voList);
     }
+    
+//    MultipartFile f, 
 
         
 }//class

@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.yeogi.app.member.vo.MemberVo;
+import com.yeogi.app.member.vo.selectMyClubVo;
 
 @Repository
 public class MemberDao {
@@ -41,7 +42,7 @@ public class MemberDao {
 	}
 
 	//메인화면- 로그인후 가입한 모임 조회하기
-	public List<MemberVo> selectMyClub(SqlSessionTemplate sst, MemberVo vo) {
+	public List<selectMyClubVo> selectMyClub(SqlSessionTemplate sst, selectMyClubVo vo) {
 		return sst.selectList("MemberMapper.selectMyClub", vo);
 	}
 

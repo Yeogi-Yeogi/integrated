@@ -1,29 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import MainProduce from './MainProduce';
+import SelectMyClub from './SelectMyClub';
+import SearchBar from './SearchBar';
+import MainClubList from './MainClubList';
 
 
 const StyledMainLayoutDiv = styled.div`
-    width: 100%;
-    margin: auto;
-
-    & > div {
-        /* width: 70em; */
-        display: flex;
-        justify-content: space-between;
-        margin: auto;
-    }
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const MainLayout = () => {
     return (
         <StyledMainLayoutDiv>
-            <div>
-                <Routes>
-                    <Route path='/main/mainStart' element={<MainStart/>}/>
-                    <Route path='/main'element={<MemberLogin/>}/>
-                    <Route path='/main' element={<MemberQuit/>}/>
-                </Routes>  
-            </div>                   
+            <MainProduce/>
+            <SelectMyClub/>
+            <SearchBar/>
+            <MainClubList/>                   
         </StyledMainLayoutDiv>
     );
 };

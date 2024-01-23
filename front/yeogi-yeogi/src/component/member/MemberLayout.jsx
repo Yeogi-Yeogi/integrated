@@ -30,8 +30,8 @@ const MemberLayout = () => {
                     <Route path='/login'element={<MemberLogin/>}/>
                     <Route path='/mySelect' element={<MemberMySelect/>}/>
                     <Route path='/edit' element={<MemberEdit/>}/>
-                    <Route path='/logout' element={<MemberLogout/>}/>
-                    <Route path='/quit' element={<MemberQuit/>}/>
+                    {/* <Route path='/logout' element={<MemberLogout/>}/> */}
+                    {/* <Route path='/quit' element={<MemberQuit/>}/> */}
                 </Routes>  
             </div>                   
         </StyledMemberLayoutDiv>

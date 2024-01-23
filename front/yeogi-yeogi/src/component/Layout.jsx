@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Header from './Header';
-import Main from './Main';
 import Footer from './Footer';
 import { Route, Routes, useParams } from 'react-router-dom';
 import ClubLayout from './club/ClubLayout';
 import MemberLayout from './member/MemberLayout';
 import CreateClub from './club/manage/CreateClub';
-import MainLogin from './MainLogin';
+import MainLayout from './main/MainLayout';
 
 const StyledLayOutDiv = styled.div`
     width: 100%;
@@ -24,8 +23,7 @@ const Layout = () => {
         <StyledLayOutDiv>
             <Header />
             <Routes>
-                <Route path='/' element={<Main/>}/>
-                <Route path='/main' element={<MainLogin/>}/>
+                <Route path='/main' element={<MainLayout/>}/>
                 <Route path='/member/*' element={<MemberLayout/>}/>
                 <Route path='/club/:clubNo/*' element={<ClubLayout/>}/>
                 <Route path='/club/createClub' element={<CreateClub/>}/>
