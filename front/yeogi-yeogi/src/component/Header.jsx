@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useMemberMemory } from './context/MemberContext';
 
@@ -103,6 +103,24 @@ const StyledHeaderDiv = styled.div`
 
 const Header = () => {
 
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // 로그아웃 시 필요한 작업을 수행
+        // 예: 세션 정보 삭제, 로그인 상태 초기화 등
+    
+        // 세션 정보 삭제 예제
+        sessionStorage.removeItem('loginMember');
+
+        alert("로그아웃 성공");
+    
+        // 또는 로그인 상태를 관리하는 상태를 초기화
+        // setLoggedIn(false);
+    
+        // 로그아웃 후 리다이렉션 등 추가 작업 수행
+        navigate('/');
+    }
+
     const {loginMember , setLoginMember}  = useMemberMemory();
 
     console.log(loginMember);
@@ -112,21 +130,20 @@ const Header = () => {
     return (
         <StyledHeaderDiv>
             <div>
-                {loginMember === null ? (
-                    <Link to={`/`}>
+                {loginMember === null ? 
+                    <Link to={`/main`}>
                         <div id="loginBeforeLogo">
                             <img src="/img/logo.png" alt="여기여기로고" />
                             <span>여기여기</span>
                         </div>
                     </Link>
-                ): (
+                : 
                     <Link to={`/main`}>
                         <div id="loginAfterLogo">
                             <img src="/img/logo.png" alt="여기여기로고" />
                             <span>여기여기 or 여기? 여기! 뭘로하지..</span>
                         </div>
-                    </Link>
-                )
+                    </Link>                
                 }
             </div>         
             <div>
@@ -138,7 +155,7 @@ const Header = () => {
                 : 
                     <div id="loginAfter">
                         <Link to="/member/myselect">마이페이지</Link>        
-                        <Link to="/member/logout">로그아웃</Link>
+                        <Link to="/main" onClick={handleLogout}>로그아웃</Link>
                     </div>
                     
                 }

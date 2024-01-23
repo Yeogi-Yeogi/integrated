@@ -41,11 +41,16 @@
     <select id="login" resultType="com.yeogi.app.member.vo.MemberVo">
 		SELECT
 		    NO
-		    ,ID
-		    ,PWD
-		    ,NICK
-		    ,ENROLL_DATE
-		    ,QUIT_YN
+            ,NAME
+            ,ID
+            ,PWD
+            ,NICK
+            ,PHONE
+            ,EMAIL
+            ,ENROLL_DATE
+            ,MODIFIED_DATE
+            ,FULL_PATH
+            ,RESI_NUM
 		FROM MEMBER
 		WHERE ID = #{id}
 		AND PWD = #{pwd}
@@ -88,8 +93,8 @@
 		   AND QUIT_YN = 'N'		
 	</update>
 	
-	<select id="selectMyClub" resultType="com.yeogi.app.member.vo.MemberVo">
-		SELECT CC.CATEGORY_NAME, M.NICK, M.NAME, C.NAME, C.CLUB_DESCRIPTION, C.ENROLL_DATE
+	<select id="selectMyClub" resultType="com.yeogi.app.member.vo.selectMyClubVo">
+		SELECT CC.CATEGORY_NAME, M.NICK  AS MEMBER_NICK, C.NAME AS CLUB_NAME, C.CLUB_DESCRIPTION, C.ENROLL_DATE
 		FROM CLUB C
 		JOIN MEMBER_CLUB MC ON MC.CLUB_NO = C.NO
 		JOIN MEMBER M ON M.NO = C.CREATOR_NO

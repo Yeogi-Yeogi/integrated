@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.yeogi.app.member.dao.MemberDao;
 import com.yeogi.app.member.vo.MemberVo;
+import com.yeogi.app.member.vo.selectMyClubVo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,7 +56,7 @@ public class MemberService {
 	}
 	
 	//메인화면- 로그인후 가입한 모임 조회하기
-	public List<MemberVo> selectMyClub(MemberVo vo) {
+	public List<selectMyClubVo> selectMyClub(selectMyClubVo vo) {
 		return dao.selectMyClub(sst,vo);
 	}
 
