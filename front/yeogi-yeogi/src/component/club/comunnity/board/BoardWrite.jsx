@@ -211,9 +211,10 @@ const BoardWrite = () => {
             method: "POST",
             body: formData
         })
-        .then(res => {
+        .then(async res => {
             if(!res.ok) {
-                throw new Error(res.json());
+                const errorData = await res.json();
+                throw new Error(errorData.message);
             }
             return res.text();
         })

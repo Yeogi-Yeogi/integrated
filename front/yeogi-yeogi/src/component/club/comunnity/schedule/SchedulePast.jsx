@@ -60,6 +60,10 @@ const SchedulePast = () => {
  
          try {
              const res = await fetch(`http://localhost:8885/schedule/list/${page}?memberNo=${memberNo}&clubNo=${clubNo}&isExpected=N`);
+             if(!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData?.message);
+            }
              const data = await res.json();
              console.log(data);
              if(data.length === 0) { //마지막 페이지일 경우

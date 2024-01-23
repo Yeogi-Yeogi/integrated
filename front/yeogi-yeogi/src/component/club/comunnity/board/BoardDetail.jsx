@@ -163,9 +163,10 @@ const BoardDetail = () => {
     useEffect(() => {
         if(memberNo) {
             fetch(`http://localhost:8885/board/detail?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
-            .then(res => {
+            .then(async res => {
                 if(!res.ok) {
-                    throw new Error(res.json());
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
                 }
                 return res.json();
             })

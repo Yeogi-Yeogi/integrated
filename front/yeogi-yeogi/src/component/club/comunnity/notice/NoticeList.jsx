@@ -103,11 +103,11 @@ const NoticeList = () => {
         if(vo) {
             const memberNo = vo.no;
             fetch(`http://localhost:8885/notice/list/${pageNo}?memberNo=${memberNo}&clubNo=${clubNo}`)
-            .then(res => {
+            .then(async res => {
                 if(!res.ok) {
-                    throw new Error(res.data);
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
                 }
-                
                 return res.json();
             })
             .then((data) => {
@@ -131,7 +131,8 @@ const NoticeList = () => {
                 setItems([...newItem]);
             })
             .catch(err => {
-                alert(err);
+                alert(err.message);
+
             })
         } else {
             alert('로그인한 회원만 이용가능합니다');

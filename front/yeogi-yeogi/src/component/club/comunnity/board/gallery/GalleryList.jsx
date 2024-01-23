@@ -78,6 +78,10 @@ const GalleryList = () => {
         try {
             
             const res = await fetch(`http://localhost:8885/gallery/list/${page}?memberNo=${memberNo}&clubNo=${clubNo}`);
+            if(!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData?.message);
+            }
             const data = await res.json();
 
             if(data.length === 0) {

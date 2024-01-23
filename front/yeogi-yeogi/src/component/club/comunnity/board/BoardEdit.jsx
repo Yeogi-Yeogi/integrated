@@ -255,9 +255,10 @@ const BoardEdit = () => {
             method: "PATCH",
             body: formData
         })
-        .then(res => {
+        .then(async res => {
             if(!res.ok) {
-                throw new Error(res.json());
+                const errorData = await res.json();
+                throw new Error(errorData.message);
             }
             return res.text();
         })
@@ -266,7 +267,7 @@ const BoardEdit = () => {
             navigate(`/club/${clubNo}/commu/board/detail/${previous.boardNo}`);
         })
         .catch(err => {
-            alert("게시글을 등록하지 못했습니다.");
+            alert(err.message);
             console.error(err);
         })
         .finally(() => {

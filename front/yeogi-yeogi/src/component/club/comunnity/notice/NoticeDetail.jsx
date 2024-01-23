@@ -150,11 +150,11 @@ const NoticeDetail = () => {
 
         if(memberNo) {
             fetch(`http://localhost:8885/notice/detail?clubNo=${clubNo}&memberNo=${memberNo}&boardNo=${noticeNo}`)
-            .then(res => {
+            .then(async res => {
                 if(!res.ok) {
-                    throw new Error(res.data);
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
                 }
-    
                 return res.json();
             })
             .then(data => {
@@ -162,7 +162,7 @@ const NoticeDetail = () => {
                 setNotice(data);
             })
             .catch(err => {
-                console.error(err);
+                alert(err.mssage);
             })
         } else {
             alert('로그인한 회원만 이용가능합니다');
@@ -191,9 +191,10 @@ const NoticeDetail = () => {
             },
             body: JSON.stringify(data)
         })
-        .then(res => {
+        .then(async res => {
             if(!res.ok) {
-                throw new Error(res.text());
+                const errorData = await res.json();
+                throw new Error(errorData.message);
             }
 
             return res.text();
