@@ -121,9 +121,9 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
     const navigate = useNavigate();
     
     const signupClub = (clubNo) => {
+        
         const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
         const memberNo = loginMember.no;
-
         const join = {
             "clubNo" : clubNo,
             "memberNo" : memberNo
@@ -139,7 +139,7 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
         })
         .then(resp => resp.text())
         .then(data => {
-            // console.log("data ::: ", data);
+            console.log("data ::: ", data);
             if(data === "1"){
                 isOpen = false;
                 Swal.fire({
@@ -150,11 +150,20 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                 });
                 navigate("/club/"+ clubNo +"/commu/board");
             } else {
-                Swal.fire({
-                    icon: 'error',                  
-                    text: '모임 가입이 실ㄹ패,,?', 
-                    confirmButtonText: '확인'
-                }); 
+                if(data === "2"){
+                    Swal.fire({
+                        icon: 'error',                  
+                        text: '너무 어려서 안됨', 
+                        confirmButtonText: '확인'
+                    }); 
+                }
+                if(data === "3"){
+                    Swal.fire({
+                        icon: 'error',                  
+                        text: '가입인원 꽉찼음ㄴ', 
+                        confirmButtonText: '확인'
+                    }); 
+                }
             }
         })
         .catch(error => {

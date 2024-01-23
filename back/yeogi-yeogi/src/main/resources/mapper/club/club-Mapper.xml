@@ -15,6 +15,7 @@
                 ELSE 'N'
             END AS CREATOR_YN
             , MC.ADMIN_YN
+            , C.DEL_YN
         FROM MEMBER_CLUB MC
         LEFT OUTER JOIN CLUB C
             ON MC.CLUB_NO = C.NO
@@ -152,11 +153,35 @@
         WHERE C.NO = #{no}
     </select>
 
-<!--    클럽 가입 (가입인원, 연령제한 생각)-->
+<!--    클럽 가입 (연령제한 및 가입인원 체크)-->
+    <select id="checkLimit" resultType="com.yeogi.app.club.vo.CheckClubLimitVo">
+        SELECT
+            CASE
+                WHEN TO_NUMBER(SUBSTR(RESI_NUM, 8, 1)) IN (3, 4)
+                    THEN TRUNC((SYSDATE - TO_DATE('20' || SUBSTR(RESI_NUM, 1, 6), 'YYYYMMDD')) / 365)
+                ELSE TRUNC((SYSDATE - TO_DATE('19' || SUBSTR(RESI_NUM, 1, 6), 'YYYYMMDD')) / 365)
+            END AS AGE,
+            C.AGE_LIMIT,
+            MC.MEMBER_COUNT,
+            C.SIGNUP_LIMIT AS MEMBER_LIMIT
+        FROM MEMBER M
+        JOIN CLUB C ON C.NO = #{clubNo}
+        LEFT JOIN (
+            SELECT CLUB_NO,
+                COUNT(MEMBER_NO) AS MEMBER_COUNT
+            FROM MEMBER_CLUB
+            GROUP BY CLUB_NO
+            ) MC ON MC.CLUB_NO = C.NO
+        WHERE M.NO = #{memberNo}
+    </select>
+
+<!--    클럽 가입-->
     <insert id="joinClub">
         INSERT INTO MEMBER_CLUB(MEMBER_NO, CLUB_NO)
         VALUES (#{memberNo}, #{clubNo})
     </insert>
+
+
 <!--    클럽 관리 ( 클럽 정보 상세 조회 ) 일단 clubDescription 이랑 같이 사용.. -->
     <select id="getClubInfo" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT *

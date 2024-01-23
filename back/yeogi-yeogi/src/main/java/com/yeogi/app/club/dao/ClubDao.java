@@ -1,6 +1,7 @@
 package com.yeogi.app.club.dao;
 
 import com.yeogi.app.club.dto.*;
+import com.yeogi.app.club.vo.CheckClubLimitVo;
 import com.yeogi.app.club.vo.ClubCategoryVo;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
@@ -79,9 +80,7 @@ public class ClubDao {
     }
 
     public int uploadFile(ClubImageDto clubImageDto, SqlSessionTemplate sst) {
-
         log.info("dao clubImageDto = {}", clubImageDto);
-
         return sst.insert("ClubMapper.insertClubImage", clubImageDto);
     }
 
@@ -109,7 +108,7 @@ public class ClubDao {
         return sst.selectList("ClubMapper.getClubList");
     }
 
-    public int checkAge(SqlSessionTemplate sst, JoinClubDto dto) {
-        return sst.select("ClubMapper.checkAge", dto);
+    public CheckClubLimitVo checkLimit(SqlSessionTemplate sst, JoinClubDto dto) {
+        return sst.selectOne("ClubMapper.checkLimit", dto);
     }
 }

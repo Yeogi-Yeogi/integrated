@@ -7,6 +7,7 @@ import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +62,6 @@ public class ClubController {
         log.info("file = {}", file);
         String type = "create";
 
-
         int seqNo = service.createClub(file, createClubDto, type);
 
         // 클럽이미지 선택x == 기본이미지
@@ -95,7 +95,6 @@ public class ClubController {
     public ClubVo clubDescription(String clubNo){
         return service.getClubDescription(clubNo);
     }
-
 
     /**
      * 클럽 가입
@@ -140,8 +139,7 @@ public class ClubController {
      */
     @PostMapping("editClub")
     public int editClub(@RequestBody MultipartFile file, EditClubDto editClubDto) throws IOException {
-        System.out.println("실행됨");
-                
+
         log.info("EditClubDto = {}", editClubDto);
         log.info("file = {}", file);
         return service.editClub(editClubDto, file);
@@ -188,7 +186,7 @@ public class ClubController {
      * @throws NotClubMemberException
      */
     @PostMapping("checkMember")
-    public CheckDto checkMember(@RequestBody CheckDto checkDto) throws NotClubMemberException {
+    public CheckDto checkMember(@RequestBody CheckDto checkDto) throws NotClubMemberException, DeletedClubException {
         return service.checkMember(checkDto);
     }
 

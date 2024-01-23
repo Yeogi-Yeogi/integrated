@@ -186,8 +186,8 @@ const EditClubInfo = () => {
     }
 
     const ageLimit = [];
-    for (let i = 5; i <= 20; i++) {
-        ageLimit.push(<option key={i} value={i}>{i}</option>);
+    for (let i = 5; i <= 30; i++) {
+        ageLimit.push(<option key={i} value={i}>{i}세 이상</option>);
     }
 
     // 정보 변경 
