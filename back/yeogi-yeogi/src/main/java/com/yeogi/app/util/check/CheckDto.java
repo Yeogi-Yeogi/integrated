@@ -12,6 +12,7 @@ public class CheckDto {
     private String memberNo;
     private String creatorYn;
     private String adminYn;
+    private String delYn;
 
     public CheckDto(String clubNo, String memberNo) {
         this.clubNo = clubNo;
