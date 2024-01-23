@@ -187,10 +187,10 @@ public class BoardService {
 
         if (dto.getDeleted() != null) {
             result = boardImageService.deleteImagesByNo(dto.getDeleted());
-        }
 
-        if(result != dto.getDeleted().size()) {
-            throw new NoResultException("삭제 실패");
+            if(result != dto.getDeleted().size()) {
+                throw new NoResultException("삭제 실패");
+            }
         }
 
         if(dto.getImageList() != null) {
