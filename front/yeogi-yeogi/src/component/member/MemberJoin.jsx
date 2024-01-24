@@ -98,12 +98,9 @@ const MemberJoin = () => {
     })
     const navigate = useNavigate();
 
-
     const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
     
-   
-
     const handleChangeFile = () => {
         if (!imgRef.current.files.length) {
             // 파일 선택 취소했을때
@@ -201,13 +198,13 @@ const MemberJoin = () => {
                                 <div>
                                     <img
                                         src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
-                                        alt="클럽 대표 이미지"
+                                        alt="프로필 이미지"
                                         id='previewImgTag'
-                                        style={{width: "100%", height: "100%", borderRadius: "10px"}}
+                                        style={{width: "50%", height: "50%", borderRadius: "10px"}}
                                     />
                                 </div>
+                                <label htmlFor="fileInput" >프로필 선택</label>
                                 <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
-                                <label htmlFor="fileInput" >사진 선택</label>
                             </div>
                         </td>
                     </tr>

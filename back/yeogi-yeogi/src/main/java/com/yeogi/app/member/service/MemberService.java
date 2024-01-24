@@ -52,6 +52,10 @@ public class MemberService {
 	
 	//내 정보 수정(update)
 	public int edit(MemberVo vo) {
+		
+		String str = vo.getFullPath().replace("C:\\dev\\profileImg\\", "C:\\dev\\profileImg\\");
+		vo.setFullPath(str);
+		
 		return dao.edit(sst,vo);
 	}
 	
