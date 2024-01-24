@@ -66,7 +66,7 @@ public class MemberApiController {
 	 * @param 파일경로
 	 * @return 실제파일저장경로(파일경로+파일명)
 	 * @throws Exception
-	 */	 
+	 */	 //회원가입, 회원정보 수정시 파일경로 저장 목적으로 사용
 	private String saveFile(MultipartFile profileImg) throws Exception {
 		        
         // 저장할 경로 설정
@@ -156,7 +156,15 @@ public class MemberApiController {
     
     //내 정보 수정하기 
     @PostMapping("edit")
-    public Map<String,String> edit(@RequestBody MemberVo vo) throws Exception {
+    public Map<String,String> edit(MemberVo vo, MultipartFile profileImg) throws Exception {
+    	
+    	System.out.println("vo : " + vo);
+    	System.out.println("profileImg : " + profileImg);
+    	System.out.println("profileImg.getOriginalFilename : " + profileImg.getOriginalFilename());
+    	
+    	String fullPath = saveFile(profileImg);
+		vo.setFullPath(fullPath);
+		
         int result = service.edit(vo);
         Map<String, String> map = new HashMap<String, String>();
         map.put("msg", "good");
