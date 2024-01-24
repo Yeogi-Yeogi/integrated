@@ -140,11 +140,31 @@ const StyledEditClubInfoDiv = styled.div`
 const EditClubInfo = () => {
 
     const navigate = useNavigate();
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+    const memberNo = loginMember.no;
     // 화면 정보 불러오기
     let { clubNo } = useParams();
     const [clubInfo, setClubInfo] = useState({});
-
+    const [checkAdmin, setCheckAdmin] = useState();
     console.log(clubNo);
+    const checkMemberDto = {
+        memberNo,
+        clubNo
+    };
+    useEffect(()=>{
+        fetch("http://127.0.0.1:8885/club/checkMember", {
+            method: "POST",
+            headers : {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkMemberDto)
+        })
+        .then(resp => resp.json())
+        .then(check => {
+            setCheckAdmin(check);
+        })   
+    },[]);
+
     const loadClubInfo = () => {
         fetch("http://127.0.0.1:8885/club/management/" + clubNo)
         .then(resp => resp.json())
@@ -176,13 +196,14 @@ const EditClubInfo = () => {
         };
     };
 
-
-    
-
     // 모임인원, 나이제한 글자 넣기,,,(임시)
     const signupLimit = [];
     for (let i = 5; i <= 20; i++) {
-        signupLimit.push(<option key={i} value={i}>{i} 명</option>);
+        if(clubInfo.memberCount > i){
+            signupLimit.push(<option disabled key={i} value={i}>{i} 명</option>);
+        } else {
+            signupLimit.push(<option key={i} value={i}>{i} 명 </option>);
+        }
     }
 
     const ageLimit = [];
@@ -193,8 +214,7 @@ const EditClubInfo = () => {
     // 정보 변경 
     const handleChange = (e) => {      
         const {name, value} = e.target;
-
-        // textarea 글자 바꿔줌
+        // textarea 글자 바꿔주기
         if(e.target.name === "clubDescription"){
             setClubInfo({ 
                 ...clubInfo, 
@@ -211,7 +231,6 @@ const EditClubInfo = () => {
 
     // 변경완료 (제출)
     const handleSubmit = (input) => {
-        alert("ㅋㅋㅋㅋㅎ");
         input.preventDefault();
 
         const formData = new FormData();
@@ -227,7 +246,22 @@ const EditClubInfo = () => {
         })
         .then(resp => resp.text())
         .then(data => {
-            console.log(data);
+            if(data === '1'){
+                Swal.fire({
+                    title: '변경이 완료되었습니다.',
+                    text: '모임 홈으로 돌아가시겠습니까?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6', 
+                    cancelButtonColor: '#d33', 
+                    confirmButtonText: '확인',
+                    cancelButtonText: '취소', 
+                 }).then(result => {
+                    if (result.isConfirmed) { 
+                        navigate("/club/" + clubNo + "/commu/board")
+                    }
+                 });
+            }
             
         })
         .catch(error => {
@@ -285,7 +319,9 @@ const EditClubInfo = () => {
                         />
                     </div>
                     <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
+                    {checkAdmin && checkAdmin.creatorYn === 'Y' && 
                     <label htmlFor="fileInput">대표이미지 변경</label>
+                    }
                 </div>
 
 
@@ -294,30 +330,35 @@ const EditClubInfo = () => {
                         <h2 style={{color:"#3A3A3A"}}>{clubInfo.name}</h2>
                         <span style={{color:"#3A3A3A"}}>모임장 {clubInfo.nick}</span>
                         <span style={{color:"#999999"}}>회원수 {clubInfo.memberCount}</span>
-                        <button type='button' id='deleteBtn' onClick={deleteClubConfirm}>모임삭제</button>
+                        {checkAdmin && checkAdmin.creatorYn === 'Y' && 
+                            <button type='button' id='deleteBtn' onClick={deleteClubConfirm}>모임삭제</button>
+                        }
                     </div>
                     <div>
-                        <textarea name="clubDescription" id="" cols="30" rows="10" value={clubInfo.clubDescription} onChange={handleChange} spellCheck="false">
-                           
-                        </textarea>
+                    {(checkAdmin && checkAdmin.creatorYn === 'Y') ? (
+                        <textarea name="clubDescription" id="" cols="30" rows="10" value={clubInfo.clubDescription} onChange={handleChange} spellCheck="false"/>
+                        ) : (<textarea name="clubDescription" id="" cols="30" rows="10" value={clubInfo.clubDescription} spellCheck="false"/>) 
+                    }
                     </div>
                     <div>
                         <span>모임 인원</span>
-                        <select name="signupLimit" id="signupLimit" onChange={handleChange}>
+                        <select name="signupLimit" id="signupLimit" onChange={handleChange} disabled={!(checkAdmin && checkAdmin.creatorYn === 'Y')}>
                             <option value="" disabled selected>현재 인원제한 {clubInfo.signupLimit}</option>
                             {signupLimit}
                         </select>
                     </div>
                     <div>
                         <span>나이 제한</span>
-                        <select name="ageLimit" id="ageLimit" onChange={handleChange}>
+                        <select name="ageLimit" id="ageLimit" onChange={handleChange} disabled={!(checkAdmin && checkAdmin.creatorYn === 'Y')}>
                             <option value="" disabled selected>현재 나이제한 {clubInfo.ageLimit}</option>
                             {ageLimit}
                         </select>
                     </div>
                     <div>
+                    {checkAdmin && checkAdmin.creatorYn === 'Y' && 
                         <input type="submit" value="변경완료"/>
-                        <button type='button' onClick={() => { navigate(`/club/${clubNo}/commu/board/list`);}}>취소</button>
+                    }
+                        <button type='button' onClick={() => { navigate(`/club/${clubNo}/commu/board/list`);}}>돌아가기</button>
                     </div>
                 </div>  
             </form>

@@ -121,8 +121,8 @@ public class ClubService {
         return dao.getClubMemberList(sst, clubNo);
     }
 
-    public int quitClub(EditClubDto editClubDto) {
-        return dao.quitClub(sst, editClubDto);
+    public int quitClub(EditClubMemberDto editClubMemberDto) {
+        return dao.quitClub(sst, editClubMemberDto);
     }
 
     public int deleteClub(String clubNo) {

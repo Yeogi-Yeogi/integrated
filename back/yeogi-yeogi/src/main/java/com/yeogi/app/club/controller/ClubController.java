@@ -151,19 +151,20 @@ public class ClubController {
      * @return
      */
     @PostMapping("editClubMember")
-    public int editClubMember(EditClubMemberDto editClubMemberDto){
+    public int editClubMember(@RequestBody EditClubMemberDto editClubMemberDto){
+        log.info("EditClubMemberDto : {}", editClubMemberDto);
         return service.editClubMember(editClubMemberDto);
     }
 
     /**
-     * 클럽 탈퇴(회원) => 모임장은 안돼
-     * @param editClubDto
+     * 클럽 탈퇴하기
+     * @param editClubMemberDto
      * @return
      */
     @PostMapping("quitClub")
-    public int quitClub(@RequestBody EditClubDto editClubDto){
-
-        int result = service.quitClub(editClubDto);
+    public int quitClub(@RequestBody EditClubMemberDto editClubMemberDto){
+        log.info("editClubMemberDto : {}", editClubMemberDto);
+        int result = service.quitClub(editClubMemberDto);
 
         return result;
     }
