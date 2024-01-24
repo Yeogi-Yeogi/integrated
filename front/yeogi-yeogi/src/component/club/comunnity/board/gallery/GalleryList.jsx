@@ -131,7 +131,7 @@ const GalleryList = () => {
                     <Spinner animation="border" />
                 </StyledSpinnerDiv>
             }
-            <StyledObserverDiv ref={obsRef}>옵저버 Element</StyledObserverDiv>
+            <StyledObserverDiv ref={obsRef}></StyledObserverDiv>
         </>
     );
 };
