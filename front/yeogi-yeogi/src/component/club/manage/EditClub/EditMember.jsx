@@ -62,7 +62,7 @@ const StyledEditMemberDiv = styled.div`
 const EditMember = () => {
 
     const navigate = useNavigate();
-    const loginMember = sessionStorage.getItem("loginMember");
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
     
     // if(loginMember === null){
     //     navigate("/main");
@@ -114,6 +114,25 @@ const EditMember = () => {
     //     }
     //     return rows;
     // };
+    const [checkAdmin, setCheckAdmin] = useState({});
+    const checkMemberDto = {
+        "memberNo" : loginMember.no,
+        "clubNo" : clubNo,
+    };
+
+    useEffect(()=>{
+        fetch("http://127.0.0.1:8885/club/checkMember", {
+            method: "POST",
+            headers : {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkMemberDto)
+        })
+        .then(resp => resp.json())
+        .then(check => {
+            setCheckAdmin(check);
+        })   
+    },[]);
 
     const editClubMemberConfirm = (editType, member) => {
         let editText = '';
@@ -208,9 +227,9 @@ const EditMember = () => {
                     </colgroup>
                     <tbody>
                         {
-                            clubMemberList.map((member) => 
-                                <tr key={member.memberNo}>
-                                    <td>
+                            clubMemberList.map((member) => {                     
+                                return <tr key={member.memberNo} style={{height:"40px"}}>
+                                    <td >
                                         {member.memberNo === member.creatorNo && <img src="/img/goldCrown.png" alt="z" />}
                                         {member.adminYn === 'Y' && member.memberNo !== member.creatorNo && <img src="/img/silverCrown.png" alt="z" /> }
                                     </td>
@@ -219,19 +238,20 @@ const EditMember = () => {
                                     <td>{member.phone}</td>
                                     <td>{member.regDate}</td>
                                     <td>          
-                                        {member.memberNo !== member.creatorNo &&                              
-                                            <DropdownButton  title="">
-                                                {(loginMember && !member.creatorNo  && member.adminYn === 'N') ? (
+                                        {member.creatorNo === null && loginMember.no !== member.memberNo && !(checkAdmin.creatorYn === 'N' && member.adminYn === 'Y') &&                 
+                                            <DropdownButton>
+                                                {(checkAdmin.creatorYn === 'Y' && member.adminYn === 'N') &&
                                                     <Dropdown.Item onClick={() => editClubMemberConfirm('adminY', member)}>관리자 지정</Dropdown.Item>
-                                                ) : null}
-                                                {(loginMember && !member.creatorNo && member.adminYn === 'Y') ? (
+                                                }
+                                                {(checkAdmin.creatorYn === 'Y' && member.adminYn === 'Y') &&
                                                     <Dropdown.Item onClick={() => editClubMemberConfirm('adminN', member)}>관리자 해제</Dropdown.Item>
-                                                ) : null}
-                                                <Dropdown.Item onClick={() => editClubMemberConfirm('deleteMember', member)}>회원추방</Dropdown.Item>                                       
+                                                }            
+                                                <Dropdown.Item onClick={() => editClubMemberConfirm('deleteMember', member)}>회원추방</Dropdown.Item>   
                                             </DropdownButton>
                                         }
                                     </td>
                                 </tr>
+                            }
                             )
                         }
                         {/* {generateRows()} */}

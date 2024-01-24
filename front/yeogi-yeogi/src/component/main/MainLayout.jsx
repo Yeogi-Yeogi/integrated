@@ -27,7 +27,7 @@ const MainLayout = () => {
         return (
             <StyledMainLayoutDiv>
                 <MainProduce/>
-                <Slide/>
+                {/* <Slide/> */}
                 <SearchBar/>
                 <MainClubList/>                   
             </StyledMainLayoutDiv>
