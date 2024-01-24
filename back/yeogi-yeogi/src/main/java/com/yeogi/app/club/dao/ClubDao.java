@@ -71,8 +71,8 @@ public class ClubDao {
         return sst.selectList("ClubMapper.getClubMemberList", clubNo);
     }
 
-    public int quitClub(SqlSessionTemplate sst, EditClubDto editClubDto) {
-        return sst.delete("ClubMapper.quitClub", editClubDto);
+    public int quitClub(SqlSessionTemplate sst, EditClubMemberDto editClubMemberDto) {
+        return sst.delete("ClubMapper.quitClub", editClubMemberDto);
     }
 
     public int insertClubMaster(CreateClubDto createClubDto, SqlSessionTemplate sst) {

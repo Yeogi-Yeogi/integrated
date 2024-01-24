@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const StyledClubDescriptionDiv = styled.div`
 
@@ -69,6 +70,18 @@ const StyledClubDescriptionDiv = styled.div`
         font-size: 16px;
     }
 
+    #quitClubBtn{
+        margin-left: 20px;
+        color: #fff;
+        background-color: #c80000;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+        border: none;
+        width: 130px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 16px;   
+    }
+
     ::-webkit-scrollbar {
         width: 10px;  
     }
@@ -132,6 +145,51 @@ const ClubDescription = () => {
         navigate("/club/" + clubNo + "/manage/editClub");
     }
 
+    const quitClubConfirm = () => {
+        Swal.fire({
+            title: '정말 탈퇴 하시겠습니까?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', 
+            cancelButtonColor: '#d33', 
+            confirmButtonText: '확인',
+            cancelButtonText: '취소', 
+         }).then(result => {
+            if (result.isConfirmed) { 
+                quitClub();
+            }
+         });
+    }
+
+    const quitClub = () => {
+        fetch("http://127.0.0.1:8885/club/quitClub", {
+            method: "POST",
+            headers : {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "no" : clubNo,
+                memberNo,
+            }),
+        })
+        .then(resp => resp.text())
+        .then(result => {
+            if(result === '1'){
+                Swal.fire({
+                    title: '클럽을 탈퇴하셨습니다',
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6', 
+                    cancelButtonColor: '#d33', 
+                    confirmButtonText: '확인',
+                }).then(result => {
+                    if (result.isConfirmed) { 
+                        navigate("/");
+                    }
+                });
+            }
+        })
+    }
+
     return (
         <StyledClubDescriptionDiv>
             <div>
@@ -160,6 +218,10 @@ const ClubDescription = () => {
                         ) : (
                             null
                         )
+                    }
+                    {checkMember.creatorYn === 'N' ? (
+                        <button id='quitClubBtn' type='button' onClick={quitClubConfirm}>탈퇴하기</button>
+                        ) : ( null )
                     }
                 </div>
             </div>

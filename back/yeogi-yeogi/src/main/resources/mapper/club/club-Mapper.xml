@@ -260,7 +260,9 @@
 
 <!--    클럽 탈퇴 -->
     <delete id="quitClub">
-
+        DELETE FROM MEMBER_CLUB
+        WHERE CLUB_NO = #{no}
+            AND MEMBER_NO = #{memberNo}
     </delete>
 
 <!--    클럽 삭제-->

@@ -13,5 +13,8 @@ public class EditClubMemberDto {
     private String editType; // 관리자 지정, 관리자 해제, 회원 추방 등등,,,
     // adminY, adminN, deleteMember,
 
-
+    public EditClubMemberDto(String no, String memberNo) {
+        this.no = no;
+        this.memberNo = memberNo;
+    }
 }
