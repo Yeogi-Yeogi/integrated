@@ -134,9 +134,7 @@ const ClubDescription = () => {
         fetch("http://127.0.0.1:8885/club/management/" + clubNo)
         .then(resp => resp.json())
         .then(clubInfo => {
-            console.log(clubInfo);
             setClubInfo(clubInfo);
-            console.log(clubInfo);
         })
     }, []);
 

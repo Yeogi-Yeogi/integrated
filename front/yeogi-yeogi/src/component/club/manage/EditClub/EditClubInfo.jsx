@@ -196,13 +196,14 @@ const EditClubInfo = () => {
         };
     };
 
-
-    
-
     // 모임인원, 나이제한 글자 넣기,,,(임시)
     const signupLimit = [];
     for (let i = 5; i <= 20; i++) {
-        signupLimit.push(<option key={i} value={i}>{i} 명</option>);
+        if(clubInfo.memberCount > i){
+            signupLimit.push(<option disabled key={i} value={i}>{i} 명</option>);
+        } else {
+            signupLimit.push(<option key={i} value={i}>{i} 명 </option>);
+        }
     }
 
     const ageLimit = [];
@@ -230,7 +231,6 @@ const EditClubInfo = () => {
 
     // 변경완료 (제출)
     const handleSubmit = (input) => {
-        alert("ㅋㅋㅋㅋㅎ");
         input.preventDefault();
 
         const formData = new FormData();
@@ -246,7 +246,22 @@ const EditClubInfo = () => {
         })
         .then(resp => resp.text())
         .then(data => {
-            console.log(data);
+            if(data === '1'){
+                Swal.fire({
+                    title: '변경이 완료되었습니다.',
+                    text: '모임 홈으로 돌아가시겠습니까?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6', 
+                    cancelButtonColor: '#d33', 
+                    confirmButtonText: '확인',
+                    cancelButtonText: '취소', 
+                 }).then(result => {
+                    if (result.isConfirmed) { 
+                        navigate("/club/" + clubNo + "/commu/board")
+                    }
+                 });
+            }
             
         })
         .catch(error => {

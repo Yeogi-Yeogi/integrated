@@ -292,7 +292,7 @@ const CreateClub = () => {
 
     const ageLimit = [];
     for (let i = 1; i <= 100; i++) {
-        ageLimit.push(<option key={i} value={i}>{i}</option>);
+        ageLimit.push(<option key={i} value={i}>{i} 세 이상</option>);
     }
     return (
         <StyledCreateClubdiv>
