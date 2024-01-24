@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from "styled-components";
 import BoardListItem from './BoardListItem';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 
 const StyledBoardListDiv = styled.div`
     width: 100%;
@@ -20,6 +20,26 @@ const SpinnerContainerDiv = styled.div`
     display: flex;
     justify-content: center;
 `;
+
+const StyledButton = styled(Button)`
+    position: fixed;
+    bottom: 40px;
+    right: 100px;
+    background-color: #6c1895;
+    border-color: #6c1895;
+    font-weight: 600;
+    width: 8em;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+        background-color: #5d1582;
+    }
+
+    &:active {
+        background-color: #5d1582;
+    }
+`;
+
 const BoardList = () => {
     const [page, setPage] = useState(-1); //페이징 번호
     const [load, setLoad] = useState(false); //==isFetching
@@ -34,7 +54,7 @@ const BoardList = () => {
 
     useEffect(() => {
         if(memberNo) {
-            const observer = new IntersectionObserver(obsHandler, {threshold : 0.5});
+            const observer = new IntersectionObserver(obsHandler, {threshold : 0.7});
             if(obsRef.current) observer.observe(obsRef.current);
             return () => {observer.disconnect(); }
         } else {
@@ -89,6 +109,10 @@ const BoardList = () => {
         }
     }, [page]);
 
+    const handleScrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <StyledBoardListDiv>
             {
@@ -100,6 +124,7 @@ const BoardList = () => {
                     <Spinner animation="border" />
                 </SpinnerContainerDiv>
             }
+            <StyledButton onClick={handleScrollToTop}>위로 올라가기</StyledButton>
             <div ref={obsRef}></div>
         </StyledBoardListDiv>
     );
