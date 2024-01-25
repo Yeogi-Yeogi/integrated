@@ -15,7 +15,7 @@ const StyledSearchClubDiv = styled.div`
     }
 
     .clubList{
-        height: 500px;
+        height: 600px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr;
@@ -23,6 +23,7 @@ const StyledSearchClubDiv = styled.div`
         justify-items: center;
         overflow: scroll;
         overflow-x: hidden;
+        align-items: center;
     }
 
     #searchHeader{
