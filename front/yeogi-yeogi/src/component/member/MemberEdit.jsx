@@ -1,22 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import MyPageSideBar from '../club/comunnity/board/common/MyPageSideBar';
 
 const StyledMemberEditDiv =styled.div`
+    width: 100%;
+    margin: auto;
+    
+    & > div {
+        width: 70em;
+        display: flex;
+        justify-content:space-evenly;
+        margin: auto;       
+    }
+
+    & input {
+        border: 2px solid #999999;
+        border-radius: 10px;
+        width: 500px;
+        height: 50px;
+        margin: 10px;
+        padding: 10px;
+        outline: none;
+        font-size: 0.8rem;        
+    }
+
+    & #table-container > & text{
+        font-weight: bord;
+        font-size: 100px;
+
+        & input {
+            border: 2px solid #999999;
+            border-radius: 10px;
+            width: 500px;
+            height: 50px;
+            margin: 10px;
+            padding: 10px;
+            outline: none;
+            font-size: 0.8rem;        
+        }
+    }
+
+    form > {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        margin-left:200px
+    }
     
 `;    
 
 const MemberEdit = () => {
 
     // let isFetching = false;
-    // const [vo,setVo] = useState({
-    //     name: "",
-    //     id :"",
-    //     pwd: "",
-    //     nick: "",
-    //     phone:"",
-    //     email:"",
-    //     resiNum:"",
-    // })
+    const [vo,setVo] = useState(JSON.parse(sessionStorage.getItem('loginMember')))
 
     // const navigate = useNavigate();
 
@@ -43,12 +81,12 @@ const MemberEdit = () => {
     // };
 
     const handleInputChange = (event) => {
-    //     const{name, value} = event.target;
+        const{name, value} = event.target;
 
-    //     setVo({
-    //         ...vo,
-    //         [name] : value
-    //     });
+        setVo({
+            ...vo,
+            [name] : value
+        });
     }
 
     const handleMemberMySelectSubmit = (event) => {
@@ -112,54 +150,57 @@ const MemberEdit = () => {
 
     return (
         <StyledMemberEditDiv>
-            <form onSubmit={handleMemberMySelectSubmit} encType="multipart/form-data">
-                <table id="table-container">
-                    {/* <tr>
-                        <td colSpan={3}>
-                            <div>
+            <div>
+                <MyPageSideBar/>
+                <form onSubmit={handleMemberMySelectSubmit} encType="multipart/form-data">
+                    <table id="table-container">
+                        {/* <tr>
+                            <td colSpan={3}>
                                 <div>
-                                    <img
-                                        src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
-                                        alt="프로필 이미지"
-                                        id='previewImgTag'
-                                        style={{width: "50%", height: "50%", borderRadius: "10px"}}
-                                    />
+                                    <div>
+                                        <img
+                                            src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
+                                            alt="프로필 이미지"
+                                            id='previewImgTag'
+                                            style={{width: "50%", height: "50%", borderRadius: "10px"}}
+                                        />
+                                    </div>
+                                    <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
+                                    <label htmlFor="fileInput" >사진 선택</label>
                                 </div>
-                                <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
-                                <label htmlFor="fileInput" >사진 선택</label>
-                            </div>
-                        </td>
-                    </tr> */}
-                    <tr>
-                        <td id="text">이름</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="text">아이디</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="text">비밀번호</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="text">닉네임</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="text">전화번호</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="text">이메일</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="text">주민등록번호</td>
-                        <td><input type="text" id='resiNum' name="resiNum" placeholder='주민등록번호를 입력하세요' onChange={handleInputChange}/></td>
-                    </tr>
-                </table>
-            </form>
+                            </td>
+                        </tr> */}
+                        <tr>
+                            <td id="text">이름</td>
+                            <td><input type="text" id='name' name="name" placeholder={vo.name} onChange={handleInputChange}/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">아이디</td>
+                            <td><input type="text" id="name" name="name" value={vo.id} readOnly/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">비밀번호</td>
+                            <td><input type="text" id='name' name="pwd" placeholder={vo.pwd} onChange={handleInputChange}/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">닉네임</td>
+                            <td><input type="text" id='name' name="nick" placeholder={vo.nick} onChange={handleInputChange}/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">전화번호</td>
+                            <td><input type="text" id='name' name="phone" placeholder={vo.phone} onChange={handleInputChange}/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">이메일</td>
+                            <td><input type="text" id='name' name="email" placeholder={vo.email} onChange={handleInputChange}/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">주민등록번호</td>
+                            <td><input type="text" id="name" name="name" value={vo.resiNum} readOnly/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div> 
         </StyledMemberEditDiv>
     );
 };

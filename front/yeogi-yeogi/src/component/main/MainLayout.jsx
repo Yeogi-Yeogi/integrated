@@ -5,7 +5,7 @@ import SelectMyClub from './SelectMyClub';
 import SearchBar from './SearchBar';
 import MainClubList from './MainClubList';
 import { useMemberMemory } from '../context/MemberContext';
-import Slide from './Slide';
+// import Slide from './Slide';
 
 
 const StyledMainLayoutDiv = styled.div`
@@ -27,7 +27,7 @@ const MainLayout = () => {
         return (
             <StyledMainLayoutDiv>
                 <MainProduce/>
-                <Slide/>
+                {/* <Slide/> */}
                 <SearchBar/>
                 <MainClubList/>                   
             </StyledMainLayoutDiv>
