@@ -17,7 +17,7 @@
         WHERE
             R.BOARD_NO = #{boardNo}
             AND R.DEL_YN = 'N'
-        ORDER BY 4 DESC, 1 DESC
+        ORDER BY 4, 1
     </select>
 
     <insert id="addReview" parameterType="com.yeogi.app.review.dto.ReviewAddDto">
