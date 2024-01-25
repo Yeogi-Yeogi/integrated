@@ -282,7 +282,6 @@ const CreateClub = () => {
                 ))
                 setClubCategory(options);
             })       
-
     },[]);
 
     const signupLimit = [];

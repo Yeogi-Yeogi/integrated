@@ -33,8 +33,8 @@ public class ClubService {
     private final ClubImageService imgService;
     private final CheckClubMember checkClubMember;
 
-    public List<ClubVo> searchClub(ClubSearchDto clubSearchDto) {
-        return dao.searchClub(clubSearchDto, sst);
+    public List<ClubVo> searchClub(String searchText) {
+        return dao.searchClub(searchText, sst);
     }
 
 

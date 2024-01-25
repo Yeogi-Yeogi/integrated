@@ -33,10 +33,11 @@ public class ClubController {
      * @param clubSearchDto
      * @return
      */
-    @GetMapping("searchClub")
-    public List<ClubVo> searchClub(ClubSearchDto clubSearchDto){
-        log.info("clubSearchDto = {}", clubSearchDto);
-        List<ClubVo> searchClubList = service.searchClub(clubSearchDto);
+    @GetMapping("searchClub/{searchText}")
+    public List<ClubVo> searchClub(@PathVariable String searchText){
+        log.info("searchText = {}", searchText);
+//        log.info("clubSearchDto = {}", clubSearchDto);
+        List<ClubVo> searchClubList = service.searchClub(searchText);
         log.info("clubList = {}", searchClubList);
 
         return searchClubList;
