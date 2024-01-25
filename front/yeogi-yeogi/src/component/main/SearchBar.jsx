@@ -71,8 +71,6 @@ const SearchBar = () => {
     // 카테고리 만들어야하나,..?
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState({});
-    const [searchClubList, setSearchClubList] = useState([]);
-
 
     const handleChangeInput = (input) => {
         setSearchText(input.target.value);
@@ -82,12 +80,13 @@ const SearchBar = () => {
         e.preventDefault();
         alert("서치텍스트 " + searchText);
         fetch("http://127.0.0.1:8885/club/searchClub/" + searchText)
-        .then(resp => resp.text())
+        .then(resp => resp.json())
         .then(clubList => {
-            console.log(clubList);
-            setSearchClubList(clubList);
             navigate("/searchClub", {
-                state: {searchClubList}
+                state : {
+                    searchClubList : clubList,
+                    searchText : searchText,
+                },              
             });
         })
     };

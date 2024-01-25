@@ -12,10 +12,10 @@ import SearchClub from './main/SearchClub';
 
 const StyledLayOutDiv = styled.div`
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
     display: grid;
-    /* grid-template-rows: auto; */
-    grid-template-rows: 100px 8fr auto;
+    grid-template-rows: auto;
+    grid-template-rows: 100px auto auto;
 
 `;
 
