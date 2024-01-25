@@ -156,7 +156,7 @@ const Header = () => {
                     </div>
                 : 
                     <div id="loginAfter">
-                        <Link to="/member/myselect">마이페이지</Link>        
+                        <Link to="/member/myPageLayout/myselect">마이페이지</Link>        
                         <Link to="/main" onClick={handleLogout}>로그아웃</Link>
                     </div>
                     
