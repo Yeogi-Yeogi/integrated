@@ -12,6 +12,7 @@
             B.CONTENT,
             B.HIT,
             TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE,
+            M.NO MEMBER_NO,
             M.NICK MEMBER_NAME,
             M.FULL_PATH MEMBER_PROFILE,
             COUNT(DISTINCT BI.FILE_URL)-1 AS IMAGE_COUNT,
@@ -20,7 +21,7 @@
         BOARD B
         INNER JOIN CLUB C ON B.CLUB_NO = C.NO
         INNER JOIN MEMBER M ON B.MEMBER_NO = M.NO
-        LEFT OUTER JOIN REVIEW R  ON B.NO = R.BOARD_NO
+        LEFT OUTER JOIN REVIEW R ON B.NO = R.BOARD_NO
         LEFT OUTER JOIN BOARD_IMAGE_FILE BI ON B.NO = BI.BOARD_NO
         WHERE
             C.NO = #{clubNo}
@@ -28,7 +29,7 @@
             AND B.DEL_YN = 'N'
             AND B.NOTICE_YN = 'N'
         GROUP BY
-            B.NO, B.TITLE, B.CONTENT, B.HIT, TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI'), M.NICK, M.FULL_PATH
+            B.NO, B.TITLE, B.CONTENT, B.HIT, TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI'), M.NO, M.NICK, M.FULL_PATH
         ORDER BY 5 DESC, 1 DESC
     </select>
 
@@ -108,6 +109,7 @@
             B.TITLE,
             B.HIT,
             TO_CHAR(B.ENROLL_DATE, 'YYYY. MM. DD HH24:MI') ENROLL_DATE,
+            M.NO MEMBER_NO,
             M.NICK MEMBER_NAME
 <!--            COUNT(R.NO) AS REVIEW_COUNT-->
         FROM
@@ -121,7 +123,7 @@
         AND B.DEL_YN = 'N'
         AND B.NOTICE_YN = 'Y'
         GROUP BY
-        B.NO, B.TITLE, B.CONTENT, B.HIT, B.ENROLL_DATE, M.NICK, M.FULL_PATH
+        B.NO, B.TITLE, B.HIT, B.ENROLL_DATE, M.NO, M.NICK
         ORDER BY 5 DESC, 1 DESC
     </select>
 

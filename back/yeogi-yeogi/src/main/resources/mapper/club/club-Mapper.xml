@@ -301,4 +301,26 @@
         FROM CLUB
         WHERE NO = #{clubNo}
     </select>
+    
+    <select id="getAuthorityByMemberNo" resultType="com.yeogi.app.util.check.CheckDto">
+        SELECT
+        MC.CLUB_NO
+        , MC.MEMBER_NO
+        , CASE
+        WHEN C.CREATOR_NO = MC.MEMBER_NO THEN 'Y'
+        ELSE 'N'
+        END AS CREATOR_YN
+        , MC.ADMIN_YN
+        , C.DEL_YN
+        FROM MEMBER_CLUB MC
+        LEFT OUTER JOIN CLUB C
+        ON MC.CLUB_NO = C.NO
+        WHERE C.NO = #{clubNo}
+        <if test="memberNoList.size() > 0">
+            AND MC.MEMBER_NO IN
+            <foreach collection="memberNoList" item="memberNo" open="(" close=")" separator=",">
+                #{memberNo}
+            </foreach>
+        </if>
+    </select>
 </mapper>

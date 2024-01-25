@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 public class ReviewDetailDto {
     private String reviewNo;
     private String memberProfile;
+    private String memberNo;
     private String memberNick;
     private String enrollDate;
     private String content;
+    private boolean creatorYn = false;
+    private boolean adminYn = false;
 }

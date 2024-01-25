@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class BoardListDto {
     //게시글 번호
     private String boardNo;
+
+    private String memberNo;
     //프로필 이미지
     private String memberProfile;
     //작성자
@@ -28,4 +30,8 @@ public class BoardListDto {
     private Long imageCount;
     //댓글 개수
     private String reviewCount;
+
+    private boolean creatorYn = false;
+    private boolean adminYn = false;
+
 }

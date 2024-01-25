@@ -32,4 +32,6 @@ public class BoardDetailDto {
     //리뷰들
 
     private boolean isMine = false;
+    private boolean creatorYn = false;
+    private boolean adminYn = false;
 }
