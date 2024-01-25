@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MainClubList from './MainClubList';
+import { useNavigate } from 'react-router-dom';
 
 const StyledSearchBarDiv = styled.div`
     /* background-color: bisque; */
@@ -67,12 +68,30 @@ const StyledSearchBarDiv = styled.div`
 
 // 메인 Search하는 칸
 const SearchBar = () => {
+    // 카테고리 만들어야하나,..?
+    const navigate = useNavigate();
+    const [searchText, setSearchText] = useState({});
+    const [searchClubList, setSearchClubList] = useState([]);
+
+
+    const handleChangeInput = (input) => {
+        setSearchText(input.target.value);
+    }
 
     const searchInput = (e) => {
         e.preventDefault();
-
-        alert("zzzz");
+        alert("서치텍스트 " + searchText);
+        fetch("http://127.0.0.1:8885/club/searchClub/" + searchText)
+        .then(resp => resp.text())
+        .then(clubList => {
+            console.log(clubList);
+            setSearchClubList(clubList);
+            navigate("/searchClub", {
+                state: {searchClubList}
+            });
+        })
     };
+
 
     return (
         <StyledSearchBarDiv>
@@ -80,7 +99,7 @@ const SearchBar = () => {
                 <form onSubmit={searchInput}>
                     <span>검색하기</span>
                     <div class="input-container">
-                        <input type="text" placeholder="검색 할 모임명 입력"/>
+                        <input type="text" name='searchText' placeholder="검색 할 모임명 입력" onChange={handleChangeInput}/>
                         <input type="submit"/>
                     </div>
                 </form>

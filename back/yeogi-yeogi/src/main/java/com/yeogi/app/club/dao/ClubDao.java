@@ -30,8 +30,8 @@ public class ClubDao {
         return template.selectOne("ClubMapper.isDeleted", clubNo);
     }
 
-    public List<ClubVo> searchClub(ClubSearchDto clubSearchDto, SqlSessionTemplate sst) {
-        return sst.selectList("ClubMapper.searchClub", clubSearchDto);
+    public List<ClubVo> searchClub(String searchText, SqlSessionTemplate sst) {
+        return sst.selectList("ClubMapper.searchClub", searchText);
     }
 
     public int createClub(CreateClubDto createClubDto, SqlSessionTemplate sst) {

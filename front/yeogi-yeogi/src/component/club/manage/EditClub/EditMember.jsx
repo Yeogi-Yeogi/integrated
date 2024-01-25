@@ -21,6 +21,7 @@ const StyledEditMemberDiv = styled.div`
             margin-bottom: 30px;
         }
     }
+    
     & table:nth-of-type(1) {
         width: 800px;
         height: 100px;

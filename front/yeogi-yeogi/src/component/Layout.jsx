@@ -7,6 +7,7 @@ import ClubLayout from './club/ClubLayout';
 import MemberLayout from './member/MemberLayout';
 import CreateClub from './club/manage/CreateClub';
 import MainLayout from './main/MainLayout';
+import SearchClub from './main/SearchClub';
 
 
 const StyledLayOutDiv = styled.div`
@@ -28,6 +29,7 @@ const Layout = () => {
                 <Route path='/member/*' element={<MemberLayout/>}/>
                 <Route path='/club/:clubNo/*' element={<ClubLayout/>}/>
                 <Route path='/club/createClub' element={<CreateClub/>}/>
+                <Route path='/searchClub' element={<SearchClub/>}/>
             </Routes>
             <Footer />
         </StyledLayOutDiv>
