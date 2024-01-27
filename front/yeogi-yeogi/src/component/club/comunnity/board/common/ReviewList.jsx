@@ -124,6 +124,15 @@ const ReviewList = ({data, setPageNo}) => {
                         <div>
                             <img src={el.memberProfile} alt="" />
                             <span className='userSpan'>{el.memberNick}</span>
+                            {
+                                el.creatorYn ?
+                                <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/creator.png" alt="" width="15" height="15"/>
+                                :
+                                !el.creatorYn && el.adminYn ?
+                                <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/admin.png" alt="" width="15" height="15"/>
+                                :
+                                null
+                            }
                             <span className='dateSpan'>{el.enrollDate}</span>
                             <Button className='review-delete' variant="link" onClick={() => {handleDeleteReview(el.reviewNo, setPageNo)}}>삭제</Button>
                         </div>

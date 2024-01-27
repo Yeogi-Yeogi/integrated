@@ -7,7 +7,7 @@ const StyledBoardListItemDiv = styled.div`
     margin-top: 0.5em;
     margin-bottom: 4em;
     & * {
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-family: 'NanumBarunGothic';
     }
 
     &:hover {
@@ -16,15 +16,23 @@ const StyledBoardListItemDiv = styled.div`
 `;
 
 const FirstDiv = styled.div`
-    display: inline;
-    
-    & > * {
-        margin: 0.3em;
+    display: flex;
+    align-items: flex-end;
+
+    & > img {
+        margin-right: 0.2em;
+
+        &:not(:first-child) {
+            margin-bottom: 0.5em;
+        }
     }
 
+    
 `;
 
 const UserSpan = styled.span`
+    margin: 0;
+    margin-right: 0.2em;
     font-size: 1.5em;
     font-weight: 500;
 `;
@@ -78,6 +86,15 @@ const BoardListItem = ({data}) => {
             <FirstDiv>
                 <img src={data.memberProfile} alt="" width="45" height="45"/>
                 <UserSpan>{data.memberName}</UserSpan>
+                {
+                    data.creatorYn ?
+                    <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/creator.png" alt="" width="15" height="15"/>
+                    :
+                    !data.creatorYn && data.adminYn ?
+                    <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/admin.png" alt="" width="15" height="15"/>
+                    :
+                    null
+                }
                 <DateSpan>{data.enrollDate}</DateSpan>
             </FirstDiv>
             <hr />

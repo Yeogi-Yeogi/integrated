@@ -4,6 +4,7 @@ import com.yeogi.app.board.dto.*;
 import com.yeogi.app.board.repository.BoardRepository;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.check.CheckMemberAuthorityDto;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,8 +51,24 @@ public class BoardService {
         RowBounds rowBounds = new RowBounds(Integer.parseInt(pageNo)*boardLimit, boardLimit);
         List<BoardListDto> boardList = boardRepository.getBoardListIgnoreFileUrl(dto.getClubNo(), template, rowBounds);
 
+        List<String> memberNoList = boardList.stream().map(e -> e.getMemberNo()).distinct().collect(Collectors.toList());
+        CheckMemberAuthorityDto memberAuthorityDto = new CheckMemberAuthorityDto(memberNoList, dto.getClubNo());
+        List<CheckDto> memberAuthorites = checkMember.getAuthorites(memberAuthorityDto, template);
+
         Map<String, BoardListDto> boardMap = new HashMap<>();
-        boardList.stream().forEach(e -> boardMap.put(e.getBoardNo(), e));
+        for(CheckDto check : memberAuthorites) {
+
+            boardList.stream().filter(i -> check.getMemberNo().equals(i.getMemberNo()))
+                    .forEach(e -> {
+                        if(check.getCreatorYn().equals("Y")) {
+                            e.setCreatorYn(true);
+                            e.setAdminYn(true);
+                        } else if(check.getCreatorYn().equals("N") && check.getAdminYn().equals("Y")){
+                            e.setAdminYn(true);
+                        }
+                boardMap.put(e.getBoardNo(), e);
+            });
+        }
 
         List<String> collect = boardList.stream()
                 .filter(o -> o.getImageCount() != -1)
@@ -68,7 +85,6 @@ public class BoardService {
                 boardMap.put(imageDto.getBoardNo(), boardListDto);
             }
         }
-
 
         boardList = boardMap.entrySet().stream().map(e -> e.getValue()).sorted((e1, e2)-> e2.getBoardNo().compareTo(e1.getBoardNo())).collect(Collectors.toList());
 
@@ -94,6 +110,15 @@ public class BoardService {
             throw new NoResultException("게시글이 존재하지 않습니다");
         }
 
+        CheckDto checkAuthorityDto = checkValid(valid.getClubNo(), findBoard.getMemberNo());
+
+        if(checkAuthorityDto.getCreatorYn().equals("Y")) {
+            findBoard.setCreatorYn(true);
+            findBoard.setAdminYn(true);
+        } else if(checkAuthorityDto.getCreatorYn().equals("N") && checkAuthorityDto.getAdminYn().equals("Y")) {
+            findBoard.setAdminYn(true);
+        }
+
         //이미지 가져오기
         List<BoardListFileUrlDto> imageList = boardRepository.getImagesByBoardNo(valid.getBoardNo(), template);
         findBoard.setImages(imageList);
@@ -103,6 +128,13 @@ public class BoardService {
         if(findBoard.getMemberNo().equals(clubMember.getMemberNo())) {
             findBoard.setMine(true);
         }
+
+//        if(clubMember.getCreatorYn().equals("Y")) {
+//            findBoard.setCreatorYn(true);
+//            findBoard.setAdminYn(true);
+//        } else if(clubMember.getCreatorYn().equals("N") && clubMember.getAdminYn().equals("Y")) {
+//            findBoard.setAdminYn(true);
+//        }
 
         return findBoard;
     }

@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NoticeListDto {
     private String noticeNo;
+    private String memberNo;
     private String memberName;
     private String title;
     private String hit;
     private String enrollDate;
-
+    private boolean creatorYn = false;
+    private boolean adminYn = false;
 }

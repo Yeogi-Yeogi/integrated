@@ -12,6 +12,7 @@ import com.yeogi.app.notice.repository.ScheduleRepository;
 import com.yeogi.app.notice.vo.ScheduleVo;
 import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.check.CheckMemberAuthorityDto;
 import com.yeogi.app.util.exception.NotAdminException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import com.yeogi.app.util.page.PageVo;
@@ -57,12 +58,37 @@ public class NoticeService {
 
         RowBounds rowBounds = new RowBounds((pno-1) * boardLimit, boardLimit);
         List<NoticeListDto> noticeList = boardRepository.getNoticeList(template, clubMember, rowBounds);
+
+        List<String> memberNoList = noticeList.stream().map(n -> n.getMemberNo()).collect(Collectors.toList());
+
+        List<CheckDto> authoritesDto = check.getAuthorites(new CheckMemberAuthorityDto(memberNoList, checkDto.getClubNo()), template);
+
+        for(CheckDto c : authoritesDto) {
+            noticeList.stream().filter(n -> n.getMemberNo().equals(c.getMemberNo()))
+                    .forEach(r -> {
+                        if(c.getCreatorYn().equals("Y")) {
+                            r.setCreatorYn(true);
+                            r.setAdminYn(true);
+                        } else if(c.getCreatorYn().equals("N") && c.getAdminYn().equals("Y")) {
+                            r.setAdminYn(true);
+                        }
+                    });
+
+        }
         Map<String, Object> resultMap =  new HashMap<>();
         resultMap.put("list", noticeList);
         resultMap.put("pageVo", pageVo);
-        if(!(clubMember.getAdminYn().equals("N") && clubMember.getCreatorYn().equals("N")))
-            resultMap.put("adminYn", true);
-        else resultMap.put("adminYn", false);
+
+//        if(clubMember.getCreatorYn().equals("Y")) {
+//            resultMap.put("creatorYn", true);
+//            resultMap.put("adminYn", true);
+//        } else if(clubMember.getCreatorYn().equals("N") && clubMember.getAdminYn().equals("Y")) {
+//            resultMap.put("creatorYn", false);
+//            resultMap.put("adminYn", true);
+//        } else {
+//            resultMap.put("creatorYn", false);
+//            resultMap.put("adminYn", false);
+//        }
         return resultMap;
     }
 
@@ -82,6 +108,14 @@ public class NoticeService {
             throw new IllegalStateException("해당 공지사항이 없습니다");
         }
         NoticeDetailDto findNotice = boardRepository.getOne(dto, template);
+        CheckDto checkAuthorityDto = checkMember(dto.getClubNo(), findNotice.getMemberNo());
+
+        if(checkAuthorityDto.getCreatorYn().equals("Y")) {
+            findNotice.setCreatorYn(true);
+            findNotice.setAdminYn(true);
+        } else if(checkAuthorityDto.getCreatorYn().equals("N") && checkAuthorityDto.getAdminYn().equals("Y")){
+            findNotice.setAdminYn(true);
+        }
         ScheduleVo findSchedule = scheduleRepository.getScheduleByBoardNo(findNotice.getBoardNo(), template);
         findNotice.setSchedule(findSchedule);
 
@@ -94,6 +128,7 @@ public class NoticeService {
         if(findNotice.getMemberNo().equals(clubMember.getMemberNo())) {
             findNotice.setMine(true);
         }
+
         return findNotice;
     }
 

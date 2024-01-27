@@ -15,7 +15,7 @@ const StyledNoticeDetailDiv = styled.div`
     padding-left: 2em;
 
     & * {
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-family: 'NanumBarunGothic';
     }
 
     & > div:first-child {
@@ -32,13 +32,22 @@ const StyledNoticeDetailDiv = styled.div`
                 align-items: end;
                 
                 & > * {
-                    margin-right: 0.8em;
+                    margin-right: 0.5em;
                 }
 
-                & > img {
+                & > img:first-child {
                     width: 45px;
                     height: 45px;
                     border-radius: 10px;
+                }
+
+                & > img:not(:first-child) {
+                    margin-bottom: 0.3em;
+                    margin-right:0.6em;
+                }
+                & > span.enroll-span {
+                    font-size: 0.9em;
+                    color: #999999;
                 }
 
             }
@@ -358,7 +367,16 @@ const BoardDetail = () => {
                         <div>
                             <img src={`${vo?.memberProfile}`} alt="" />
                             <span>{vo?.memberName}</span>
-                            <span>{vo?.enrollDate}</span>
+                            {
+                                vo?.creatorYn ?
+                                <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/creator.png" alt="" width="15" height="15"/>
+                                :
+                                !vo?.creatorYn && vo?.adminYn ?
+                                <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/admin.png" alt="" width="15" height="15"/>
+                                :
+                                null
+                            }
+                            <span className='enroll-span'>{vo?.enrollDate}</span>
                         </div>
                         {
                             vo?.mine &&

@@ -36,6 +36,11 @@ const StyledTableDiv = styled.div`
         & tr > *:nth-child(4) {
             width: 10%;
         }
+        
+        & img {
+            margin-left: 0.1em;
+            margin-bottom: 0.3em;
+        }
     }
 
     
@@ -184,7 +189,18 @@ const NoticeList = () => {
                         noticeList.map(el => 
                             <tr onClick={() => {handleClick(el.noticeNo);}} key={el.noticeNo}>
                                 <td>{el.title}</td>
-                                <td>{el.memberName}</td>
+                                <td>
+                                    {el.memberName}
+                                    {
+                                        el.creatorYn ?
+                                        <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/creator.png" alt="" width="15" height="15"/>
+                                        :
+                                        !el.creatorYn && el.adminYn ?
+                                        <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/admin.png" alt="" width="15" height="15"/>
+                                        :
+                                        null
+                                    }
+                                </td>
                                 <td>{el.enrollDate}</td>
                                 <td>{el.hit}</td>
                             </tr>

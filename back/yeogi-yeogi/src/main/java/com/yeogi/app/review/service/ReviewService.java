@@ -1,13 +1,14 @@
 package com.yeogi.app.review.service;
 
 import com.yeogi.app.review.dto.ReviewAddDto;
-import com.yeogi.app.review.dto.ReviewValidDto;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
+import com.yeogi.app.review.dto.ReviewValidDto;
 import com.yeogi.app.review.repository.ReviewRepository;
-import com.yeogi.app.util.check.CheckDto;
-import com.yeogi.app.util.exception.FailReviewException;
 import com.yeogi.app.util.check.CheckClubMember;
+import com.yeogi.app.util.check.CheckDto;
+import com.yeogi.app.util.check.CheckMemberAuthorityDto;
+import com.yeogi.app.util.exception.FailReviewException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -56,6 +58,23 @@ public class ReviewService {
 
         RowBounds rowBounds = new RowBounds(i * reviewLimit, reviewLimit);
         List<ReviewDetailDto> reviews = repository.getReviewListByBoardNo(dto.getBoardNo(), template, rowBounds);
+
+        if(reviews.size() > 0) {
+            List<String> memberNoList = reviews.stream().map(r -> r.getMemberNo()).distinct().collect(Collectors.toList());
+            List<CheckDto> authoritesDto = checkMember.getAuthorites(new CheckMemberAuthorityDto(memberNoList, dto.getClubNo()), template);
+
+            for(CheckDto check : authoritesDto) {
+                reviews.stream().filter(r -> r.getMemberNo().equals(check.getMemberNo()))
+                        .forEach(r -> {
+                            if(check.getCreatorYn().equals("Y")) {
+                                r.setCreatorYn(true);
+                                r.setAdminYn(true);
+                            } else if(check.getCreatorYn().equals("N") && check.getAdminYn().equals("Y")) {
+                                r.setAdminYn(true);
+                            }
+                        });
+            }
+        }
 
         map.put("list", reviews);
         return map;

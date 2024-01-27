@@ -254,6 +254,15 @@ const NoticeDetail = () => {
                         <div>
                             <img src={notice?.memberProfile} alt="" />
                             <span>{notice?.memberName}</span>
+                            {
+                                notice?.creatorYn ?
+                                <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/creator.png" alt="" width="15" height="15"/>
+                                :
+                                !notice?.creatorYn && notice?.adminYn ?
+                                <img src="https://junho-practice.s3.ap-northeast-2.amazonaws.com/admin.png" alt="" width="15" height="15"/>
+                                :
+                                null
+                            }
                             <span>{notice?.enrollDate}</span>
                             <span>조회수 {notice?.hit}</span>
                         </div>

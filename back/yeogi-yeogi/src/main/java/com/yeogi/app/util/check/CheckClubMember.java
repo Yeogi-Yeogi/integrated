@@ -8,6 +8,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Configuration
 @Transactional
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ public class CheckClubMember {
 
     /**
      * 모임에 가입한 사람인지 검사하는 로직
+     * & 회원 한명의 권한 등급 확인
      * @param dto
      * @return
      */
@@ -33,4 +36,13 @@ public class CheckClubMember {
 
     }
 
+    /**
+     * 여러 회원의 권한 목록 조회
+     * @param memberNoList
+     * @param template
+     * @return
+     */
+    public List<CheckDto> getAuthorites(CheckMemberAuthorityDto memberNoList, SqlSessionTemplate template) {
+        return template.selectList("ClubMapper.getAuthorityByMemberNo", memberNoList);
+    }
 }
