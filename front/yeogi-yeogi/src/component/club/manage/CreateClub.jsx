@@ -137,13 +137,13 @@ const CreateClub = () => {
     console.log("loginMember ::: ", loginMember);
     console.log("vo ::: ", vo);
     
-
     const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
     const [clubNameCheck, setClubNameCheck] = useState(false);
     const [createClubDto, setCreateClubDto] = useState({
         "creatorNo" : creatorNo
     });
+    const [clubCategory, setClubCategory] = useState();
 
     
     const handleChangeFile = () => {
@@ -277,7 +277,7 @@ const CreateClub = () => {
             name.value = "";
         })
     };
-    const [clubCategory, setClubCategory] = useState();
+    
     useEffect(() => {
         fetch("http://127.0.0.1:8885/club/getCategoryName")
         .then(resp => resp.json())

@@ -70,9 +70,13 @@ const SearchClub = () => {
                     <h3>'{searchText}'에 대한 검색결과</h3>
                 </div>
                 <div className='clubList'>
-                    {searchClubList.map((club) =>(
-                        <ClubListItem key={club.no} club={club}/>
-                    ))}
+                      {searchClubList.length === 0 ? (
+                        <p style={{fontWeight: "bold"}}>검색된 모임이 없습니다.</p>
+                    ) : (
+                        searchClubList.map((club) => (
+                        <ClubListItem key={club.no} club={club} />
+                        ))
+                    )}
                 </div>
                 <div id='searchBarContainer'>
                     <SearchBar/>
