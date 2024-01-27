@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import MyPageSideBar from '../club/comunnity/board/common/MyPageSideBar';
@@ -57,26 +57,28 @@ const StyledMemberMySelectDiv = styled.div`
 
 const MemberMySelect = () => {
 
-    // const [imgFile, setImgFile] = useState("");
-    // const imgRef = useRef();
+    const [imgFile, setImgFile] = useState("");
+    const imgRef = useRef();
 
-    // const handleChangeFile = () => {
-    //     if(!imgRef.current.files.length) {
-    //         setImgFile("");
-    //         return;
-    //     }
+    const handleChangeFile = () => {
+        if(!imgRef.current.files.length) {
+            return;
+        }
 
-    //     const file = imgRef.current.file[0];
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onloadend = () => {
-    //         setImgFile(reader.result);
-    //     };
-    // };
+        const file = imgRef.current.file[0];
+        const reader = new FileReader();
 
-    let isFetching = false;
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setImgFile(reader.result);
+        };
+    };
+
+   
+
     const [vo,setVo] = useState(JSON.parse(sessionStorage.getItem('loginMember')));
 
+    console.log("vo:::", vo);
     // setVo((JSON.parse(sessionStorage.getItem('loginMember')))) //후순위
   
     return (
@@ -85,6 +87,21 @@ const MemberMySelect = () => {
                 <MyPageSideBar/>
                 <form >
                     <table id="table-container">
+                        <tr>
+                            <td colSpan={3}>
+                                <div>
+                                    <div>
+                                        <img
+                                            // src= {vo.fullPath? vo.fullPath : `/img/defaultClubImage.png`}
+                                            src = {`http://127.0.0.1:8885/member/display?no=${vo.no}`? vo.fullPath : `/img/defaultClubImage.png`}//백틱
+                                            alt="프로필 이미지"
+                                            id='previewImgTag'
+                                            style={{width: "50%", height: "50%", borderRadius: "10px"}}
+                                        />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <td id="text">이름</td>
                             <td><input type="text" id="name" name="name" value={vo.name} readOnly/></td>
@@ -112,6 +129,14 @@ const MemberMySelect = () => {
                         <tr>
                             <td id="text">주민등록번호</td>
                             <td><input type="text" id="name" name="name" value={vo.resiNum} readOnly/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">회원등록일자</td>
+                            <td><input type="text" id="enrollDate" name="enrollDate" value={vo.enrollDate} readOnly/></td>
+                        </tr>
+                        <tr>
+                            <td id="text">정보수정일자</td>
+                            <td><input type="text" id="modifiedDate" name="modifiedDate" value={vo.modifiedDate} readOnly/></td>
                         </tr>
                     </table>
                 </form>

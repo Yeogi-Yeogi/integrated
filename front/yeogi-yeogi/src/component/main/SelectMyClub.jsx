@@ -4,43 +4,105 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 
 const StyledSelectMyClubDiv = styled.div`
+  .bigBox{
+    display: block;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 0px;
+    line-height: 1;
+}
+  .titlePlusBox{
+    flex: 1 1 0%;
+    display: flex;
+  }
+
+  #title{
+    cursor: pointer;
+  }
+
+  #plus{
+    align-items: center;
+    margin-left: 100px;
+  }
+
+  .selectListBox {
+  display: flex;
+  justify-content: space-between;
+}
+
+.innerBox > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.innerBox {
+  margin-bottom: 10px; /* 필요에 따라 간격을 조절하세요 */
+}
+.innerBox:first-child {
+  margin-right: 20px; /* 이미지 div와의 간격을 조절하세요 */
+}
 
     
 `;
 
 const SelectMyClub = () => {
-
-    function KitchenSinkExample() {
-        return (
-          <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
-            <Card.Body>
-              <Card.Title>Card Title</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the
-                bulk of the card's content.
-              </Card.Text>
-            </Card.Body>
-            <ListGroup className="list-group-flush">
-              <ListGroup.Item>Cras justo odio</ListGroup.Item>
-              <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-              <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-            </ListGroup>
-            <Card.Body>
-              <Card.Link href="#">Card Link</Card.Link>
-              <Card.Link href="#">Another Link</Card.Link>
-            </Card.Body>
-          </Card>
-        );
-      }
-    
-      const a = KitchenSinkExample()
-    
       
-
     return (
         <StyledSelectMyClubDiv>
-            {a}
+          <div class="bigBox">
+            <div class="titlePlusBox">
+              <div id="title">
+                <strong>여기여기에서 내 모임을 조회</strong>
+              </div>
+              <div id="Plus">
+                <button type='button'>더보기</button>
+              </div>
+            </div>
+            <div class="selectListBox">
+              <div class="innerBox">
+                <div>이미지</div>
+                <div id='list'>
+                  <div>낙천주의자 클럽</div>
+                  <div>누구나지금바로행복해질수</div>
+                  <div>멤버1504</div>
+                  <div>리더리더</div>
+                  <div>소통밴드</div>
+                </div>
+              </div>
+              <div class="innerBox">
+                <div>이미지</div>
+                <div id='list'>
+                  <div>낙천주의자 클럽</div>
+                  <div>누구나지금바로행복해질수</div>
+                  <div>멤버1504</div>
+                  <div>리더리더</div>
+                  <div>소통밴드</div>
+                </div>
+              </div>
+              <div class="innerBox">
+                <div>이미지</div>
+                <div id='list'>
+                  <div>낙천주의자 클럽</div>
+                  <div>누구나지금바로행복해질수</div>
+                  <div>멤버1504</div>
+                  <div>리더리더</div>
+                  <div>소통밴드</div>
+                </div>
+              </div>
+              <div class="innerBox">
+                <div>이미지</div>
+                <div id='list'>
+                  <div>낙천주의자 클럽</div>
+                  <div>누구나지금바로행복해질수</div>
+                  <div>멤버1504</div>
+                  <div>리더리더</div>
+                  <div>소통밴드</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </StyledSelectMyClubDiv>
     );
 };

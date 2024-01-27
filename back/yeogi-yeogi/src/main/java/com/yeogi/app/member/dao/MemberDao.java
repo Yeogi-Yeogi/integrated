@@ -46,4 +46,5 @@ public class MemberDao {
 		return sst.selectList("MemberMapper.selectMyClub", vo);
 	}
 
+
 }
