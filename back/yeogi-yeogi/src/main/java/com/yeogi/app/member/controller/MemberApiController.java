@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yeogi.app.member.dao.MemberDao;
 import com.yeogi.app.member.service.MemberService;
 import com.yeogi.app.member.vo.MemberVo;
 import com.yeogi.app.member.vo.selectMyClubVo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Controller
@@ -35,9 +37,11 @@ import lombok.RequiredArgsConstructor;
 @ResponseBody
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
+@Slf4j
 public class MemberApiController {
 	
     private final MemberService service;
+    private final MemberDao dao;
 
     //회원가입
     @PostMapping("join")
@@ -127,24 +131,36 @@ public class MemberApiController {
     }
 
     //회원정보조회
-    @PostMapping("mySelect")
-    public Map<String, Object> mySelect(@RequestBody MemberVo vo, @PathVariable Long no) throws Exception {
+    @PostMapping("mySelect/{no}")
+    public Map<String, Object> mySelect(@RequestBody MemberVo vo, @PathVariable String no) throws Exception {
     	
+    	// 회원정보 조회
     	MemberVo loginMember = service.mySelect(vo);
+    	
+    	// 응답 맵 생성
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg","good");
         map.put("loginMember", loginMember);
         System.out.println(loginMember);
+        
+        // 회원이 존재하지 않을 경우
         if( loginMember == null ) {
         	map.put("msg", "bad");
         }
         return map;  
     }
     
+    
     //클라이언트로 이미지파일을 전달
-    @GetMapping("display/{no}")
-    public ResponseEntity display(@PathVariable String no) throws IOException {        
-        File f = new File(no);
+    @GetMapping("display")
+    public ResponseEntity display(String no) throws IOException {      
+    	//파일경로=회원번호 를 이용하여, 디비에 있는 파일경로 가져오기
+    	MemberVo vo = new MemberVo();
+    	vo.setNo(no);
+    	MemberVo dbVo = service.mySelect(vo);
+    	String dbFullPath = dbVo.getFullPath();
+//    	7 -> C:\dev\profileImg\lyj.png
+        File f = new File(dbFullPath);
         Path filePath = f.toPath();
         byte[] data = Files.readAllBytes(filePath);
         return ResponseEntity
@@ -153,7 +169,7 @@ public class MemberApiController {
                 .body(data)
                 ;
     }
-    
+         
     //내 정보 수정하기 
     @PostMapping("edit")
     public Map<String,String> edit(MemberVo vo, MultipartFile profileImg) throws Exception {
@@ -174,6 +190,8 @@ public class MemberApiController {
         return map;        
     }
     
+    
+    
     //메인화면- 로그인후 가입한 모임 조회하기        
     @PostMapping("selectMyClub")
     public Map<String, Object> selectMyClub(selectMyClubVo vo){
@@ -191,9 +209,6 @@ public class MemberApiController {
 ////    	MemberVo memberVo = new MemberVo();
 ////    	voList.add(memberVo);
 //    	System.out.println(voList);
-    }
-    
-//    MultipartFile f, 
-
-        
+    } 
+       
 }//class

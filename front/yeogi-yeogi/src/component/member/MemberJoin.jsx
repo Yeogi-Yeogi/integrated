@@ -10,6 +10,15 @@ const StyledMemberJoinDiv = styled.div`
     margin-bottom: 70px;
     width: 100vw;
 
+    & > div {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
     & input {
         border: 2px solid #999999;
         border-radius: 10px;
@@ -38,14 +47,6 @@ const StyledMemberJoinDiv = styled.div`
     }
 
 
-    & > div {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-    }
 
     form > {
         width: 100%;
@@ -86,7 +87,10 @@ const StyledMemberJoinDiv = styled.div`
 
 const MemberJoin = () => {
 
+    // 회원가입 중인지 여부를 나타내는 변수
     let isFetching = false;
+
+    // 회원가입 정보를 담는 상태 변수
     const [vo,setVo] = useState({
         name: "",
         id :"",
@@ -96,40 +100,65 @@ const MemberJoin = () => {
         email:"",
         resiNum:"",
     })
+
+    // React Router의 useNavigate 훅을 통해 네비게이션 기능 사용
     const navigate = useNavigate();
 
+    // 프로필 이미지와 관련된 상태 및 ref 설정
+    //현재 선택된 프로필 이미지의 데이터 URL을 저장하는 상태 변수,imgFile 상태를 업데이트하는 함수
     const [imgFile, setImgFile] = useState("");
+    //파일 입력(input type="file") 엘리먼트에 대한 참조를 생성->해당 엘리먼트에 접근가능
     const imgRef = useRef();
+
+    // console.log(imgRef?.current)
+    // console.log(imgRef?.current?.files)
+    // console.log(imgRef?.current?.name)
+    // console.log(imgRef?.current?.value)
+    // console.log(imgRef?.current?.accept)
+
     
+    // 프로필 이미지 파일 변경 시 동작하는 함수
     const handleChangeFile = () => {
+        //파일 입력 엘리먼트에서 선택된 파일의 개수
         if (!imgRef.current.files.length) {
             // 파일 선택 취소했을때
             return;
         }
       
-        const file = imgRef.current.files[0];
+        const file = imgRef.current.files[0];//선택된 파일이 있다면, 첫 번째 파일을 가져와서 FileReader를 사용하여 해당 파일의 내용을 읽습니다
+        
         const fileReader = new FileReader();
-        fileReader.readAsDataURL(file);
+        fileReader.readAsDataURL(file);// 파일의 내용을 데이터 URL로 읽어오도록 지시
+        
+        // 파일 읽기가 완료된 후에 실행되는 콜백 함수
+        //파일의 데이터 URL을 setImgFile을 통해 imgFile 상태에 업데이트
         fileReader.onloadend = () => {
-            setImgFile(fileReader.result);
+            setImgFile(fileReader.result);//이미지 썸네일 보여주기용
         };
 
+        // 회원가입 정보 중 프로필 이미지 업데이트
         setVo({
             ...vo , 
-            profileImg : file ,
+            'profileImg' : file , //mutiPartfile에서 가져온 변수(키값) : 위에 지정한 변수(value)
         });
     };
 
-
+    // 입력 필드 값 변경 시 동작하는 함수
     const handleInputChange = (event) => {
         const{name, value} = event.target;
 
+        // const name = event.target.name
+        // const value =event.target.value
+        //name은 input태그에 있는 값
+
+        // 해당 입력 필드의 값을 업데이트
         setVo({
             ...vo,
             [name] : value
         });
     }
     
+    // 회원가입 양식 제출 시 동작하는 함수
     const handleMemberJoinSubmit = (event) => {
         event.preventDefault();
 
@@ -142,7 +171,7 @@ const MemberJoin = () => {
 
         const formData = new FormData();
 
-        //각 입력 필드의 값을 FormData에 추가
+        //각 입력 필드의 값을 FormData에 추가// FormData를 사용하여 서버로 회원가입 정보 전송
         formData.append('name',vo.name);
         formData.append('id', vo.id);
         formData.append('pwd', vo.pwd);
@@ -153,6 +182,7 @@ const MemberJoin = () => {
         formData.append('profileImg', vo.profileImg);
 
 
+        // 서버에 회원가입 요청을 보내고 응답 처리
         fetch("http://127.0.0.1:8885/member/join", {
         method:"post",
         // headers:{
@@ -170,7 +200,8 @@ const MemberJoin = () => {
             if(data.msg === "good"){
                 
                 alert("회원가입 성공!");
-                navigate("/");
+                alert("로그인 후 이용가능합니다.")
+                navigate("/main");
             }else{
                 alert("회원가입 실패..");
                 navigate("/failpage");
@@ -187,7 +218,7 @@ const MemberJoin = () => {
 
     }
 
-    
+    // JSX를 반환하여 화면에 표시
     return (
         <StyledMemberJoinDiv>
             <form onSubmit={handleMemberJoinSubmit} encType="multipart/form-data">
@@ -222,23 +253,23 @@ const MemberJoin = () => {
                     </tr>
                     <tr>
                         <td id="text">비밀번호</td>
-                        <td><input type="text" id='name' name="pwd" placeholder='비밀번호를 입력하세요' onChange={handleInputChange}/></td>
+                        <td><input type="text" id='pwd' name="pwd" placeholder='비밀번호를 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text">비밀번호 확인</td>
-                        <td><input type="text" id='name' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
+                        <td><input type="text" id='pwdCheck' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
                     </tr>
                     <tr>
                         <td id="text">닉네임</td>
-                        <td><input type="text" id='name' name="nick" placeholder='닉네임을 입력하세요' onChange={handleInputChange}/></td>
+                        <td><input type="text" id='nick' name="nick" placeholder='닉네임을 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text">전화번호</td>
-                        <td><input type="text" id='name' name="phone" placeholder='전화번호를 입력하세요' onChange={handleInputChange}/></td>
+                        <td><input type="text" id='phone' name="phone" placeholder='전화번호를 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text">이메일</td>
-                        <td><input type="text" id='name' name="email" placeholder='이메일을 입력하세요' onChange={handleInputChange}/></td>
+                        <td><input type="text" id='email' name="email" placeholder='이메일을 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text"></td>
@@ -261,4 +292,5 @@ const MemberJoin = () => {
     );
 };
 
+// MemberJoin 컴포넌트를 외부로 내보냄
 export default MemberJoin;

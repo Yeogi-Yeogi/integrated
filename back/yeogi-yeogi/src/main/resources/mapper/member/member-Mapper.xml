@@ -73,7 +73,7 @@
             ,PHONE
             ,EMAIL
             ,ENROLL_DATE
-            ,MODIFIED_DATE
+            ,MODIFIED_DATE 
             ,FULL_PATH
             ,RESI_NUM
          FROM MEMBER
@@ -83,17 +83,24 @@
 	<update id="edit">
 		UPDATE MEMBER
 			SET
-	           ID = #{id}
+			   <if test="name != '' and name != null">
+	           	,NAME = #{name}
+	           </if>
 	           <if test="pwd != '' and pwd != null">
 	           	,PWD = #{pwd}
 	           </if>
 	           <if test="nick != '' and nick != null">
 	           	,NICK = #{nick}
 	           </if>
-	           
-	           ,PHONE = #{phone}
-	           ,EMAIL = #{email}
-	           ,FULL_PATH = #{fullPath}
+	           <if test="phone != '' and phone != null">
+	           	,PHONE = #{phone}
+	           </if>
+	           <if test="email != '' and email != null">
+	           	,EMAIL = #{email}
+	           </if>
+	           <if test="fullPath != '' and fullPath != null">
+	           	,FULL_PATH = #{fullPath}
+	           </if>	           
            WHERE NO = #{no}
 		   AND QUIT_YN = 'N'		
 	</update>
