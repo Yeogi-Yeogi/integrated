@@ -7,7 +7,7 @@ const StyledClubListItemDiv = styled.div`
     grid-template-rows: 1.5fr 1fr;
     width: 200px;
     height: 250px;
-    background: #d2e1ff;
+    background: #ececec;
     border-radius: 5px;
     //#d2e1ff; #F5F6F8;
     transition: box-shadow 0.5s;

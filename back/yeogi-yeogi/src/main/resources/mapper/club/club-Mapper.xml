@@ -126,6 +126,7 @@
         SELECT NAME
         FROM CLUB
         WHERE NAME = #{clubName}
+            AND DEL_YN = 'N'
     </select>
     
     

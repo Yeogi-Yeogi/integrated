@@ -51,14 +51,15 @@ const StyledCreateClubdiv = styled.div`
                 justify-content: center;
                 border-radius: 10px;
                 margin-bottom: 25px;
-                & > div:nth-of-type(1){
+                position: relative;
+                /* & > div:nth-of-type(1){
                     width: 150px;
                     height: 150px;
                     margin-bottom: 15px;
                     border-radius: 10px;
                     border: 1px solid #e8e8e8;
                     
-                }
+                } */
             }
             & > div:nth-of-type(2) > button{
                 color: #fff;
@@ -83,6 +84,8 @@ const StyledCreateClubdiv = styled.div`
             border-radius: 10px;
             cursor: pointer;
             text-align: center;
+            position: absolute;
+            bottom: 10px;
         }
         
         & > form input[type="submit"] {
@@ -95,7 +98,6 @@ const StyledCreateClubdiv = styled.div`
             color: #fff;
             font-weight: bold;
             font-size: 18px;
-            
         }
 
         & > form textarea[id='clubDescription']{
@@ -127,6 +129,7 @@ const StyledCreateClubdiv = styled.div`
 const CreateClub = () => {
     
     const loginMember = window.sessionStorage.getItem("loginMember");
+    const navigate = useNavigate();
 
     const vo = JSON.parse(loginMember);
     const creatorNo = vo?.no;
@@ -134,15 +137,15 @@ const CreateClub = () => {
     console.log("loginMember ::: ", loginMember);
     console.log("vo ::: ", vo);
     
-    const navigate = useNavigate();
-
     const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
     const [clubNameCheck, setClubNameCheck] = useState(false);
     const [createClubDto, setCreateClubDto] = useState({
         "creatorNo" : creatorNo
     });
+    const [clubCategory, setClubCategory] = useState();
 
+    
     const handleChangeFile = () => {
         if (!imgRef.current.files.length) {
             // 파일 선택 취소했을때
@@ -169,21 +172,11 @@ const CreateClub = () => {
         });
     };
 
-    
 
     const handleSubmit = (input) => {
         input.preventDefault();
         console.log(createClubDto);
         
-        if(!createClubDto.categoryNo){
-            Swal.fire({
-                icon: 'warning',                  
-                text: '카테고리를 선택해주세요', 
-                confirmButtonText: '확인'
-            });
-            return;
-        }
-
         if(!clubNameCheck){
             Swal.fire({
                 icon: 'warning',                  
@@ -192,7 +185,24 @@ const CreateClub = () => {
             });
             return;
         }
-        // 빈값에 대한거 작성..
+
+        const checkMsg = {
+            signupLimit: '인원 제한',
+            ageLimit: '나이 제한',
+            clubDescription: '모임 소개',
+            categoryNo: '카테고리',
+        };
+
+        for (const [key, label] of Object.entries(checkMsg)) {
+            if (!createClubDto[key]){
+                Swal.fire({
+                    icon: 'warning',
+                    text: `${label}을(를) 선택 또는 작성해주세요.`,
+                    confirmButtonText: '확인',
+                });
+                return;
+            }
+        }
 
         const formData = new FormData();
 
@@ -212,7 +222,7 @@ const CreateClub = () => {
         })
         .then(resp => resp.text())
         .then(data => {
-            console.log("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ :",data);
+            // console.log("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ :",data);
             if(data !== "0"){
                 Swal.fire({
                     icon: 'success',                  
@@ -227,7 +237,6 @@ const CreateClub = () => {
         .catch(error => {
             console.error("Error : ", error);
         });
-    
     };
 
     // 이름 중복 확인
@@ -240,7 +249,7 @@ const CreateClub = () => {
                 icon: 'error',                  
                 text: '모임 이름을 입력해주세요', 
                 confirmButtonText: '확인'
-              });
+            });
             return;
         }
 
@@ -268,20 +277,20 @@ const CreateClub = () => {
             name.value = "";
         })
     };
-    const [clubCategory, setClubCategory] = useState();
+    
     useEffect(() => {
-            fetch("http://127.0.0.1:8885/club/getCategoryName")
-            .then(resp => resp.json())
-            .then(categoryList => {
-                console.log("categoryList", categoryList);
+        fetch("http://127.0.0.1:8885/club/getCategoryName")
+        .then(resp => resp.json())
+        .then(categoryList => {
+            console.log("categoryList", categoryList);
 
-                const options = categoryList.map(category => (
-                  <option key={category.categoryNo} value={category.categoryNo}>
-                    {category.categoryName}
-                  </option>
-                ))
-                setClubCategory(options);
-            })       
+            const options = categoryList.map(category => (
+                <option key={category.categoryNo} value={category.categoryNo}>
+                {category.categoryName}
+                </option>
+            ))
+            setClubCategory(options);
+        })       
     },[]);
 
     const signupLimit = [];
@@ -293,19 +302,34 @@ const CreateClub = () => {
     for (let i = 1; i <= 100; i++) {
         ageLimit.push(<option key={i} value={i}>{i} 세 이상</option>);
     }
+
+    if(!loginMember){
+        Swal.fire({
+            title: '로그인 후 진행하실 수 있습니다.',
+            icon: 'error',
+            confirmButtonColor: '#3085d6', 
+            cancelButtonColor: '#d33', 
+            confirmButtonText: '확인',
+         }).then(result => {
+            if (result.isConfirmed) { 
+                navigate('/member/login');
+            }
+         });
+        return
+    }
     return (
         <StyledCreateClubdiv>
             <div>
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
                     <div>
-                        <div>
+                        {/* <div> */}
                             <img
                                 src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
                                 alt="클럽 대표 이미지"
                                 id='previewImgTag'
-                                style={{width: "100%", height: "100%", borderRadius: "10px"}}
+                                style={{width: "90%", height: "90%", borderRadius: "10px"}}
                             />
-                        </div>
+                        {/* </div> */}
                         <input type="file" name="f" id="fileInput" accept="image/*" onChange={handleChangeFile} ref={imgRef}/>
                         <label htmlFor="fileInput" >사진 선택</label>
                     </div>
