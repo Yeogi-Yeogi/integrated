@@ -79,16 +79,16 @@ public class NoticeService {
         resultMap.put("list", noticeList);
         resultMap.put("pageVo", pageVo);
 
-//        if(clubMember.getCreatorYn().equals("Y")) {
-//            resultMap.put("creatorYn", true);
-//            resultMap.put("adminYn", true);
-//        } else if(clubMember.getCreatorYn().equals("N") && clubMember.getAdminYn().equals("Y")) {
-//            resultMap.put("creatorYn", false);
-//            resultMap.put("adminYn", true);
-//        } else {
-//            resultMap.put("creatorYn", false);
-//            resultMap.put("adminYn", false);
-//        }
+        if(clubMember.getCreatorYn().equals("Y")) {
+            resultMap.put("creatorYn", true);
+            resultMap.put("adminYn", true);
+        } else if(clubMember.getCreatorYn().equals("N") && clubMember.getAdminYn().equals("Y")) {
+            resultMap.put("creatorYn", false);
+            resultMap.put("adminYn", true);
+        } else {
+            resultMap.put("creatorYn", false);
+            resultMap.put("adminYn", false);
+        }
         return resultMap;
     }
 

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +87,12 @@ public class BoardService {
             }
         }
 
-        boardList = boardMap.entrySet().stream().map(e -> e.getValue()).sorted((e1, e2)-> e2.getBoardNo().compareTo(e1.getBoardNo())).collect(Collectors.toList());
+        boardList = boardMap.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .sorted(Comparator.comparing(BoardListDto::getEnrollDate)
+                        .thenComparing(BoardListDto::getBoardNo).reversed())
+                .collect(Collectors.toList());
 
         for (BoardListDto b:
              boardList) {

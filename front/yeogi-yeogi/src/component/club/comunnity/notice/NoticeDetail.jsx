@@ -34,10 +34,16 @@ const StyledNoticeDetailDiv = styled.div`
                     margin-right: 0.8em;
                 }
 
-                & > img {
+                & > img:first-child {
                     width: 45px;
                     height: 45px;
                     border-radius: 10px;
+                }
+
+                & > img:nth-child(2) {
+                    width: 15px;
+                    height: 15px;
+                    margin-bottom: 2em;
                 }
 
                 & > span:nth-child(4) {
@@ -269,7 +275,6 @@ const NoticeDetail = () => {
                         {
                             notice?.mine && 
                             <div>
-                                <Button variant="link">수정</Button>
                                 <Button variant="link" onClick={deleteNotice}>삭제</Button>
                             </div>
                         }

@@ -24,11 +24,17 @@ const StyledReviewListDiv = styled.div`
             align-items: end;
             margin-bottom: 0.5em;
 
-            & > img {
+            & > img:first-child {
                 width: 60px;
                 height: 60px;
                 border-radius: 10px;
                 margin-right: 0.5em;
+            }
+
+            & > img:nth-child(2) {
+                width: 15px;
+                height: 15px;
+                margin-bottom: 0.5em;
             }
 
             & > span.userSpan {

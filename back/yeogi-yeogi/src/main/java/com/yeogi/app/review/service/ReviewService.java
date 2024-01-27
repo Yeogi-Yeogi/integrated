@@ -61,6 +61,7 @@ public class ReviewService {
 
         if(reviews.size() > 0) {
             List<String> memberNoList = reviews.stream().map(r -> r.getMemberNo()).distinct().collect(Collectors.toList());
+            log.info("memberNoList = {}", memberNoList);
             List<CheckDto> authoritesDto = checkMember.getAuthorites(new CheckMemberAuthorityDto(memberNoList, dto.getClubNo()), template);
 
             for(CheckDto check : authoritesDto) {

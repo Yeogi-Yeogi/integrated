@@ -8,6 +8,7 @@
     <select id="getReviewListByBoardNo" resultType="com.yeogi.app.review.dto.ReviewDetailDto">
         SELECT
             R.NO REVIEW_NO
+            , R.WRITER_NO MEMBER_NO
             , M.NICK MEMBER_NICK
             , M.FULL_PATH MEMBER_PROFILE
             ,TO_CHAR(R.ENROLL_DATE, 'YYYY. MM. DD. HH24:MI') ENROLL_DATE
