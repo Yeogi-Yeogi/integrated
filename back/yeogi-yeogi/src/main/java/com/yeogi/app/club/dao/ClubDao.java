@@ -115,4 +115,8 @@ public class ClubDao {
         return sst.selectOne("ClubMapper.checkLimit", dto);
     }
 
+    public String checkJoinedClub(SqlSessionTemplate sst, JoinClubDto dto) {
+        return sst.selectOne("ClubMapper.checkJoinedClub", dto);
+
+    }
 }

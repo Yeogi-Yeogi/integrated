@@ -146,4 +146,8 @@ public class ClubService {
     public List<ClubVo> getClubList() {
         return dao.getClubList(sst);
     }
+
+    public String checkJoinedClub(JoinClubDto dto) {
+        return dao.checkJoinedClub(sst, dto);
+    }
 }

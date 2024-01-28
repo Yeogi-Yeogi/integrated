@@ -11,6 +11,7 @@ import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -201,4 +202,8 @@ public class ClubController {
         return service.getCategoryName();
     }
 
+    @PostMapping("checkJoinedClub")
+    public String checkJoinedClub(@RequestBody JoinClubDto dto){
+        return service.checkJoinedClub(dto);
+    }
 }

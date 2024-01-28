@@ -329,4 +329,15 @@
             </foreach>
         </if>
     </select>
+
+    <select id="checkJoinedClub" resultType="String">
+        SELECT
+            CASE
+                WHEN COUNT(*) = 1 THEN 'JOINED'
+                ELSE 'NOTJOINED'
+            END AS result
+        FROM MEMBER_CLUB
+        WHERE CLUB_NO = #{clubNo}
+        AND MEMBER_NO = #{memberNo}
+    </select>
 </mapper>
