@@ -289,7 +289,6 @@ const EditClubInfo = () => {
     };
     
     const deleteClub = () => {
-        alert("클럽삭ㅈ젷ㅎㅎㅎㅎ");
         fetch("http://127.0.0.1:8885/club/deleteClub", {
             method : "POST",
             body : clubNo 
@@ -297,7 +296,7 @@ const EditClubInfo = () => {
         .then(resp => resp.text())
         .then(data => {
             console.log(data);
-            if(data === 1){
+            if(data === '1'){
                 navigate(`/main`);
             }
         })

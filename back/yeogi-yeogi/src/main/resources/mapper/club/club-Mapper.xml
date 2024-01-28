@@ -296,6 +296,11 @@
         SET DEL_YN = 'Y'
         WHERE NO = #{clubNo}
     </update>
+<!--    클럽 삭제시 모든 회원 탈퇴 처리-->
+    <delete id="deleteClubMember">
+        DELETE FROM MEMBER_CLUB
+        WHERE CLUB_NO = #{clubNo}
+    </delete>
 <!--    삭제된 클럽인지 확인-->
     <select id="isDeleted" resultType="String">
         SELECT DEL_YN
