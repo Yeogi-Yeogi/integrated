@@ -302,8 +302,8 @@
         FROM CLUB
         WHERE NO = #{clubNo}
     </select>
-    
-    <select id="getAuthorityByMemberNo" resultType="com.yeogi.app.util.check.CheckDto">
+
+    <select id="getAuthorityByMemberNo" parameterType="com.yeogi.app.util.check.CheckMemberAuthorityDto" resultType="com.yeogi.app.util.check.CheckDto">
         SELECT
         MC.CLUB_NO
         , MC.MEMBER_NO
@@ -317,7 +317,7 @@
         LEFT OUTER JOIN CLUB C
         ON MC.CLUB_NO = C.NO
         WHERE C.NO = #{clubNo}
-        <if test="memberNoList.size() > 0">
+        <if test="memberNoList != null and memberNoList.size() > 0">
             AND MC.MEMBER_NO IN
             <foreach collection="memberNoList" item="memberNo" open="(" close=")" separator=",">
                 #{memberNo}
