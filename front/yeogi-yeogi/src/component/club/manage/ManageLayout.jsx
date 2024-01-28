@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import EditMember from './EditClub/EditMember';
 import ClubDescription from './ClubDescription';
@@ -18,6 +18,14 @@ const StyledManageLayoutDiv = styled.div`
 
 const ManageLayout = () => {
 
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+    const navigate = useNavigate();
+    if(!loginMember){
+        alert("로그인하지 않은 유저는 사용할 수 없습니다.");
+        navigate("/main");
+
+        return;
+    }
     return (
         <StyledManageLayoutDiv>
             <Routes>

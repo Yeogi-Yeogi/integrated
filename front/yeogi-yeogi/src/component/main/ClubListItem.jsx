@@ -68,9 +68,12 @@ const ClubListItem = ({club}) => {
     const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
 
     const handleClickClub = () => {
-        // 이미 가입한 회원은 모달 안띄우고 바로 모임으로 이동
+        if(!loginMember){
+            setOpen(true);
+            return;
+        }
         console.log("clubNo ::: ", club.no);
-        console.log("memberNo ::: ", loginMember.no);
+        console.log("memberNo ::: ", loginMember?.no);
         fetch("http://127.0.0.1:8885/club/checkJoinedClub", {
             method: "POST",
             headers:{
@@ -78,7 +81,7 @@ const ClubListItem = ({club}) => {
             },
             body: JSON.stringify({
                 clubNo : club.no,
-                memberNo : loginMember.no,
+                memberNo : loginMember?.no,
             })
         })
         .then(resp => resp.text())

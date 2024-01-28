@@ -98,12 +98,12 @@ const StyledClubDescriptionDiv = styled.div`
 
 const ClubDescription = () => {
 
-    const str = window.sessionStorage.getItem("loginMember");
-    const vo = JSON.parse(str);
-    const memberNo = vo?.no;
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+    const navigate = useNavigate();
+
+    const memberNo = loginMember?.no;
 
     const { clubNo } = useParams();
-    const navigate = useNavigate();
     const [clubInfo, setClubInfo] = useState({});
 
     const checkMemberDto = {
@@ -187,7 +187,12 @@ const ClubDescription = () => {
             }
         })
     }
+    if(!loginMember){
+        alert("로그인하지 않은 유저는 사용할 수 없습니다.");
+        navigate("/main");
 
+        return;
+    }
     return (
         <StyledClubDescriptionDiv>
             <div>

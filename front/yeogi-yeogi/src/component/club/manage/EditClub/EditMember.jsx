@@ -117,7 +117,7 @@ const EditMember = () => {
     // };
     const [checkAdmin, setCheckAdmin] = useState({});
     const checkMemberDto = {
-        "memberNo" : loginMember.no,
+        "memberNo" : loginMember?.no,
         "clubNo" : clubNo,
     };
 
@@ -239,7 +239,7 @@ const EditMember = () => {
                                     <td>{member.phone}</td>
                                     <td>{member.regDate}</td>
                                     <td>          
-                                        {member.creatorNo === null && loginMember.no !== member.memberNo && !(checkAdmin.creatorYn === 'N' && member.adminYn === 'Y') &&                 
+                                        {member.creatorNo === null && loginMember?.no !== member.memberNo && !(checkAdmin.creatorYn === 'N' && member.adminYn === 'Y') &&                 
                                             <DropdownButton>
                                                 {(checkAdmin.creatorYn === 'Y' && member.adminYn === 'N') &&
                                                     <Dropdown.Item onClick={() => editClubMemberConfirm('adminY', member)}>관리자 지정</Dropdown.Item>
