@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,13 +66,14 @@ public class NoticeService {
 
         for(CheckDto c : authoritesDto) {
             noticeList.stream().filter(n -> n.getMemberNo().equals(c.getMemberNo()))
-                    .forEach(r -> {
+                    .forEach(n -> {
                         if(c.getCreatorYn().equals("Y")) {
-                            r.setCreatorYn(true);
-                            r.setAdminYn(true);
+                            n.setCreatorYn(true);
+                            n.setAdminYn(true);
                         } else if(c.getCreatorYn().equals("N") && c.getAdminYn().equals("Y")) {
-                            r.setAdminYn(true);
+                            n.setAdminYn(true);
                         }
+
                     });
 
         }
@@ -116,6 +118,16 @@ public class NoticeService {
         } else if(checkAuthorityDto.getCreatorYn().equals("N") && checkAuthorityDto.getAdminYn().equals("Y")){
             findNotice.setAdminYn(true);
         }
+
+        if(!findNotice.getMemberProfile().startsWith("https://")) {
+            try {
+                findNotice.setMemberProfile(imageService.getBoardImageByBytes(findNotice.getMemberProfile()));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        //스케줄 가져오기
         ScheduleVo findSchedule = scheduleRepository.getScheduleByBoardNo(findNotice.getBoardNo(), template);
         findNotice.setSchedule(findSchedule);
 

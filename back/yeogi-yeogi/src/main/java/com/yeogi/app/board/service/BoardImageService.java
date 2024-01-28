@@ -10,12 +10,15 @@ import com.yeogi.app.board.vo.BoardImageFileVo;
 import com.yeogi.app.util.config.S3Config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -135,5 +138,38 @@ public class BoardImageService {
 
         int result = imageRepository.deleteByNo(deleted, template);
         return result;
+    }
+
+    /**
+     * 파일 객체 인코딩하기
+     * @param imagePath
+     * @return
+     */
+    public String getBoardImageByBytes(String imagePath) throws IOException {
+        String base64Img = "";
+
+        File file = new File(imagePath);
+        if (file.exists() && file.isFile() && file.length() > 0) {
+            byte[] bt = new byte[(int) file.length()];
+            FileInputStream fis = null;
+
+            try {
+                fis = new FileInputStream(file);
+                fis.read(bt);
+                base64Img = new String(Base64.encodeBase64(bt));
+            } catch (IOException e) {
+                throw e;
+            } finally {
+                try {
+                    if (fis != null) {
+                        fis.close();
+                    }
+                } catch (IOException e) {
+                } catch (Exception e) {
+                }
+            }
+        }
+
+        return "data:image/jpeg;base64,"+base64Img;
     }
 }

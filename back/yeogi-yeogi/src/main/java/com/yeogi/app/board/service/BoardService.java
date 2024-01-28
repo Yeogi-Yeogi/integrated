@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -61,12 +62,23 @@ public class BoardService {
 
             boardList.stream().filter(i -> check.getMemberNo().equals(i.getMemberNo()))
                     .forEach(e -> {
+
                         if(check.getCreatorYn().equals("Y")) {
                             e.setCreatorYn(true);
                             e.setAdminYn(true);
                         } else if(check.getCreatorYn().equals("N") && check.getAdminYn().equals("Y")){
                             e.setAdminYn(true);
                         }
+
+                        //이미지 서버에 저장된 파일이 아닐 경우
+                        if(!e.getMemberProfile().startsWith("https://")) {
+                            try {
+                                e.setMemberProfile(boardImageService.getBoardImageByBytes(e.getMemberProfile()));
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                        log.info("e = {}", e);
                 boardMap.put(e.getBoardNo(), e);
             });
         }
@@ -125,6 +137,14 @@ public class BoardService {
             findBoard.setAdminYn(true);
         }
 
+        if(!findBoard.getMemberProfile().startsWith("https://")) {
+            try {
+                findBoard.setMemberProfile(boardImageService.getBoardImageByBytes(findBoard.getMemberProfile()));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
         //이미지 가져오기
         List<BoardListFileUrlDto> imageList = boardRepository.getImagesByBoardNo(valid.getBoardNo(), template);
         findBoard.setImages(imageList);
@@ -134,13 +154,6 @@ public class BoardService {
         if(findBoard.getMemberNo().equals(clubMember.getMemberNo())) {
             findBoard.setMine(true);
         }
-
-//        if(clubMember.getCreatorYn().equals("Y")) {
-//            findBoard.setCreatorYn(true);
-//            findBoard.setAdminYn(true);
-//        } else if(clubMember.getCreatorYn().equals("N") && clubMember.getAdminYn().equals("Y")) {
-//            findBoard.setAdminYn(true);
-//        }
 
         return findBoard;
     }
