@@ -57,7 +57,7 @@ const MainClubList = () => {
   useEffect(() => {
     fetch("http://127.0.0.1:8885/club/clubList")
     .then(resp => resp.json())
-    .then( data => {
+    .then(data => {
       console.log(data);
       setClubList(data);
     });

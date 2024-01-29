@@ -126,7 +126,13 @@ public class ClubService {
     }
 
     public int deleteClub(String clubNo) {
-        return dao.deleteClub(sst, clubNo);
+        int result = dao.deleteClub(sst, clubNo);
+        // 클럽 삭제 성공시 회원 탈퇴
+        if(result == 1){
+            int result2 = dao.deleteClubMember(sst, clubNo);
+            System.out.println("result2 :::" + result2);
+        }
+        return result;
     }
 
     public CheckDto checkMember(CheckDto checkDto) throws NotClubMemberException, DeletedClubException {
@@ -139,5 +145,9 @@ public class ClubService {
 
     public List<ClubVo> getClubList() {
         return dao.getClubList(sst);
+    }
+
+    public String checkJoinedClub(JoinClubDto dto) {
+        return dao.checkJoinedClub(sst, dto);
     }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import JoinClub from '../club/manage/JoinClub';
+import { useNavigate } from 'react-router-dom';
 
 const StyledClubListItemDiv = styled.div`
     display: grid;
@@ -62,10 +63,36 @@ const StyledClubListItemDiv = styled.div`
 
 const ClubListItem = ({club}) => {
     
+    const navigate = useNavigate();
     const [isOpen, setOpen] = useState(false);
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
 
     const handleClickClub = () => {
-        setOpen(true);
+        if(!loginMember){
+            setOpen(true);
+            return;
+        }
+        console.log("clubNo ::: ", club.no);
+        console.log("memberNo ::: ", loginMember?.no);
+        fetch("http://127.0.0.1:8885/club/checkJoinedClub", {
+            method: "POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify({
+                clubNo : club.no,
+                memberNo : loginMember?.no,
+            })
+        })
+        .then(resp => resp.text())
+        .then(result => {
+            if(result === "JOINED"){
+                navigate(`/club/${club.no}/commu/board`);
+            } else if(result === "NOTJOINED"){
+                setOpen(true);
+            }
+        });
+        
     };
     
     const closeModal = () => {

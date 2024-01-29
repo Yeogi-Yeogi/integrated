@@ -13,8 +13,12 @@ const StyledInnerLayout = styled.div`
     margin: auto;
     padding: 1em;
     width: 80%;
+    
 `;
 const InnerLayout = () => {
+
+    document.documentElement.scrollTop = 0;
+
     return (
         <StyledInnerLayout>
             <ClubDescription/>

@@ -95,6 +95,9 @@ public class ClubDao {
     public int deleteClub(SqlSessionTemplate sst, String clubNo) {
         return sst.update("ClubMapper.deleteClub", clubNo);
     }
+    public int deleteClubMember(SqlSessionTemplate sst, String clubNo) {
+        return sst.delete("ClubMapper.deleteClubMember", clubNo);
+    }
 
     public int getSeqNo(SqlSessionTemplate sst) {
         return sst.selectOne("ClubMapper.getClubSeqNo");
@@ -110,5 +113,10 @@ public class ClubDao {
 
     public CheckClubLimitVo checkLimit(SqlSessionTemplate sst, JoinClubDto dto) {
         return sst.selectOne("ClubMapper.checkLimit", dto);
+    }
+
+    public String checkJoinedClub(SqlSessionTemplate sst, JoinClubDto dto) {
+        return sst.selectOne("ClubMapper.checkJoinedClub", dto);
+
     }
 }

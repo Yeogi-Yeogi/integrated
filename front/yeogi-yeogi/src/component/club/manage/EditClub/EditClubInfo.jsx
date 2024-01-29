@@ -141,7 +141,7 @@ const EditClubInfo = () => {
 
     const navigate = useNavigate();
     const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
-    const memberNo = loginMember.no;
+    const memberNo = loginMember?.no;
     // 화면 정보 불러오기
     let { clubNo } = useParams();
     const [clubInfo, setClubInfo] = useState({});
@@ -151,6 +151,7 @@ const EditClubInfo = () => {
         memberNo,
         clubNo
     };
+
     useEffect(()=>{
         fetch("http://127.0.0.1:8885/club/checkMember", {
             method: "POST",
@@ -163,7 +164,7 @@ const EditClubInfo = () => {
         .then(check => {
             setCheckAdmin(check);
         })   
-    },[]);
+    },[loginMember, checkMemberDto]);
 
     const loadClubInfo = () => {
         fetch("http://127.0.0.1:8885/club/management/" + clubNo)
@@ -289,7 +290,6 @@ const EditClubInfo = () => {
     };
     
     const deleteClub = () => {
-        alert("클럽삭ㅈ젷ㅎㅎㅎㅎ");
         fetch("http://127.0.0.1:8885/club/deleteClub", {
             method : "POST",
             body : clubNo 
@@ -297,7 +297,7 @@ const EditClubInfo = () => {
         .then(resp => resp.text())
         .then(data => {
             console.log(data);
-            if(data === 1){
+            if(data === '1'){
                 navigate(`/main`);
             }
         })
