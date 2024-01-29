@@ -31,7 +31,7 @@ public class ClubController {
 
     /**
      * 클럽 검색
-     * @param clubSearchDto
+     * @param
      * @return
      */
     @GetMapping("searchClub/{searchText}")

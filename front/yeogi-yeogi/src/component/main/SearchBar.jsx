@@ -83,7 +83,6 @@ const SearchBar = () => {
             return;
         }
 
-        alert("서치텍스트 " + searchText);
         fetch("http://127.0.0.1:8885/club/searchClub/" + searchText)
         .then(resp => resp.json())
         .then(clubList => {
