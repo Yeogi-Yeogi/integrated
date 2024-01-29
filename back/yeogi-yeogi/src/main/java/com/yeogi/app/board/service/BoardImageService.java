@@ -158,7 +158,8 @@ public class BoardImageService {
                 fis.read(bt);
                 base64Img = new String(Base64.encodeBase64(bt));
             } catch (IOException e) {
-                throw e;
+                e.printStackTrace();
+                return "";
             } finally {
                 try {
                     if (fis != null) {
