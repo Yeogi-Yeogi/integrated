@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +39,10 @@ import lombok.extern.slf4j.Slf4j;
 @ResponseBody
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@Slf4j
+
 public class MemberApiController {
 	
+	private static Logger logger = LoggerFactory.getLogger(MemberApiController.class);
     private final MemberService service;
     private final MemberDao dao;
 
@@ -121,8 +124,10 @@ public class MemberApiController {
     @PostMapping("quit")
     public Map<String,String> quit(@RequestBody MemberVo vo) throws Exception {
         int result = service.quit(vo);
+        logger.debug("회원탈퇴vo : " + vo);
         Map<String, String> map = new HashMap<String, String>();
         map.put("msg", "good");
+        
 		if(result != 1) {
 			map.put("msg", "bad");
 		}        
@@ -131,8 +136,8 @@ public class MemberApiController {
     }
 
     //회원정보조회
-    @PostMapping("mySelect/{no}")
-    public Map<String, Object> mySelect(@RequestBody MemberVo vo, @PathVariable String no) throws Exception {
+    @PostMapping("mySelect")
+    public Map<String, Object> mySelect(@RequestBody MemberVo vo) throws Exception {
     	
     	// 회원정보 조회
     	MemberVo loginMember = service.mySelect(vo);
@@ -174,7 +179,7 @@ public class MemberApiController {
     @PostMapping("edit")
     public Map<String,String> edit(MemberVo vo, MultipartFile profileImg) throws Exception {
     	
-    	System.out.println("vo : " + vo);
+    	System.out.println("정보수정vo : " + vo);
     	System.out.println("profileImg : " + profileImg);
     	System.out.println("profileImg.getOriginalFilename : " + profileImg.getOriginalFilename());
     	
@@ -199,7 +204,7 @@ public class MemberApiController {
     	Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg","good");
         map.put("voList", voList);
-        System.out.println("로그인: " + voList);
+        System.out.println("로그인후 가입한 모임 조회하기: " + voList);
         
         if(voList == null ) {
         	map.put("msg", "bad");

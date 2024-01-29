@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import MyPageSideBar from '../club/comunnity/board/common/MyPageSideBar';
 import { useNavigate } from 'react-router-dom';
+import { useMemberMemory } from '../context/MemberContext';
 
 const StyledMemberEditDiv =styled.div`
     width: 100%;
@@ -77,6 +78,10 @@ const StyledMemberEditDiv =styled.div`
         margin-top: 10px; // 원하는 간격 조절
         width: 600px; // 원하는 넓이로 조절
     }
+
+    #tt{
+        background-color: lightgray;
+    }
     
 `;    
 
@@ -142,7 +147,10 @@ const MemberEdit = () => {
             ...vo,
             [name] : value
         });
+
     }
+
+    
 
     // 정보수정 시 동작하는 함수
     const handleMemberMySelectSubmit = (event) => {
@@ -159,13 +167,13 @@ const MemberEdit = () => {
 
         //각 입력 필드의 값을 FormData에 추가// FormData를 사용하여 서버로 정보수정한것 전송
         formData.append('name',vo.name);
-        // formData.append('id', vo.id);
+        formData.append('id', memberVo.id);
         formData.append('pwd', vo.pwd);
         formData.append('nick', vo.nick);
         formData.append('phone', vo.phone);
         formData.append('email', vo.email);
-        // formData.append('resiNum', vo.resiNum);
-        formData.append('profileImg', vo.profileImg);
+        formData.append('resiNum', vo.resiNum);
+        // formData.append('profileImg', memberVo.profileImg);
 
 
         fetch("http://127.0.0.1:8885/member/edit", {
@@ -202,7 +210,7 @@ const MemberEdit = () => {
 
     }
 
-
+    const {loginMember , setLoginMember}  = useMemberMemory();
 
     return (
         <StyledMemberEditDiv>
@@ -228,31 +236,31 @@ const MemberEdit = () => {
                         </tr>
                         <tr>
                             <td id="text">이름</td>
-                            <td><input type="text" id='name' name="name" placeholder={memberVo.name} onChange={handleInputChange}/></td>
+                            <td><input type="text" id='name' name="name" value={vo === null ? memberVo.name : vo.name} placeholder={memberVo.name} onChange={handleInputChange}/></td>
                         </tr>
                         <tr>
                             <td id="text">아이디</td>
-                            <td><input type="text" id="id" name="id" value={memberVo.id} readOnly/></td>
+                            <td><input type="text" id="tt" name="id" value={memberVo.id} readOnly/></td>
                         </tr>
                         <tr>
                             <td id="text">비밀번호</td>
-                            <td><input type="text" id='pwd' name="pwd" placeholder={memberVo.pwd} onChange={handleInputChange}/></td>
+                            <td><input type="text" id='pwd' name="pwd" value={vo === null ?memberVo.pwd : vo.pwd} placeholder={memberVo.pwd} onChange={handleInputChange}/></td>
                         </tr>
                         <tr>
                             <td id="text">닉네임</td>
-                            <td><input type="text" id='nick' name="nick" placeholder={memberVo.nick} onChange={handleInputChange}/></td>
+                            <td><input type="text" id='nick' name="nick" value={vo === null ? memberVo.nick : vo.nick} placeholder={memberVo.nick} onChange={handleInputChange}/></td>
                         </tr>
                         <tr>
                             <td id="text">전화번호</td>
-                            <td><input type="text" id='phone' name="phone" placeholder={memberVo.phone} onChange={handleInputChange}/></td>
+                            <td><input type="text" id='phone' name="phone" value={vo === null ? memberVo.phone : vo.phone} placeholder={memberVo.phone} onChange={handleInputChange}/></td>
                         </tr>
                         <tr>
                             <td id="text">이메일</td>
-                            <td><input type="text" id='email' name="email" placeholder={memberVo.email} onChange={handleInputChange}/></td>
+                            <td><input type="text" id='email' name="email" value={vo === null ? memberVo.email : vo.email} placeholder={memberVo.email} onChange={handleInputChange}/></td>
                         </tr>
                         <tr>
                             <td id="text">주민등록번호</td>
-                            <td><input type="text" id="resiNum" name="resiNum" value={memberVo.resiNum} readOnly/></td>
+                            <td><input type="text" id="tt" name="resiNum" value={memberVo.resiNum} readOnly/></td>
                         </tr>
                         <tr>
                         <td colspan="2"><input type="submit" id="editbutton" value='수정하기'/></td>

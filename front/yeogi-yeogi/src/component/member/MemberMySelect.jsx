@@ -78,6 +78,12 @@ const MemberMySelect = () => {
 
     const [vo,setVo] = useState(JSON.parse(sessionStorage.getItem('loginMember')));
 
+    // const formatDate = (dateString) => {
+    //     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    //     const formattedDate = new Date(dateString).toLocaleDateString('ko-KR', options);
+    //     return formattedDate;
+    //   };
+      
     console.log("vo:::", vo);
     // setVo((JSON.parse(sessionStorage.getItem('loginMember')))) //후순위
   
@@ -143,6 +149,6 @@ const MemberMySelect = () => {
             </div>            
         </StyledMemberMySelectDiv>
     );
-};
+};//formatDate(vo.enrollDate)
 
 export default MemberMySelect;

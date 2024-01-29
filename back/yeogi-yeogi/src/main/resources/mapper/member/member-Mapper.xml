@@ -21,9 +21,6 @@
 		(
 		    SEQ_MEMBER_NO.NEXTVAL
             , #{name}
-		    , #{id}
-		    , #{pwd}
-		    , #{nick}
             , #{phone}
             , #{email}
             , #{resiNum}
@@ -72,8 +69,8 @@
             ,NICK
             ,PHONE
             ,EMAIL
-            ,ENROLL_DATE
-            ,MODIFIED_DATE 
+            ,TO_CHAR(ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE
+            ,TO_CHAR(MODIFIED_DATE, 'YYYY-MM-DD') AS MODIFIED_DATE
             ,FULL_PATH
             ,RESI_NUM
          FROM MEMBER
@@ -98,9 +95,9 @@
 	           <if test="email != '' and email != null">
 	           	,EMAIL = #{email}
 	           </if>
-	           <if test="fullPath != '' and fullPath != null">
-	           	,FULL_PATH = #{fullPath}
-	           </if>	           
+<!-- 	           <if test="fullPath != '' and fullPath != null"> -->
+<!-- 	           	,FULL_PATH = #{fullPath} -->
+<!-- 	           </if>	            -->
            WHERE NO = #{no}
 		   AND QUIT_YN = 'N'		
 	</update>
