@@ -263,7 +263,7 @@ const BoardDetail = () => {
                     const errorData = await res.json();
                     throw new Error(errorData.message);
                 }
-                return res.json();
+                return res.text();
             })
             .then(data => {
                 alert(data);
@@ -273,8 +273,8 @@ const BoardDetail = () => {
                 const message = e.message;
                 alert(message);
                 switch(message) {
-                    case "리뷰 삭제 실패":
-                    case "자신이 작성한 댓글만 삭제가 가능합니다.":
+                    case "게시글 삭제 실패":
+                    case "자신이 작성한 게시글만 삭제가 가능합니다.":
                         break;
                     case "회원 전용 서비스입니다. 로그인하세요.":
                         navigate('/member/login');

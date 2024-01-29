@@ -191,6 +191,16 @@ const BoardWrite = () => {
       const uploadBoard = (e) => {
         e.preventDefault();
 
+        if(!title) {
+            alert('제목을 입력해주세요');
+            return;
+        }
+
+        if(!content) {
+            alert('내용을 입력해주세요');
+            return;
+        }
+
         if(isFetching) {
             alert('작성중입니다.');
             return;

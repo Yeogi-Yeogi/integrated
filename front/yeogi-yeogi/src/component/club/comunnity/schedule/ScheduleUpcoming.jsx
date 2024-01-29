@@ -91,12 +91,6 @@ const ScheduleUpcoming = () => {
     return (
         <StyledScheduleLisDiv>
             {
-                isAdmin &&
-                <div style={{textAlign:'right' }}>
-                    <Button>일정 등록하기</Button>
-                </div>
-            }
-            {
                 dto?.map(el => 
                     <ScheduleItem data={el} key={el.scheduleNo}/>
                 )

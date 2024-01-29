@@ -1,5 +1,6 @@
 package com.yeogi.app.review.service;
 
+import com.yeogi.app.board.service.BoardImageService;
 import com.yeogi.app.review.dto.ReviewAddDto;
 import com.yeogi.app.review.dto.ReviewDetailDto;
 import com.yeogi.app.review.dto.ReviewReqDto;
@@ -17,6 +18,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository repository;
+    private final BoardImageService imageService;
     private final CheckClubMember checkMember;
     private final SqlSessionTemplate template;
 
@@ -61,6 +64,7 @@ public class ReviewService {
 
         if(reviews.size() > 0) {
             List<String> memberNoList = reviews.stream().map(r -> r.getMemberNo()).distinct().collect(Collectors.toList());
+            log.info("memberNoList = {}", memberNoList);
             List<CheckDto> authoritesDto = checkMember.getAuthorites(new CheckMemberAuthorityDto(memberNoList, dto.getClubNo()), template);
 
             for(CheckDto check : authoritesDto) {
@@ -71,6 +75,15 @@ public class ReviewService {
                                 r.setAdminYn(true);
                             } else if(check.getCreatorYn().equals("N") && check.getAdminYn().equals("Y")) {
                                 r.setAdminYn(true);
+                            }
+
+                            //이미지 서버에 저장된 파일이 아닐 경우
+                            if(!r.getMemberProfile().startsWith("https://")) {
+                                try {
+                                    r.setMemberProfile(imageService.getBoardImageByBytes(r.getMemberProfile()));
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
                             }
                         });
             }
