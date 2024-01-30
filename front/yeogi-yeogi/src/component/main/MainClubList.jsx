@@ -16,7 +16,6 @@ const StyledCarouselDiv = styled(Slider)`
   height: 400px;
   & > div {
   }
-  
   .slick-track > div{
     outline: none;
     width: 250px;

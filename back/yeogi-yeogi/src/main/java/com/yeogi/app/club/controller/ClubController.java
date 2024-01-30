@@ -5,15 +5,16 @@ import com.yeogi.app.club.service.ClubService;
 import com.yeogi.app.club.vo.ClubCategoryVo;
 import com.yeogi.app.club.vo.ClubMemberVo;
 import com.yeogi.app.club.vo.ClubVo;
-import com.yeogi.app.util.check.CheckClubMember;
 import com.yeogi.app.util.check.CheckDto;
 import com.yeogi.app.util.exception.DeletedClubException;
 import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -25,10 +26,8 @@ import java.util.List;
 @CrossOrigin("*")
 public class ClubController {
 
+
     private final ClubService service;
-
-
-
     /**
      * 클럽 검색
      * @param
@@ -158,6 +157,7 @@ public class ClubController {
         return service.editClubMember(editClubMemberDto);
     }
 
+
     /**
      * 클럽 탈퇴하기
      * @param editClubMemberDto
@@ -181,6 +181,7 @@ public class ClubController {
     public int deleteClub(@RequestBody String clubNo){
         return service.deleteClub(clubNo);
     }
+
 
     /**
      * 클럽 회원정보 체크 ( creator, admin, .. )

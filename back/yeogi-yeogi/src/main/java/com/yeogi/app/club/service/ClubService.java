@@ -13,14 +13,15 @@ import com.yeogi.app.util.exception.NotClubMemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,11 @@ public class ClubService {
     private final SqlSessionTemplate sst;
     private final ClubImageService imgService;
     private final CheckClubMember checkClubMember;
+
+    private static final String AUTH_CODE_PREFIX = "AuthCode ";
+
+    @Value("${spring.mail.auth-code-expiration-millis}")
+    private long authCodeExpirationMillis;
 
     public List<ClubVo> searchClub(String searchText) {
         return dao.searchClub(searchText, sst);
@@ -110,7 +116,11 @@ public class ClubService {
     }
 
     public String checkClubName(String clubName) {
-        return dao.checkClubName(sst, clubName);
+        if(checkName(clubName)){
+            return dao.checkClubName(sst, clubName);
+        } else {
+            return "invalidPattern";
+        }
     }
 
     public ClubVo getClubInfo(String no) {
@@ -150,4 +160,9 @@ public class ClubService {
     public String checkJoinedClub(JoinClubDto dto) {
         return dao.checkJoinedClub(sst, dto);
     }
+
+    private boolean checkName(String name){
+        return Pattern.matches("^[a-zA-Z가-힣\\s]*$", name);
+    }
+
 }
