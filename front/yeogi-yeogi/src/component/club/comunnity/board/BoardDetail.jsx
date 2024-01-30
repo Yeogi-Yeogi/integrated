@@ -180,7 +180,6 @@ const BoardDetail = () => {
                 return res.json();
             })
             .then(data => {
-                // console.log(data);
                 setVo(data);
             })
             .catch(e => {
@@ -209,7 +208,6 @@ const BoardDetail = () => {
      */
     useEffect(() => {
         if(memberNo) {
-            console.log(`pageNo = ${pageNo}`);
             fetch(`http://localhost:8885/review/list/${pageNo}?memberNo=${memberNo}&boardNo=${boardNo}&clubNo=${clubNo}`)
             .then(async res => {
                 if(!res.ok) {
@@ -219,7 +217,6 @@ const BoardDetail = () => {
                 return res.json();
             })
             .then(data => {
-                console.log(data);
                 setReview(data);
             })
             .catch(e => {
@@ -379,11 +376,13 @@ const BoardDetail = () => {
                             <span className='enroll-span'>{vo?.enrollDate}</span>
                         </div>
                         {
-                            vo?.mine &&
+                            (vo?.mine || vo?.admin) ?
                             <div>
                                 <Button variant="link" onClick={handleUpdate}>수정</Button>
                                 <Button variant="link" onClick={handleDelete}>삭제</Button>
                             </div>
+                            :
+                            null
                         }
                     </div>
                     <hr/>
@@ -406,7 +405,7 @@ const BoardDetail = () => {
                         </Form>
                     </ReviewDiv>
                     <hr />
-                    <ReviewList data={review?.list} setPageNo={setPageNo}/>
+                    <ReviewList data={review} setPageNo={setPageNo}/>
                     {
                         <div className='pagination-container'>
                             {

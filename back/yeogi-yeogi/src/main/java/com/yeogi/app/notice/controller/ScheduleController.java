@@ -25,7 +25,6 @@ public class ScheduleController {
 
     @GetMapping("/list/{offset}")
     public ResponseEntity<ScheduleListDto> getList(CheckDto dto, String isExpected, @PathVariable int offset) throws RuntimeException {
-        log.debug("dto = {}, isExpected = {}, offset = {}", dto, isExpected, offset);
         return new ResponseEntity<>(service.getListByClubNo(dto, isExpected, offset), getHttpHeaders(), HttpStatus.OK);
     }
 

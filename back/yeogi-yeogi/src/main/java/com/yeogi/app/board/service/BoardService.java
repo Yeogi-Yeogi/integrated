@@ -78,7 +78,6 @@ public class BoardService {
                                 throw new RuntimeException(ex);
                             }
                         }
-                        log.info("e = {}", e);
                 boardMap.put(e.getBoardNo(), e);
             });
         }
@@ -90,7 +89,6 @@ public class BoardService {
 
         if(collect != null && collect.size() != 0) {
             List<BoardListFileUrlDto> fileUrlByBoardNo = boardRepository.getFileUrlByBoardNo(collect, template);
-            System.out.println("fileUrlByBoardNo = " + fileUrlByBoardNo);
             for (BoardListFileUrlDto imageDto:
                  fileUrlByBoardNo) {
                 BoardListDto boardListDto = boardMap.get(imageDto.getBoardNo());
@@ -106,10 +104,6 @@ public class BoardService {
                         .thenComparing(BoardListDto::getBoardNo).reversed())
                 .collect(Collectors.toList());
 
-        for (BoardListDto b:
-             boardList) {
-            log.info("b = {}", b);
-        }
         return boardList;
     }
 
@@ -155,6 +149,10 @@ public class BoardService {
             findBoard.setMine(true);
         }
 
+        if(clubMember.getAdminYn().equals("Y")) {
+            findBoard.setAdmin(true);
+        }
+
         return findBoard;
     }
 
@@ -175,14 +173,12 @@ public class BoardService {
         List<MultipartFile> imageList = dto.getImageList();
         if(result == 1 && imageList != null && imageList.size() != 0) {
             String recentBoardNo = boardRepository.getNoByMemberNo(clubMember, template);
-            System.out.println("recentBoardNo = " + recentBoardNo);
             imageResult += boardImageService.addImages(dto.getImageList(), recentBoardNo);
 
             if(imageList.size() != imageResult) {
                 throw new IllegalStateException("작성 실패");
             }
         }
-        log.info("imageResult = {}", imageResult);
         return imageResult;
 
     }

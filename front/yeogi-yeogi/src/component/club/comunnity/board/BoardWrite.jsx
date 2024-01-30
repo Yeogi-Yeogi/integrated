@@ -215,7 +215,6 @@ const BoardWrite = () => {
         formData.append("clubNo", clubNo);
         imageList.forEach(el => formData.append("imageList", el));
 
-        console.log(formData);
 
         fetch('http://localhost:8885/board/add', {
             method: "POST",

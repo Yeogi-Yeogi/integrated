@@ -102,8 +102,8 @@ const NoticeList = () => {
     const handlePageClick = (pageNumber) => {
         setPageNo(pageNumber);
     };
+
     const getList = (pageNo) => {
-        console.log(pageNo); //
         const vo = JSON.parse(sessionStorage.getItem("loginMember"));
         if(vo) {
             const memberNo = vo.no;
@@ -116,11 +116,9 @@ const NoticeList = () => {
                 return res.json();
             })
             .then((data) => {
-                console.log(data);
                 setNoticeList([...data.list]);
                 setPageVo(data.pageVo);
                 setIsAdmin(data.adminYn)
-                console.log(pageVo);
                 
                 return data.pageVo;
             })

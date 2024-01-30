@@ -32,7 +32,6 @@ public class BoardController {
     @GetMapping("/list/{pageNo}")
     public ResponseEntity<List<BoardListDto>> getList(@ModelAttribute CheckDto dto, @PathVariable String pageNo) throws RuntimeException {
         HttpHeaders headers = getHttpHeaders();
-        log.info("check = {}", dto);
         return new ResponseEntity<>(service.getBoardListByClubNo(dto, pageNo), headers, HttpStatus.OK);
     }
 
@@ -43,7 +42,6 @@ public class BoardController {
      */
     @PostMapping("/add")
     public ResponseEntity<String> addBoard(BoardUploadDto dto) throws RuntimeException {
-        log.info("boardUploadDto = {}", dto);
         int result = service.addBoard(dto); //import한 사진 개수 만큼
 
         HttpHeaders headers = getHttpHeaders();
@@ -58,7 +56,6 @@ public class BoardController {
      */
     @GetMapping("/detail")
     public ResponseEntity<BoardDetailDto> getOneByBoardNo(@ModelAttribute BoardDetailValidDto valid) throws RuntimeException {
-        log.info("valid = {}", valid);
         HttpHeaders headers = getHttpHeaders();
         return new ResponseEntity<>(service.getOneByBoardNo(valid), headers, HttpStatus.OK);
     }
@@ -71,7 +68,6 @@ public class BoardController {
      */
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws RuntimeException {
-        log.info("deleteDto = {} ", dto);
         int result = service.deleteBoard(dto);
 
         if(result != 1) {
@@ -82,7 +78,6 @@ public class BoardController {
 
     @PatchMapping("/update")
     public ResponseEntity<String> updateBoard(BoardUploadDto dto) throws RuntimeException {
-        log.info("update = {}, 삭제하려는 사진 = {}, 추가하려는 사진 = {}", dto, dto.getDeleted(), dto.getImageList());
         int result = service.updateBoard(dto);
 
         if(result == 0) {
