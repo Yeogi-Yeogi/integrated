@@ -90,28 +90,30 @@ const MemberEdit = () => {
     //정보수정 중인지 여부를 나타내는 변수
     let isFetching = false;
 
+    // 프로필 이미지와 관련된 상태 및 ref 설정
+    //현재 선택된 프로필 이미지의 데이터 URL을 저장하는 상태 변수,imgFile 상태를 업데이트하는 함수
+    const imgRef = useRef();
+    
     // 회원가입 정보를 담는 상태 변수
+    const [memberVo,setMemberVo] = useState(JSON.parse(sessionStorage.getItem('loginMember')))
+    const [imgFile, setImgFile] = useState(`http://127.0.0.1:8885/member/display?no=${memberVo.no}`);
     const [vo,setVo] = useState({
-        name: "",
+        name: memberVo.name,
         // id :"",
-        pwd: "",
-        nick: "",
-        phone:"",
-        email:"",
+        pwd: memberVo.pwd,
+        nick: memberVo.nick,
+        phone: memberVo.phone,
+        email: memberVo.email,
+        quitYn: memberVo.quitYn,
+        enrollDate: memberVo.enrollDate,
+        modifiedDate: memberVo.modifiedDate,
         // resiNum:"",
     })
+
     
     // React Router의 useNavigate 훅을 통해 네비게이션 기능 사용
     const navigate = useNavigate();
     
-    // 프로필 이미지와 관련된 상태 및 ref 설정
-    //현재 선택된 프로필 이미지의 데이터 URL을 저장하는 상태 변수,imgFile 상태를 업데이트하는 함수
-    const [imgFile, setImgFile] = useState("");
-    const imgRef = useRef();
-
-    const [memberVo,setMemberVo] = useState(JSON.parse(sessionStorage.getItem('loginMember')))
-
-
      // 프로필 이미지 파일 변경 시 동작하는 함수
     const handleChangeFile = () => {
         //파일 입력 엘리먼트에서 선택된 파일의 개수
@@ -121,6 +123,7 @@ const MemberEdit = () => {
         }
       
         const file = imgRef.current.files[0];//선택된 파일이 있다면, 첫 번째 파일을 가져와서 FileReader를 사용하여 해당 파일의 내용을 읽습니다
+        console.log("file",file);
 
         const fileReader = new FileReader();
         fileReader.readAsDataURL(file);// 파일의 내용을 데이터 URL로 읽어오도록 지시
@@ -153,7 +156,7 @@ const MemberEdit = () => {
     
 
     // 정보수정 시 동작하는 함수
-    const handleMemberMySelectSubmit = (event) => {
+    const handleMemberEditSubmit = (event) => {
         event.preventDefault();
 
         if(isFetching){
@@ -166,14 +169,19 @@ const MemberEdit = () => {
         const formData = new FormData();
 
         //각 입력 필드의 값을 FormData에 추가// FormData를 사용하여 서버로 정보수정한것 전송
+        formData.append('no',memberVo.no);
         formData.append('name',vo.name);
         formData.append('id', memberVo.id);
         formData.append('pwd', vo.pwd);
         formData.append('nick', vo.nick);
         formData.append('phone', vo.phone);
         formData.append('email', vo.email);
-        formData.append('resiNum', vo.resiNum);
-        // formData.append('profileImg', memberVo.profileImg);
+        formData.append('quitYn', memberVo.quitYn);
+        formData.append('enrollDate', memberVo.enrollDate);
+        formData.append('modifiedDate', memberVo.modifiedDate);
+        formData.append('resiNum', memberVo.resiNum);
+        formData.append('profileImg', vo.profileImg);
+        console.log('profileImg', vo.profileImg);
 
 
         fetch("http://127.0.0.1:8885/member/edit", {
@@ -190,10 +198,14 @@ const MemberEdit = () => {
             return resp.json();
         })
         .then( data => {
-            if(data.msg === "good"){
+            if(data.msg === "good"){                 
+                // 세션 갱신
+                sessionStorage.setItem('loginMember', JSON.stringify(data.vo));
+                console.log(JSON.stringify(data.vo));
                 
                 alert("회원정보수정 성공!");
-                navigate("/member//myPageLayout/mySelect");
+
+                navigate("/member/myPageLayout/mySelect");
             }else{
                 alert("회원정보수정 실패..");
                 navigate("/failpage");
@@ -216,14 +228,14 @@ const MemberEdit = () => {
         <StyledMemberEditDiv>
             <div>
                 <MyPageSideBar/>
-                <form onSubmit={handleMemberMySelectSubmit} encType="multipart/form-data">
+                <form onSubmit={handleMemberEditSubmit} encType="multipart/form-data">
                     <table id="table-container">
                         <tr>
                             <td colSpan={3}>
                                 <div>
                                     <div>
                                         <img
-                                            src= {`http://127.0.0.1:8885/member/display?no=${memberVo.no}`? vo.fullPath : `/img/defaultClubImage.png`}//백틱
+                                            src= {imgFile ? imgFile : `/img/defaultClubImage.png`}//백틱
                                             alt="프로필 이미지"
                                             id='previewImgTag'
                                             style={{width: "50%", height: "50%", borderRadius: "10px"}}

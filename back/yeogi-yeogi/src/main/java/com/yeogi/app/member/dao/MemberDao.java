@@ -21,6 +21,11 @@ public class MemberDao {
 		return sst.selectOne("MemberMapper.idCheck", vo);
 	}
 	
+	//비밀번호 일치 여부 확인
+	public MemberVo pwdCoincide(SqlSessionTemplate sst, MemberVo vo) {
+		return sst.selectOne("MemberMapper.pwdCoincide", vo);
+	}
+	
 	// 로그인
 	public MemberVo login(SqlSessionTemplate sst, MemberVo vo) {
 		return sst.selectOne("MemberMapper.login" , vo);
@@ -45,6 +50,7 @@ public class MemberDao {
 	public List<selectMyClubVo> selectMyClub(SqlSessionTemplate sst, selectMyClubVo vo) {
 		return sst.selectList("MemberMapper.selectMyClub", vo);
 	}
+
 
 
 }

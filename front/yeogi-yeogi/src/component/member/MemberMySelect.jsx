@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import MyPageSideBar from '../club/comunnity/board/common/MyPageSideBar';
@@ -74,15 +74,9 @@ const MemberMySelect = () => {
         };
     };
 
-   
+    // const vo = JSON.parse(sessionStorage.getItem('loginMember'));
 
     const [vo,setVo] = useState(JSON.parse(sessionStorage.getItem('loginMember')));
-
-    // const formatDate = (dateString) => {
-    //     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    //     const formattedDate = new Date(dateString).toLocaleDateString('ko-KR', options);
-    //     return formattedDate;
-    //   };
       
     console.log("vo:::", vo);
     // setVo((JSON.parse(sessionStorage.getItem('loginMember')))) //후순위
@@ -91,7 +85,7 @@ const MemberMySelect = () => {
         <StyledMemberMySelectDiv>
             <div>
                 <MyPageSideBar/>
-                <form >
+                <form>
                     <table id="table-container">
                         <tr>
                             <td colSpan={3}>
@@ -99,7 +93,7 @@ const MemberMySelect = () => {
                                     <div>
                                         <img
                                             // src= {vo.fullPath? vo.fullPath : `/img/defaultClubImage.png`}
-                                            src = {`http://127.0.0.1:8885/member/display?no=${vo.no}`? vo.fullPath : `/img/defaultClubImage.png`}//백틱
+                                            src = {`http://127.0.0.1:8885/member/display?no=${vo.no}`? `http://127.0.0.1:8885/member/display?no=${vo.no}` : `/img/defaultClubImage.png`}//백틱
                                             alt="프로필 이미지"
                                             id='previewImgTag'
                                             style={{width: "50%", height: "50%", borderRadius: "10px"}}

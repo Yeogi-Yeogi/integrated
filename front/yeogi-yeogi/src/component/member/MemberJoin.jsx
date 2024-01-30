@@ -31,7 +31,7 @@ const StyledMemberJoinDiv = styled.div`
     }
 
     & #table-container > & text{
-        font-weight: bord;
+        font-weight: bold;
         font-size: 100px;
 
         & input {
@@ -157,6 +157,42 @@ const MemberJoin = () => {
             [name] : value
         });
     }
+
+    //아이디 중복 체크시 동작하는 함수 
+    const idCheck = (event) => {
+        // 서버로 전송할 데이터 준비
+        const inputData = {
+            id: document.getElementById('id').value, // 혹은 리액트 상태에서 가져오기
+        };
+        console.log("inputData:",inputData); // ok
+
+        // 서버로 POST 요청을 보냄
+        fetch('http://127.0.0.1:8885/member/idCheck', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inputData),
+        })
+        .then(response => {
+            if (!response.ok) {
+              throw new Error(`서버 응답 오류: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.msg === 'good') {
+              console.log('아이디 중복 확인: 가능');
+              alert('아이디 중복 확인: 가능');
+            } else {
+              console.log('아이디 중복 확인: 중복');
+              alert('아이디 중복 확인: 중복');
+            }
+          })
+          .catch(error => {
+            console.error('아이디 중복 확인 에러:', error);
+          }); 
+    };
     
     // 회원가입 양식 제출 시 동작하는 함수
     const handleMemberJoinSubmit = (event) => {
@@ -181,7 +217,7 @@ const MemberJoin = () => {
         formData.append('resiNum', vo.resiNum);
         formData.append('profileImg', vo.profileImg);
 
-
+        console.log('email:', vo.email);
         // 서버에 회원가입 요청을 보내고 응답 처리
         fetch("http://127.0.0.1:8885/member/join", {
         method:"post",
@@ -200,8 +236,7 @@ const MemberJoin = () => {
             if(data.msg === "good"){
                 
                 alert("회원가입 성공!");
-                alert("로그인 후 이용가능합니다.")
-                navigate("/main");
+                navigate("/member/login");
             }else{
                 alert("회원가입 실패..");
                 navigate("/failpage");
@@ -249,7 +284,7 @@ const MemberJoin = () => {
                     </tr>
                     <tr>
                         <td></td>
-                        <td><input type="button" id='idbutton' name="idbutton" value="아이디 중복확인" onChange={handleInputChange}/></td>
+                        <td><input type="button" id='idCheck' name="idCheck" value="아이디 중복확인" onClick={idCheck}/></td>
                     </tr>
                     <tr>
                         <td id="text">비밀번호</td>
@@ -277,7 +312,7 @@ const MemberJoin = () => {
                     </tr>
                     <tr>
                         <td id="text">인증번호</td>
-                        <td><input type="text" id='email' name="email" placeholder='인증번호 확인' onChange={handleInputChange}/></td>
+                        <td><input type="text" id='emailNum' name="emailNum" placeholder='인증번호 확인' onClick={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text">주민등록번호</td>

@@ -75,7 +75,7 @@ const MemberQuit = () => {
             isFetching = true;
         }
       
-        const pwd = document.getElementById('pwd').value;
+        const pwd = e.target.elements.pwd.value;//document.getElementById('pwd').value;
       
 
         fetch("http://127.0.0.1:8885/member/quit", {
@@ -83,7 +83,7 @@ const MemberQuit = () => {
         headers:{
             "Content-Type":"application/json"
         },
-        body: JSON.stringify(pwd)
+        body: JSON.stringify({ pwd: pwd })
         })
         .then( resp => {
             if(!resp.ok){
@@ -96,9 +96,10 @@ const MemberQuit = () => {
                 
                 alert("회원 탈퇴 성공!");
                 navigate("/main");
-            }else{
-                alert("회원 탈퇴 실패..");
-                navigate("/failpage");
+            }else if (data.msg === "bad"){
+                alert("기존의 비밀번호가 일치하지 않습니다. 회원탈퇴 실패")
+            }else {
+                alert("알 수 없는 오류로 회원 탈퇴 실패.");
             }
         })
         .catch((e) => {
@@ -115,13 +116,13 @@ const MemberQuit = () => {
             <div>
                 <MyPageSideBar/>
                 <div id="quit">
-                <form onSubmit={handleInputQuit} encType="multipart/form-data">
+                <form onSubmit={handleInputQuit}>
                     <h2>회원 탈퇴</h2>
                     <p>정말로 회원 탈퇴를 하시겠습니까?</p>
                     <p> 해당 조치는 되돌릴 수 없습니다.</p>
                     
                     <label htmlFor="password">비밀번호:</label>
-                    <input type="password" id="pwd" name="pwd" value="pwd" required/>
+                    <input type="password" id="pwd" name="pwd" required/>
                     <button type="submit" id="editbutton">회원 탈퇴</button>
                 </form>
                 </div>                
