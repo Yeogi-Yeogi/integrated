@@ -114,6 +114,18 @@ const StyledJoinModal = styled(ReactModal)`
         }
     }
     
+    #categoryDiv{
+        background: #31af25;
+        width: 70px;
+        height: 30px;
+        text-align: center;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+    }
   `;
 
 const JoinClub = ({ isOpen, closeModal, club}) => {
@@ -208,7 +220,9 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                     <span>인원 : {club.memberCount} / {club.signupLimit}</span>
                     <span>가입연령 : {club.ageLimit}세 이상</span>
                     <span>개설일 : {club.enrollDate}</span>
-                    <div style={{fontStyle:"italic"}}>카테고리 보여주는곳</div>
+                    <div id='categoryDiv'>
+                        <span>{club.categoryName}</span>
+                    </div>
                 </div>
             </div>
             <div>

@@ -162,7 +162,7 @@ const CreateClub = () => {
 
     const handleChangeInput = (input) => {
         const {name, value} = input.target;
-        if(name === "name"){
+        if(name === "name"){    
             setClubNameCheck(false);
         }
         
@@ -222,7 +222,6 @@ const CreateClub = () => {
         })
         .then(resp => resp.text())
         .then(data => {
-            // console.log("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ :",data);
             if(data !== "0"){
                 Swal.fire({
                     icon: 'success',                  
@@ -230,7 +229,6 @@ const CreateClub = () => {
                     confirmButtonText: '확인'
                   });
                 navigate("/club/"+ data +"/commu/board");
-                // 클럽 주소
             }
             // 실패시에는..?
         })
@@ -269,11 +267,19 @@ const CreateClub = () => {
                 setClubNameCheck(true);
                 return;
             }
-            Swal.fire({
-                icon: 'warning',                  
-                text: '현재 사용중인 모임 이름입니다.', 
-                confirmButtonText: '확인'
-            });
+            if(data === "invalidPattern"){
+                Swal.fire({
+                    icon: 'warning',                  
+                    text: '모임 이름에는 한글 및 영어 대소문자만 사용하실 수 있습니다.', 
+                    confirmButtonText: '확인'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',                  
+                    text: '현재 사용중인 모임 이름입니다.', 
+                    confirmButtonText: '확인'
+                });
+            }
             name.value = "";
         })
     };
@@ -334,7 +340,8 @@ const CreateClub = () => {
                         <label htmlFor="fileInput" >사진 선택</label>
                     </div>
                     <div>
-                        <input type="text" name="name" id="name" placeholder='모임 이름을 설정해주세요' onChange={handleChangeInput}/> <button onClick={handleNameCheck}>중복 확인</button>
+                        <input 
+                            type="text" name="name" id="name" placeholder='모임 이름을 설정해주세요' maxLength={10} onChange={handleChangeInput}/> <button onClick={handleNameCheck}>중복 확인</button>
                     </div>
                     <div className='selelctBoxdiv'>
                         <div>카테고리</div>
