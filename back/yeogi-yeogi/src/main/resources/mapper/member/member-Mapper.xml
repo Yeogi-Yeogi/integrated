@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MemberMapper">
 
+	<!-- 회원가입 -->
     <insert id="join">
         INSERT INTO MEMBER
 		(
@@ -21,20 +22,28 @@
 		(
 		    SEQ_MEMBER_NO.NEXTVAL
             , #{name}
+            , #{id}
+            , #{pwd}
+            , #{nick}
             , #{phone}
             , #{email}
             , #{resiNum}
             , #{fullPath}
 		)
     </insert>
-    
+    <!-- 아이디 중복 확인 -->
     <select id="idCheck" resultType="com.yeogi.app.member.vo.MemberVo">
     	SELECT
     		ID
     	FROM MEMBER
 		WHERE ID = #{id}    
     </select>
-        
+    
+	<!--비밀번호 일치 여부 확인-->
+<!-- 	<select id="pwdCoincide" r -->
+	
+	
+	<!--로그인-->
     <select id="login" resultType="com.yeogi.app.member.vo.MemberVo">
 		SELECT
 		    NO
@@ -44,8 +53,9 @@
             ,NICK
             ,PHONE
             ,EMAIL
-            ,ENROLL_DATE
-            ,MODIFIED_DATE
+            ,QUIT_YN
+            ,TO_CHAR(ENROLL_DATE, 'YYYY"년 "MM"월 "DD"일"') AS ENROLL_DATE
+            ,TO_CHAR(MODIFIED_DATE, 'YYYY"년 "MM"월 "DD"일"') AS MODIFIED_DATE
             ,FULL_PATH
             ,RESI_NUM
 		FROM MEMBER
@@ -53,6 +63,7 @@
 		AND PWD = #{pwd}
 	</select>
 	
+	<!--회원탈퇴-->
 	<update id="quit">
 		UPDATE MEMBER
 		    SET 
@@ -60,6 +71,7 @@
 		WHERE NO = #{no}
 	</update>
 	
+	<!--내 정보조회-->
 	<select id="mySelect" resultType="com.yeogi.app.member.vo.MemberVo">
 		SELECT
 			NO
@@ -69,19 +81,22 @@
             ,NICK
             ,PHONE
             ,EMAIL
-            ,TO_CHAR(ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE
-            ,TO_CHAR(MODIFIED_DATE, 'YYYY-MM-DD') AS MODIFIED_DATE
+            ,QUIT_YN
+            ,TO_CHAR(ENROLL_DATE, 'YYYY"년 "MM"월 "DD"일"') AS ENROLL_DATE
+            ,TO_CHAR(MODIFIED_DATE, 'YYYY"년 "MM"월 "DD"일"') AS MODIFIED_DATE
             ,FULL_PATH
             ,RESI_NUM
          FROM MEMBER
          WHERE NO = #{no}
 	</select>
 	
+	<!--내 정보수정-->
 	<update id="edit">
 		UPDATE MEMBER
 			SET
+			   <trim prefixOverrides=",">
 			   <if test="name != '' and name != null">
-	           	,NAME = #{name}
+	           	NAME = #{name}
 	           </if>
 	           <if test="pwd != '' and pwd != null">
 	           	,PWD = #{pwd}
@@ -95,13 +110,17 @@
 	           <if test="email != '' and email != null">
 	           	,EMAIL = #{email}
 	           </if>
-<!-- 	           <if test="fullPath != '' and fullPath != null"> -->
-<!-- 	           	,FULL_PATH = #{fullPath} -->
-<!-- 	           </if>	            -->
+               ,MODIFIED_DATE = SYSDATE	           
+	           <if test="fullPath != '' and fullPath != null">
+	           	,FULL_PATH = #{fullPath}
+	           </if>	 
+	           </trim>          
            WHERE NO = #{no}
 		   AND QUIT_YN = 'N'		
 	</update>
 	
+	
+	<!--메인화면- 로그인후 가입한 모임 조회하기--> 
 	<select id="selectMyClub" resultType="com.yeogi.app.member.vo.selectMyClubVo">
 		SELECT CC.CATEGORY_NAME, M.NICK  AS MEMBER_NICK, C.NAME AS CLUB_NAME, C.CLUB_DESCRIPTION, C.ENROLL_DATE, CIF.FILE_URL
 		FROM CLUB C

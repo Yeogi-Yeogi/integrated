@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,12 +100,28 @@ public class MemberApiController {
     	Map<String, Object> map = new HashMap<String, Object>();
     	map.put("msg","good");
         map.put("idCheck", idCheck);
-        System.out.println("로그인: " + idCheck);
+        System.out.println("아이디 중복 확인: " + idCheck);
         if(idCheck != null ) {
         	map.put("msg", "bad");
         }
         return map;
     }    
+    
+    
+    //비밀번호 일치 여부 확인
+    @PostMapping("pwdCoincide")
+    public Map<String, Object> pwdCoincide(@RequestBody MemberVo vo) throws Exception {
+    	MemberVo pwdCoincide = service.pwdCoincide(vo);
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("msg","good");
+        map.put("pwdCoincide", pwdCoincide);
+        System.out.println("비밀번호 일치 여부 확인: " + pwdCoincide);
+//        if(pwdCoincide != vo.setPwd() ) {
+//        	map.put("msg", "bad");
+//        }
+        return map;
+    }    
+    
     
 	// 로그인
     @PostMapping("login")
@@ -135,7 +152,7 @@ public class MemberApiController {
         
     }
 
-    //회원정보조회
+    //내 정보조회
     @PostMapping("mySelect")
     public Map<String, Object> mySelect(@RequestBody MemberVo vo) throws Exception {
     	
@@ -158,7 +175,7 @@ public class MemberApiController {
     
     //클라이언트로 이미지파일을 전달
     @GetMapping("display")
-    public ResponseEntity display(String no) throws IOException {      
+    public ResponseEntity display(@RequestParam String no) throws IOException {      
     	//파일경로=회원번호 를 이용하여, 디비에 있는 파일경로 가져오기
     	MemberVo vo = new MemberVo();
     	vo.setNo(no);
@@ -175,9 +192,9 @@ public class MemberApiController {
                 ;
     }
          
-    //내 정보 수정하기 
+    //내 정보 수정 
     @PostMapping("edit")
-    public Map<String,String> edit(MemberVo vo, MultipartFile profileImg) throws Exception {
+    public Map<String, Object> edit(MemberVo vo, MultipartFile profileImg) throws Exception {
     	
     	System.out.println("정보수정vo : " + vo);
     	System.out.println("profileImg : " + profileImg);
@@ -185,10 +202,14 @@ public class MemberApiController {
     	
     	String fullPath = saveFile(profileImg);
 		vo.setFullPath(fullPath);
-		
+	
         int result = service.edit(vo);
-        Map<String, String> map = new HashMap<String, String>();
+        MemberVo editMember = new MemberVo();
+        
+        
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg", "good");
+        map.put("vo", vo);
 		if(result != 1) {
 			map.put("msg", "bad");
 		}        

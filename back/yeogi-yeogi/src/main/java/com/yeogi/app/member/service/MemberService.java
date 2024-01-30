@@ -35,6 +35,11 @@ public class MemberService {
 		return dao.idCheck(sst, vo);
 	}
 	
+	//비밀번호 일치 여부 확인
+	public MemberVo pwdCoincide(MemberVo vo) {
+		return dao.pwdCoincide(sst,vo);
+	}
+	
 	// 로그인
 	public MemberVo login(MemberVo vo) {
 		return dao.login(sst, vo);
@@ -42,6 +47,13 @@ public class MemberService {
 
 	// 회원 탈퇴
 	public int quit(MemberVo vo) {
+		
+		// 기존 비밀번호 확인
+	    MemberVo existingMember = dao.idCheck(sst, vo);
+	    if (existingMember == null || !existingMember.getPwd().equals(vo.getPwd())) {
+	        return 0; // 실패: 기존 비밀번호 불일치
+	    }
+	    
 		return dao.quit(sst, vo);
 	}
 	
@@ -63,5 +75,6 @@ public class MemberService {
 	public List<selectMyClubVo> selectMyClub(selectMyClubVo vo) {
 		return dao.selectMyClub(sst,vo);
 	}
+
 
 }
