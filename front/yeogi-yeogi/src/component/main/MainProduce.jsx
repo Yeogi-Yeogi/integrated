@@ -37,6 +37,7 @@ const StyledMainProduceDiv = styled.div`
         background-color: #6C1895;
         color: #F3F1F1;
         height: 40px;
+        font-weight: bold;
     }
 
 `;

@@ -27,18 +27,17 @@ const MainLayout = () => {
         return (
             <StyledMainLayoutDiv>
                 <MainProduce/>
-                {/* <Slide/> */}
-                <SearchBar/>
                 <MainClubList/>                   
+                <SearchBar/>
             </StyledMainLayoutDiv>
         );
     }else{
         return (
             <StyledMainLayoutDiv>
                 <MainProduce/>
-                <SelectMyClub/>
-                <SearchBar/>
+                {/* <SelectMyClub/> */}
                 <MainClubList/>                   
+                <SearchBar/>
             </StyledMainLayoutDiv>
         );
     }
