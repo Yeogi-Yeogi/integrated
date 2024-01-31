@@ -303,11 +303,11 @@ const MemberJoin = () => {
                     </tr>
                     <tr>
                         <td id="text">비밀번호</td>
-                        <td><input type="text" id='pwd' name="pwd" placeholder='비밀번호를 입력하세요'  onChange={handleInputChange}/></td>
+                        <td><input type="password" id='pwd' name="pwd" placeholder='비밀번호를 입력하세요'  onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text">비밀번호 확인</td>
-                        <td><input type="text" id='pwdCheck' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
+                        <td><input type="password" id='pwdCheck' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
                     </tr>
                     <tr>
                         <td id="text">닉네임</td>
@@ -317,7 +317,7 @@ const MemberJoin = () => {
                         <td id="text">전화번호</td>
                         <td><input type="text" id='phone' name="phone" placeholder='전화번호를 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <td id="text">이메일</td>
                         <td><input type="text" id='email' name="email" placeholder='이메일을 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
@@ -328,7 +328,7 @@ const MemberJoin = () => {
                     <tr>
                         <td id="text">인증번호</td>
                         <td><input type="text" id='emailNum' name="emailNum" placeholder='인증번호 확인' onClick={handleInputChange}/></td>
-                    </tr>
+                    </tr> */}
                     <tr>
                         <td id="text">주민등록번호</td>
                         <td><input type="text" id='resiNum' name="resiNum" placeholder='주민등록번호를 입력하세요' onChange={handleInputChange}/></td>
