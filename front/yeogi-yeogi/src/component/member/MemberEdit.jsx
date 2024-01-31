@@ -42,6 +42,17 @@ const StyledMemberEditDiv =styled.div`
         }
     }
 
+    & .imgBox {
+        display: flex;
+        justify-content: center;
+        height: 300px;
+        overflow: hidden;
+        & img {
+            display: block;
+            height: 100%;
+        }
+    }
+
     form > {
         width: 100%;
         height: 100%;
@@ -233,12 +244,12 @@ const MemberEdit = () => {
                         <tr>
                             <td colSpan={3}>
                                 <div>
-                                    <div>
+                                    <div className='imgBox'>
                                         <img
                                             src= {imgFile ? imgFile : `/img/defaultClubImage.png`}//백틱
                                             alt="프로필 이미지"
                                             id='previewImgTag'
-                                            style={{width: "50%", height: "50%", borderRadius: "10px"}}
+
                                         />
                                     </div>
                                     <label htmlFor="fileInput" >프로필 수정</label>

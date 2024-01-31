@@ -46,7 +46,16 @@ const StyledMemberJoinDiv = styled.div`
         }
     }
 
-
+    & .imgBox {
+        display: flex;
+        justify-content: center;
+        height: 300px;
+        overflow: hidden;
+        & img {
+            display: block;
+            height: 100%;
+        }
+    }
 
     form > {
         width: 100%;
@@ -198,6 +207,13 @@ const MemberJoin = () => {
     const handleMemberJoinSubmit = (event) => {
         event.preventDefault();
 
+        const pwd = event.target.pwd.value;
+        const pwdCheck = event.target.pwdCheck.value;
+        if(pwd !== pwdCheck){
+            alert("비밀번호 불일치. 다시 확인하세요");
+            return;
+        }
+
         if(isFetching){
             alert('회원가입이 이미 진행');
             return;
@@ -261,12 +277,11 @@ const MemberJoin = () => {
                     <tr>
                         <td colSpan={3}>
                             <div>
-                                <div>
+                                <div className='imgBox'>
                                     <img
                                         src= {imgFile ? imgFile : `/img/defaultClubImage.png`}
                                         alt="프로필 이미지"
                                         id='previewImgTag'
-                                        style={{width: "50%", height: "50%", borderRadius: "10px"}}
                                     />
                                 </div>
                                 <label htmlFor="fileInput" >프로필 선택</label>
@@ -288,11 +303,11 @@ const MemberJoin = () => {
                     </tr>
                     <tr>
                         <td id="text">비밀번호</td>
-                        <td><input type="password" id='pwd' name="pwd" placeholder='비밀번호를 입력하세요'  onChange={handleInputChange}/></td>
+                        <td><input type="text" id='pwd' name="pwd" placeholder='비밀번호를 입력하세요'  onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text">비밀번호 확인</td>
-                        <td><input type="password" id='pwdCheck' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
+                        <td><input type="text" id='pwdCheck' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
                     </tr>
                     <tr>
                         <td id="text">닉네임</td>

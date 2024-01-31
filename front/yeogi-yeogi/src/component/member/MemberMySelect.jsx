@@ -43,6 +43,18 @@ const StyledMemberMySelectDiv = styled.div`
         }
     }
 
+    & .imgBox {
+        display: flex;
+        justify-content: center;
+        height: 300px;
+        overflow: hidden;
+        & img {
+            display: block;
+            height: 100%;
+        }
+    }
+
+
     form > {
         width: 100%;
         height: 100%;
@@ -90,13 +102,12 @@ const MemberMySelect = () => {
                         <tr>
                             <td colSpan={3}>
                                 <div>
-                                    <div>
+                                    <div className='imgBox'>
                                         <img
                                             // src= {vo.fullPath? vo.fullPath : `/img/defaultClubImage.png`}
                                             src = {`http://127.0.0.1:8885/member/display?no=${vo.no}`? `http://127.0.0.1:8885/member/display?no=${vo.no}` : `/img/defaultClubImage.png`}//백틱
                                             alt="프로필 이미지"
                                             id='previewImgTag'
-                                            style={{width: "50%", height: "50%", borderRadius: "10px"}}
                                         />
                                     </div>
                                 </div>

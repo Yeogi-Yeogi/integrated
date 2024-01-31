@@ -47,19 +47,19 @@ const StyledMemberLoginDiv = styled.div`
             size: 100%
         }
 
-        & > div:nth-child(1){
+        div{
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
-            margin-left: 300px;
            
             & > img {
-                width: 5px;
-                height: 5px;
+                width: 244px;
             }
             & > span {
-                font-size: 100px;
+                font-size: 53px;
                 font-weight: bold;
+                font-family: 'yg-jalnan';
+                color: #3a3a3a;
             }
         }
 

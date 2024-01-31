@@ -47,14 +47,9 @@ public class MemberService {
 
 	// 회원 탈퇴
 	public int quit(MemberVo vo) {
-		
-		// 기존 비밀번호 확인
-	    MemberVo existingMember = dao.idCheck(sst, vo);
-	    if (existingMember == null || !existingMember.getPwd().equals(vo.getPwd())) {
-	        return 0; // 실패: 기존 비밀번호 불일치
-	    }
 	    
 		return dao.quit(sst, vo);
+		
 	}
 	
 	//내 정보 조회-이름, 아이디, 비밀번호, 닉네임, 전화번호, 이메일, 가입일자, 수정일자, 프로필이미지, 주민등록번호//내 정보 수정(회원 정보 조회-이름, 아이디, 주민등록번호 조회)-필요없음
