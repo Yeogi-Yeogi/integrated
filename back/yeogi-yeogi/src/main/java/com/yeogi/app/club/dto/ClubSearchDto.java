@@ -8,4 +8,8 @@ public class ClubSearchDto {
     private String searchMenu;
     private String searchString;
 
+    public ClubSearchDto(String searchCategory, String searchText) {
+        this.searchMenu = searchCategory;
+        this.searchString = searchText;
+    }
 }

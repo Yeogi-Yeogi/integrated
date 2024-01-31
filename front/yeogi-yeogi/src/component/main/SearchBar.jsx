@@ -4,9 +4,8 @@ import MainClubList from './MainClubList';
 import { useNavigate } from 'react-router-dom';
 
 const StyledSearchBarDiv = styled.div`
-    /* background-color: bisque; */
     width: 100%;
-    height: 250px;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,7 +13,6 @@ const StyledSearchBarDiv = styled.div`
     & > div:first-child {
         width: 400px;
         height: 150px;
-        /* background-color: red; */
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -50,16 +48,8 @@ const StyledSearchBarDiv = styled.div`
                 }
             }
             & input[type="text"] {
-                /* width: 300px; */
-                /* border: 2px solid #999999; */
                 border: none;
-                /* border-radius: 10px; */
-                /* height: 35px; */
-                /* margin: 10px; */
-                /* padding: 10px; */
                 outline: none;
-                /* font-size: 0.8rem; */
-                /* background-color: rgba(108, 24, 149, 0.2); */
                 text-align: center;
                 background-color: rgba(108, 24, 149, 0);
             }
@@ -87,7 +77,6 @@ const StyledSearchBarDiv = styled.div`
 
 // 메인 Search하는 칸
 const SearchBar = () => {
-    // 카테고리 만들어야하나,..?
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
     const [searchCategory, setSearchCategory] = useState("name");
@@ -109,7 +98,7 @@ const SearchBar = () => {
             return;
         }
 
-        fetch("http://127.0.0.1:8885/club/searchClub/" + searchText)
+        fetch(`http://127.0.0.1:8885/club/searchClub/${searchCategory}/${searchText}`)
         .then(resp => resp.json())
         .then(clubList => {
             navigate("/searchClub", {
@@ -131,7 +120,7 @@ const SearchBar = () => {
                         <select onChange={handleChangeCategory}>
                             <option value="name">모임명</option>
                             <option value="category">카테고리</option>
-                            <option value="clubDescription ">모임설명</option>
+                            <option value="clubDescription">모임설명</option>
                         </select>
                         <input type="text" name='searchText' placeholder="검색 할 모임명 입력" onChange={handleChangeInput}/>
                         <input type="submit"/>

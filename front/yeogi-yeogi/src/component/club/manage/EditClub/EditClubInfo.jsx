@@ -183,6 +183,7 @@ const EditClubInfo = () => {
     // 이미지 미리보기
     const [imgFile, setImgFile] = useState("");
     const imgRef = useRef();
+    
     const handleChangeFile = () => {
         if (!imgRef.current.files.length) {
             // 파일 선택 취소했을때
