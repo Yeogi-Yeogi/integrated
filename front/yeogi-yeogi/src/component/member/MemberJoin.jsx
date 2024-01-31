@@ -288,11 +288,11 @@ const MemberJoin = () => {
                     </tr>
                     <tr>
                         <td id="text">비밀번호</td>
-                        <td><input type="text" id='pwd' name="pwd" placeholder='비밀번호를 입력하세요' onChange={handleInputChange}/></td>
+                        <td><input type="password" id='pwd' name="pwd" placeholder='비밀번호를 입력하세요'  onChange={handleInputChange}/></td>
                     </tr>
                     <tr>
                         <td id="text">비밀번호 확인</td>
-                        <td><input type="text" id='pwdCheck' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
+                        <td><input type="password" id='pwdCheck' name="pwdCheck" placeholder='비밀번호 입력하세요'/></td>
                     </tr>
                     <tr>
                         <td id="text">닉네임</td>
