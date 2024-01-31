@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledMainProduceDiv = styled.div`
@@ -30,18 +31,42 @@ const StyledMainProduceDiv = styled.div`
         margin: 5px 0; /* 각각의 제목 요소에 대한 간격 조절 */
     }
 
-
+    .mainBtn{
+        border: none;
+        border-radius: 10px;
+        background-color: #6C1895;
+        color: #F3F1F1;
+        height: 40px;
+    }
 
 `;
 
 const MainProduce = () => {
+    
+    const loginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+    const navigate = useNavigate();
+
+
+    const createClub = () => {
+        navigate("/club/createClub");
+    };
+
+    const join = () => {
+        navigate("/member/join");
+    };
+
     return (
         <StyledMainProduceDiv>
             <div id="box">
                 <div id="i">
-                    <div><h5>여기여기로 초대하고 싶다면?</h5></div>
+                    <div><h5>모임으로 초대하고 싶다면?</h5></div>
                     <div><h2>참신한 소개글로</h2></div>
-                    <div><h2>여기여기를 표현해 보세요!</h2></div>
+                    <div><h2>모임을 표현해 보세요!</h2></div>
+                    {!loginMember ? (
+                        <button className='mainBtn' onClick={join}>회원가입하기</button>
+                    ) : (
+                        <button className='mainBtn' onClick={createClub}>모임 만들기</button>
+                    )}
                 </div>    
                 <div id="i"><img src="img/yeji1.png" alt='화면 만든 이미지 추가'></img></div>                    
             </div>
