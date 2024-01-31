@@ -181,7 +181,7 @@ const ClubDescription = () => {
                     confirmButtonText: '확인',
                 }).then(result => {
                     if (result.isConfirmed) { 
-                        navigate("/");
+                        navigate("/main");
                     }
                 });
             }
