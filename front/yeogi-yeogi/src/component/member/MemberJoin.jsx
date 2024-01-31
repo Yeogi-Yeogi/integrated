@@ -317,11 +317,11 @@ const MemberJoin = () => {
                         <td id="text">전화번호</td>
                         <td><input type="text" id='phone' name="phone" placeholder='전화번호를 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
-                    {/* <tr>
+                    <tr>
                         <td id="text">이메일</td>
                         <td><input type="text" id='email' name="email" placeholder='이메일을 입력하세요' onChange={handleInputChange}/></td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <td id="text"></td>
                         <td><input type="button" id='emailbutton' name="emailbutton" value="인증번호 전송" onChange={handleInputChange}/></td>
                     </tr>
