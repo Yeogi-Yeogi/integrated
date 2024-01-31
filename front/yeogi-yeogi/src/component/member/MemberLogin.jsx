@@ -155,7 +155,7 @@ const MemberLogin = () => {
                     <tr>
                         <td colspan="2">
                             <div><img src="/img/logo.png" alt="여기여기로고"/>
-                            <span>여기여기(임시)</span>
+                            <span>여기여기</span>
                             </div>
                         </td>                    
                     </tr>

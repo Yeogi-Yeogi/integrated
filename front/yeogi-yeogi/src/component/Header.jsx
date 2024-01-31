@@ -136,14 +136,18 @@ const Header = () => {
                     <Link to={`/main`}>
                         <div id="loginBeforeLogo">
                             <img src="/img/logo.png" alt="여기여기로고" />
-                            <span>여기여기</span>
+                            <span style={{
+                                marginLeft : "15px"
+                            }}>여기여기</span>
                         </div>
                     </Link>
                 : 
                     <Link to={`/main`}>
                         <div id="loginAfterLogo">
                             <img src="/img/logo.png" alt="여기여기로고" />
-                            <span>여기여기 or 여기? 여기! 뭘로하지..</span>
+                            <span style={{
+                                marginLeft : "15px"
+                            }}>여기? 여기!</span>
                         </div>
                     </Link>                
                 }
