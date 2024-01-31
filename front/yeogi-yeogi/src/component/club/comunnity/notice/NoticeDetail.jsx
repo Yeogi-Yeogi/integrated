@@ -272,7 +272,7 @@ const NoticeDetail = () => {
                             <span>조회수 {notice?.hit}</span>
                         </div>
                         {
-                            (notice?.mine || notice?.adminYn) ?
+                            (notice?.mine || notice?.admin) ?
                             <div>
                                 <Button variant="link" onClick={deleteNotice}>삭제</Button>
                             </div>
