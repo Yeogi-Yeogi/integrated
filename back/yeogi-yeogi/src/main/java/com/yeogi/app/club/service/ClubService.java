@@ -39,8 +39,8 @@ public class ClubService {
     @Value("${spring.mail.auth-code-expiration-millis}")
     private long authCodeExpirationMillis;
 
-    public List<ClubVo> searchClub(String searchText) {
-        return dao.searchClub(searchText, sst);
+    public List<ClubVo> searchClub(ClubSearchDto clubSearchDto) {
+        return dao.searchClub(clubSearchDto, sst);
     }
 
 

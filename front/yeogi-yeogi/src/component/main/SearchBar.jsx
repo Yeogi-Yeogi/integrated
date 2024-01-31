@@ -109,7 +109,7 @@ const SearchBar = () => {
             return;
         }
 
-        fetch("http://127.0.0.1:8885/club/searchClub/" + searchText)
+        fetch(`http://127.0.0.1:8885/club/searchClub/${searchCategory}/${searchText}`)
         .then(resp => resp.json())
         .then(clubList => {
             navigate("/searchClub", {
@@ -131,7 +131,7 @@ const SearchBar = () => {
                         <select onChange={handleChangeCategory}>
                             <option value="name">모임명</option>
                             <option value="category">카테고리</option>
-                            <option value="clubDescription ">모임설명</option>
+                            <option value="clubDescription">모임설명</option>
                         </select>
                         <input type="text" name='searchText' placeholder="검색 할 모임명 입력" onChange={handleChangeInput}/>
                         <input type="submit"/>

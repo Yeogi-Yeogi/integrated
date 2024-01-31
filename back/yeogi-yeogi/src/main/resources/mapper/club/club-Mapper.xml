@@ -45,62 +45,42 @@
             AND C.NO = #{clubNo}
     </select>
 
-<!-- 클럽 검색(조건 넣을지,,,) -->
-<!--    <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">-->
-<!--        SELECT-->
-<!--        C.NO-->
-<!--            , C.NAME-->
-<!--            , C.CATEGORY_NO-->
-<!--            , C.CREATOR_NO-->
-<!--            , C.CLUB_DESCRIPTION-->
-<!--            , C.AGE_LIMIT-->
-<!--            , C.SIGNUP_LIMIT-->
-<!--            , C.ENROLL_DATE-->
-<!--            , C.DEL_YN-->
-<!--            , CC.CATEGORY_NAME-->
-<!--            , I.FILE_URL-->
-<!--            , M.NICK-->
-<!--            , (SELECT COUNT(MEMBER_NO)-->
-<!--                FROM MEMBER_CLUB-->
-<!--                WHERE CLUB_NO = C.NO) AS MEMBER_COUNT-->
-<!--        FROM CLUB C-->
-<!--        JOIN MEMBER M ON C.CREATOR_NO = M.NO-->
-<!--        JOIN CLUB_CATEGORY CC ON C.CATEGORY_NO = CC.CATEGORY_NO-->
-<!--        JOIN CLUB_IMAGE_FILE I ON C.NO = I.NO-->
-<!--        <choose>-->
-<!--            <when test="searchMenu.equals('categoryName')">-->
-<!--                WHERE CC.CATEGORY_NAME LIKE '%'||#{searchString}||'%'-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                WHERE C.${searchMenu} LIKE '%'||#{searchString}||'%'-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        AND DEL_YN = 'N'-->
-<!--    </select>-->
+<!-- 클럽 검색(조건)-->
     <select id="searchClub" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT
-        C.NO
-        , C.NAME
-        , C.CATEGORY_NO
-        , C.CREATOR_NO
-        , C.CLUB_DESCRIPTION
-        , C.AGE_LIMIT
-        , C.SIGNUP_LIMIT
-        ,   TO_CHAR(C.ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE
-        , C.DEL_YN
-        , CC.CATEGORY_NAME
-        , I.FILE_URL
-        , M.NICK
-        , (SELECT COUNT(MEMBER_NO)
-            FROM MEMBER_CLUB
+            C.NO
+            , C.NAME
+            , C.CATEGORY_NO
+            , C.CREATOR_NO
+            , C.CLUB_DESCRIPTION
+            , C.AGE_LIMIT
+            , C.SIGNUP_LIMIT
+            , TO_CHAR(C.ENROLL_DATE, 'YYYY-MM-DD') AS ENROLL_DATE
+            , C.DEL_YN
+            , CC.CATEGORY_NAME
+            , I.FILE_URL
+            , M.NICK
+            , (SELECT COUNT(MEMBER_NO)
+        FROM MEMBER_CLUB
             WHERE CLUB_NO = C.NO) AS MEMBER_COUNT
         FROM CLUB C
         JOIN MEMBER M ON C.CREATOR_NO = M.NO
         JOIN CLUB_CATEGORY CC ON C.CATEGORY_NO = CC.CATEGORY_NO
         JOIN CLUB_IMAGE_FILE I ON C.NO = I.NO
-        WHERE C.NAME LIKE '%' || #{searchText} || '%'
-            AND C.DEL_YN = 'N'
+        <choose>
+            <when test="searchMenu.equals('name')">
+                WHERE C.NAME LIKE '%'||#{searchString}||'%'
+            </when>
+            <when test="searchMenu.equals('clubDescription')">
+                WHERE C.CLUB_DESCRIPTION LIKE '%'||#{searchString}||'%'
+            </when>
+            <when test="searchMenu.equals('category')">
+                WHERE CC.CATEGORY_NAME LIKE '%'||#{searchString}||'%'
+            </when>
+        </choose>
+        AND DEL_YN = 'N'
     </select>
+
 <!--    클럽 리스트 불러오기(메인에서 사용할거..)-->
     <select id="getClubList" resultType="com.yeogi.app.club.vo.ClubVo">
         SELECT C.NO
