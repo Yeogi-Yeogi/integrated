@@ -164,7 +164,7 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                 isOpen = false;
                 Swal.fire({
                     icon: 'success',                  
-                    title: club.name + 'ㅋㅋ',
+                    title: club.name ,
                     text : '가입이 완료되었습니다',
                     confirmButtonText: '확인'
                 });
@@ -173,14 +173,14 @@ const JoinClub = ({ isOpen, closeModal, club}) => {
                 if(data === "2"){
                     Swal.fire({
                         icon: 'error',                  
-                        text: '너무 어려서 안됨', 
+                        text: '가입하실 수 없는 연령입니다', 
                         confirmButtonText: '확인'
                     }); 
                 }
                 if(data === "3"){
                     Swal.fire({
                         icon: 'error',                  
-                        text: '가입인원 꽉찼음ㄴ', 
+                        text: '가입인원이 최대인원에 도달했습니다', 
                         confirmButtonText: '확인'
                     }); 
                 }

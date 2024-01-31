@@ -124,7 +124,7 @@
         AND B.NOTICE_YN = 'Y'
         GROUP BY
         B.NO, B.TITLE, B.HIT, B.ENROLL_DATE, M.NO, M.NICK
-        ORDER BY 5 DESC, 1 DESC
+        ORDER BY 4 DESC, 1 DESC
     </select>
 
     <delete id="deleteBoardByNo">
