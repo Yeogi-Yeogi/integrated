@@ -140,7 +140,6 @@ const BoardEdit = () => {
             alert('로그인한 회원만 이용가능합니다');
             navigate('/member/login'); 
         } else {
-            console.log(`전달받은 previous:`, previous);
             resetPrevious();
         }
     }, [])
@@ -193,12 +192,10 @@ const BoardEdit = () => {
     // 선택한 미리보기 사진 삭제하는 함수
     const deleteImage = (index) => {
         const wantToDelete = imageUrl[index]; //삭제하려는 이미지
-        console.log(`삭제하려는 이미지`, wantToDelete);
 
         if(wantToDelete.startsWith("https://")) {
             //기존 사진 삭제할 경우
             const insert = previous.images.filter(i => i.fileUrl === wantToDelete).map(i => i.boardImageNo);
-            console.log(`insert: `, insert);
             setDeleted(prev => [...prev, ...insert]);
 
         } else {

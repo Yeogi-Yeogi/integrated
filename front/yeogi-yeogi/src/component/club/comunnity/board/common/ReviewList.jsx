@@ -125,7 +125,7 @@ const ReviewList = ({data, setPageNo}) => {
     return (
         <StyledReviewListDiv>
             { 
-                data?.map(el => 
+                data?.list.map(el => 
                     <div key={el.reviewNo}>
                         <div>
                             <img src={el.memberProfile} alt="" />
@@ -140,7 +140,12 @@ const ReviewList = ({data, setPageNo}) => {
                                 null
                             }
                             <span className='dateSpan'>{el.enrollDate}</span>
-                            <Button className='review-delete' variant="link" onClick={() => {handleDeleteReview(el.reviewNo, setPageNo)}}>삭제</Button>
+                            {
+                                (el.mine || data.isAdmin) ?
+                                <Button className='review-delete' variant="link" onClick={() => {handleDeleteReview(el.reviewNo, setPageNo)}}>삭제</Button>
+                                :
+                                null
+                            }
                         </div>
                         <div>
                             <span>{el.content}</span>

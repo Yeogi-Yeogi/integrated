@@ -34,7 +34,6 @@ public class NoticeController {
      */
     @GetMapping("/list/{pageNo}")
     public ResponseEntity<Map<String,Object>> getNoticeList(CheckDto checkDto, @PathVariable String pageNo) throws RuntimeException {
-        log.info("dto = {}", checkDto);
         HttpHeaders headers = getHttpHeaders();
         Map<String, Object> result = service.getNoticeList(checkDto, pageNo);
         return new ResponseEntity<>(result, headers, HttpStatus.OK);
@@ -48,7 +47,6 @@ public class NoticeController {
      */
     @GetMapping("/detail")
     public ResponseEntity<NoticeDetailDto> getDetail(@ModelAttribute BoardDetailValidDto dto) throws RuntimeException {
-        log.info("valid = {}", dto);
         return new ResponseEntity<>(service.getOne(dto), getHttpHeaders(), HttpStatus.OK);
     }
 
@@ -60,18 +58,13 @@ public class NoticeController {
      */
     @PostMapping("/add")
     public ResponseEntity<String> addNotice(NoticeAddDto notice) throws RuntimeException {
-        log.info("notice = {}", notice);
         int result = service.addNotice(notice);
 
-        if(result != 1) {
-            throw new IllegalStateException("공지사항 작성에 실패하셨습니다.");
-        }
         return new ResponseEntity<>("공지사항을 등록하셨습니다", getHttpHeaders(), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteBoard(@RequestBody BoardDetailValidDto dto) throws RuntimeException {
-        log.info("dto = {}", dto);
 
         int result = service.deleteNotice(dto);
         if(result != 1) {

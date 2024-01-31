@@ -36,7 +36,6 @@
         SELECT NO
         FROM REVIEW
         WHERE NO = #{reviewNo}
-        AND WRITER_NO = #{writerNo}
     </select>
 
     <delete id="deleteByNo">

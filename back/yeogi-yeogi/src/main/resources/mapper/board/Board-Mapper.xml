@@ -165,7 +165,6 @@
         UPDATE BOARD
             SET DEL_YN = 'Y'
         WHERE NO = #{boardNo}
-        AND MEMBER_NO = #{memberNo}
     </update>
 
     <select id="getBoardNo" resultType="String">

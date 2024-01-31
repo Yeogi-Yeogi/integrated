@@ -14,6 +14,7 @@ public class ReviewDetailDto {
     private String memberNick;
     private String enrollDate;
     private String content;
+    private boolean isMine = false;
     private boolean creatorYn = false;
     private boolean adminYn = false;
 }

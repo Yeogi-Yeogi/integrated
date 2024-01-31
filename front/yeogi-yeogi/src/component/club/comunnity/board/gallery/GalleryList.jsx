@@ -73,7 +73,6 @@ const GalleryList = () => {
 
     const getPost = useCallback( async () => {
         setLoad(true);
-        // console.log()
 
         try {
             
@@ -89,7 +88,6 @@ const GalleryList = () => {
             }
 
             setList(prev => [...prev, ...data]);
-            console.log(data);
             preventRef.current = true;
         } catch (e) {
             const message = e.message;

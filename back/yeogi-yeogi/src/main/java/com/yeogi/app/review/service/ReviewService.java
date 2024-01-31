@@ -52,7 +52,6 @@ public class ReviewService {
         int i = Integer.parseInt(offset);
 
         Map<String, Object> map = new HashMap<>();
-        log.info("(int) Math.ceil((double)count/reviewLimit) = {},  i = {}", (int) Math.ceil((double)count/reviewLimit), i);
         if (i >= (int) Math.ceil((double) count / reviewLimit) - 1) {
             map.put("isLast", true);
         } else {
@@ -64,7 +63,6 @@ public class ReviewService {
 
         if(reviews.size() > 0) {
             List<String> memberNoList = reviews.stream().map(r -> r.getMemberNo()).distinct().collect(Collectors.toList());
-            log.info("memberNoList = {}", memberNoList);
             List<CheckDto> authoritesDto = checkMember.getAuthorites(new CheckMemberAuthorityDto(memberNoList, dto.getClubNo()), template);
 
             for(CheckDto check : authoritesDto) {
@@ -86,10 +84,12 @@ public class ReviewService {
                                 }
                             }
                         });
+                reviews.stream().filter(r -> r.getMemberNo().equals(clubMember.getMemberNo())).forEach(r-> r.setMine(true));
             }
         }
 
         map.put("list", reviews);
+        map.put("isAdmin", clubMember.getAdminYn().equals("Y"));
         return map;
     }
 
@@ -124,7 +124,6 @@ public class ReviewService {
         if(!(findReviewNo != null && findReviewNo.equals(review.getReviewNo()))) {
             throw new FailReviewException("자신이 작성한 댓글만 삭제가 가능합니다.");
         }
-        log.info("지울 리뷰 번호 = {} , DB에서 가져온 리뷰 번호 = {}", review.getReviewNo(), findReviewNo);
         int result = repository.deleteByNo(findReviewNo, template);
         return result;
     }

@@ -59,8 +59,6 @@ public class BoardImageService {
             }
         }).collect(Collectors.toList());
 
-        log.info("voList = {}", voList);
-        log.info("voList.size() = {}", voList.size() );
         int result = 0;
 
         try {

@@ -15,6 +15,7 @@
        INNER JOIN BOARD B
        ON BI.BOARD_NO = B.NO
        WHERE B.CLUB_NO = #{clubNo}
+       AND B.DEL_YN = 'N'
        ORDER BY 2 DESC, 1
    </select>
 </mapper>

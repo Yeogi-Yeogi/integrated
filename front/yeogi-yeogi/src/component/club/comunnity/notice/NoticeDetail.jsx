@@ -166,7 +166,6 @@ const NoticeDetail = () => {
                 return res.json();
             })
             .then(data => {
-                console.log(data);
                 setNotice(data);
             })
             .catch(e => {
@@ -273,10 +272,12 @@ const NoticeDetail = () => {
                             <span>조회수 {notice?.hit}</span>
                         </div>
                         {
-                            notice?.mine && 
+                            (notice?.mine || notice?.adminYn) ?
                             <div>
                                 <Button variant="link" onClick={deleteNotice}>삭제</Button>
                             </div>
+                            :
+                            null
                         }
                     </div>
                     <hr/>

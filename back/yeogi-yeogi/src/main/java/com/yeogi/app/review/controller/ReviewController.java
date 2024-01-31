@@ -45,7 +45,6 @@ public class ReviewController{
      */
     @PostMapping("/add")
     public ResponseEntity<String> addReview(@RequestBody ReviewAddDto review) throws FailReviewException, NotClubMemberException {
-        log.info("review = {}", review);
         int result = service.addReview(review);
 
         if(result != 1) throw new FailReviewException("댓글 작성 실패");
@@ -61,7 +60,6 @@ public class ReviewController{
      */
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteReview(@RequestBody ReviewValidDto review) throws NotClubMemberException, FailReviewException {
-        log.info("review = {}", review);
         int result = service.deleteReviewByNo(review);
 
         if(result != 1) {

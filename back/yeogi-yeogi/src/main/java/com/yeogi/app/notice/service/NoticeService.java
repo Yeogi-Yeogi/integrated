@@ -135,7 +135,6 @@ public class NoticeService {
         List<BoardListFileUrlDto> collect = list.stream().map(e -> new BoardListFileUrlDto(e.getNo(), e.getBoardNo(), e.getFileUrl())).collect(Collectors.toList());
 
         findNotice.setList(collect);
-        System.out.println("findNotice = " + findNotice);
 
         if(findNotice.getMemberNo().equals(clubMember.getMemberNo())) {
             findNotice.setMine(true);

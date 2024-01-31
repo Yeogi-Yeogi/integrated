@@ -32,6 +32,10 @@ public class BoardDetailDto {
     //리뷰들
 
     private boolean isMine = false;
+    //로그인한 사용자가 관리자인지
+    private boolean isAdmin = false;
+    //게시글 작성자가 모임 개설자인지
     private boolean creatorYn = false;
+    //게시글 작성자가 관리자인지
     private boolean adminYn = false;
 }
