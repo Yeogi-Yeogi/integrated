@@ -2,29 +2,28 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import MyPageSideBar from '../club/comunnity/board/common/MyPageSideBar';
 import { useNavigate } from 'react-router-dom';
+import { useMemberMemory } from '../context/MemberContext';
 
 const StyledMemberQuitDiv =styled.div`
     width: 100%;
     margin: auto;
-
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    
+        
     & > div {
         width: 70em;
         display: flex;
-        justify-content:space-evenly;
+        justify-content:center;
         margin: auto;       
     }
 
     #quit{
-        width: 100%;
+        width: 609px;
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
-        margin-left:200px
+        justify-content: space-evenly;        
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
     }
 
     form {
@@ -62,11 +61,22 @@ const StyledMemberQuitDiv =styled.div`
 const MemberQuit = () => {
 
     let isFetching = false;
-
+    const {setLoginMember}  = useMemberMemory();
     const navigate = useNavigate();
-
+    
     const handleInputQuit = (e) => {
         e.preventDefault();
+
+        const currentLoginMember = JSON.parse(sessionStorage.getItem("loginMember"));
+         //입력한 패스워드
+         const password = e.target.pwd.value;
+         console.log(document.getElementById('pwd').value);
+         console.log(password);
+
+        if(currentLoginMember.pwd !== password){
+            alert("비밀번호 불일치. 회원탈퇴 불가");
+            return;
+        }
 
         if(isFetching){
             alert('회원탈퇴 이미 진행');
@@ -75,15 +85,13 @@ const MemberQuit = () => {
             isFetching = true;
         }
       
-        const pwd = e.target.elements.pwd.value;//document.getElementById('pwd').value;
-      
-
+        // 회원탈퇴 실행하는 패치
         fetch("http://127.0.0.1:8885/member/quit", {
         method:"post",
         headers:{
             "Content-Type":"application/json"
         },
-        body: JSON.stringify({ pwd: pwd })
+        body: JSON.stringify({no : currentLoginMember.no})
         })
         .then( resp => {
             if(!resp.ok){
@@ -95,6 +103,8 @@ const MemberQuit = () => {
             if(data.msg === "good"){
                 
                 alert("회원 탈퇴 성공!");
+                sessionStorage.removeItem("loginMember");
+                setLoginMember(null);
                 navigate("/main");
             }else if (data.msg === "bad"){
                 alert("기존의 비밀번호가 일치하지 않습니다. 회원탈퇴 실패")

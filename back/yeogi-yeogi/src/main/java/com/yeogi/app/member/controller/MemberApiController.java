@@ -141,10 +141,11 @@ public class MemberApiController {
     @PostMapping("quit")
     public Map<String,Object> quit(@RequestBody MemberVo vo) throws Exception {
         int result = service.quit(vo);
-        logger.debug("회원탈퇴vo : " + vo);
+//        logger.debug("회원탈퇴vo : " + vo);
+    	System.out.println("vo: "+vo);
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "good");
-        map.put("vo", vo);
+        map.put("msg", "good");{}
+
 		if(result != 1) {
 			map.put("msg", "bad");
 		}        
