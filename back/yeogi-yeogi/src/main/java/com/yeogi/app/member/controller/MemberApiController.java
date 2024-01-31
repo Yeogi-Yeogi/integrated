@@ -109,18 +109,18 @@ public class MemberApiController {
     
     
     //비밀번호 일치 여부 확인
-    @PostMapping("pwdCoincide")
-    public Map<String, Object> pwdCoincide(@RequestBody MemberVo vo) throws Exception {
-    	MemberVo pwdCoincide = service.pwdCoincide(vo);
-    	Map<String, Object> map = new HashMap<String, Object>();
-    	map.put("msg","good");
-        map.put("pwdCoincide", pwdCoincide);
-        System.out.println("비밀번호 일치 여부 확인: " + pwdCoincide);
+//    @PostMapping("pwdCoincide")
+//    public Map<String, Object> pwdCoincide(@RequestBody MemberVo vo) throws Exception {
+//    	MemberVo pwdCoincide = service.pwdCoincide(vo);
+//    	Map<String, Object> map = new HashMap<String, Object>();
+//    	map.put("msg","good");
+//        map.put("pwdCoincide", pwdCoincide);
+//        System.out.println("비밀번호 일치 여부 확인: " + pwdCoincide);
 //        if(pwdCoincide != vo.setPwd() ) {
 //        	map.put("msg", "bad");
 //        }
-        return map;
-    }    
+//        return map;
+//    }    
     
     
 	// 로그인
@@ -139,12 +139,12 @@ public class MemberApiController {
     
     // 회원 탈퇴-회원정보페이지에서 회원탈퇴버튼 누르면 실행(로그인이 된 사람만 회원탈퇴가 가능한 구조)
     @PostMapping("quit")
-    public Map<String,String> quit(@RequestBody MemberVo vo) throws Exception {
+    public Map<String,Object> quit(@RequestBody MemberVo vo) throws Exception {
         int result = service.quit(vo);
         logger.debug("회원탈퇴vo : " + vo);
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg", "good");
-        
+        map.put("vo", vo);
 		if(result != 1) {
 			map.put("msg", "bad");
 		}        
