@@ -77,13 +77,13 @@
             <td style="text-align: center"><span>Leader & Developer</span></td>
             <td style="text-align: center"><span>DB Manager & Developer</span></td>
             <td style="text-align: center"><span>SCM Manager & Developer</span></td>
-        </tr>`
+        </tr>
         <tr>
             <td style="text-align: center"><span>gitHub</span></td>
             <td style="text-align: center"><a href="https://github.com/rinklove"><strong>rinklove</strong></a></td>
             <td style="text-align: center"><a href="https://github.com/Whdbeom"><strong>Whdbeom</strong></a></td>
             <td style="text-align: center"><a href="https://github.com/leeyeji803"><strong>leeyeji803</strong></a></td>
-        </tr>`
+        </tr>
         <tr>
             <td style="text-align: center"><span>Contributions</span></td>
             <td style="text-align: center">
@@ -101,7 +101,7 @@
                 <span>로그인 및 로그아웃</span><br>
                 <span>마이페이지 관련 기능</span><br>
             </td>
-        </tr>`
+        </tr>
     </tbody>
 </table>
 
